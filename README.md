@@ -2,7 +2,9 @@
 
 La branche par défaut s'appelle **draft** (_brouillon_) : vous pouvez travailler librement dessus.
 
-La branche **progress** correspondra aux différentes versions du jeu. Donc pour soumettre des modifications au groupe : merci de commit sur la branche **progress**.
+La branche **progress** correspondra aux différentes versions du jeu.\
+Donc pour soumettre des modifications au groupe : merci de commit sur la branche **progress**.\
+**Attention!** Utilisez cette branche uniquement si vous êtes sûrs de votre travail et si le code fonctionne!
 
 ## NE PAS TOUCHER À LA BRANCHE MASTER!
 Elle sera utilisée pour le rendu final aux professeur et deviendra la branche par défaut en temps voulu.
