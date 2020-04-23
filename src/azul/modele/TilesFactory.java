@@ -1,9 +1,9 @@
-package azul;
+package azul.modele;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TileFactory
+public class TilesFactory
 {
     // Tiles used in the game.
     public enum Tile { BLUE, WHITE, BLACK, RED, ORANGE }
@@ -13,7 +13,7 @@ public class TileFactory
     // To choose randomly the tiles in the bag.
     private Random mRandom ;
 
-    public TileFactory()
+    public TilesFactory()
     {
         mTiles = new ArrayList<>() ;
         mRandom = new Random() ;
