@@ -1,5 +1,11 @@
 package azul.modele;
 
+import azul.modele.move.PlayerMove;
+import azul.modele.player.HumanPlayer;
+import azul.modele.player.Player;
+import azul.modele.tiles.Tile;
+import azul.modele.tiles.TilesFactory;
+
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -15,7 +21,7 @@ public class Game extends Observable
     // Tiles factories.
     private ArrayList<TilesFactory> mTilesFactories ;
     // Tiles in the bag.
-    private ArrayList<TilesFactory.Tile> mTilesRemaining ;
+    private ArrayList<Tile> mTilesRemaining ;
     // The player who must play during this game turn.
     private int mCurrentPlayer ;
 
@@ -46,6 +52,8 @@ public class Game extends Observable
             e.printStackTrace() ;
             return ;
         }
+        // Initialize the 'first player marker'.
+        Tile.onGameStart() ;
 
         initializePlayers(nbPlayers) ;
         initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
@@ -78,7 +86,7 @@ public class Game extends Observable
 
         for (int i = 1 ; i <= SIZE_TILES_REMAINING ; i ++)
         {
-            mTilesRemaining.add(TilesFactory.Tile.values()[i % TilesFactory.Tile.values().length]) ;
+            mTilesRemaining.add(Tile.values()[i % (Tile.values().length - 2)]) ;
         }
     }
 
@@ -120,7 +128,7 @@ public class Game extends Observable
      * Play the player's intentions and update the UI.
      * @param move player's intentions.
      */
-    public void playMove(Move move)
+    public void playMove(PlayerMove move)
     {
         getPlayer().play(move) ;
         // Notify the UI.
@@ -137,7 +145,7 @@ public class Game extends Observable
         return mPlayers.get(mCurrentPlayer) ;
     }
 
-    public ArrayList<TilesFactory.Tile> getTilesRemaining()
+    public ArrayList<Tile> getTilesRemaining()
     {
         return mTilesRemaining ;
     }
