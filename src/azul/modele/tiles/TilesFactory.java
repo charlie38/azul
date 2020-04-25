@@ -1,7 +1,5 @@
 package azul.modele.tiles;
 
-import azul.modele.tiles.Tile;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,21 +17,40 @@ public class TilesFactory
     }
 
     /**
-     * Prepare the factory for this game round by filling it with tiles.
+     * Prepare the factory for this game round by filling it with 4 tiles (while the bag is not empty).
      * @param remainingTiles the remaining tiles in the bag to be placed in the factories.
+     * @param sideTiles the tiles in the box cover, used if the bag is empty before the factory is full.
      */
-    public void prepare(ArrayList<Tile> remainingTiles)
+    public void prepare(ArrayList<Tile> remainingTiles, ArrayList<Tile> sideTiles)
     {
         // Place 4 tiles in the factory.
-        for (int i = 1 ; i <= 4 && ! remainingTiles.isEmpty() ; i ++)
+        for (int i = 1 ; i <= 4 ; i ++)
         {
-            // According to the rules, if there is no tiles remaining, the game start.
-            mTiles.add(remainingTiles.get(mRandom.nextInt(remainingTiles.size()))) ;
+            if (remainingTiles.isEmpty())
+            {
+                if (! sideTiles.isEmpty())
+                {
+                    // If the bag is empty, put the tiles in the box cover inside the bag.
+                    remainingTiles.addAll(sideTiles) ;
+                    sideTiles.clear() ;
+                }
+                else
+                {
+                    // The box cover is also empty.
+                    // According to the rules, if there is no tiles remaining, the game start.
+                    return ;
+                }
+            }
+            // Take a tile in the bag
+            Tile tile = remainingTiles.get(mRandom.nextInt(remainingTiles.size())) ;
+            // Add this tile from the bag to the factory.
+            mTiles.add(tile) ;
+            remainingTiles.remove(tile) ;
         }
     }
 
     /**
-     * Give all the tiles in the factory with the color of 'tile'.
+     * Give all the tiles in the factory with the color of 'tile' to the player.
      * @param tile used to get the requested color.
      * @return the tiles in the factory.
      */

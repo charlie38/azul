@@ -22,6 +22,8 @@ public class Game extends Observable
     private ArrayList<TilesFactory> mTilesFactories ;
     // Tiles in the bag.
     private ArrayList<Tile> mTilesRemaining ;
+    // Tiles in the box cover.
+    private ArrayList<Tile> mTilesAside ;
     // The player who must play during this game turn.
     private int mCurrentPlayer ;
 
@@ -34,6 +36,7 @@ public class Game extends Observable
         mPlayers = new ArrayList<>() ;
         mTilesFactories = new ArrayList<>() ;
         mTilesRemaining = new ArrayList<>() ;
+        mTilesAside = new ArrayList<>() ;
     }
 
     /**
@@ -58,6 +61,22 @@ public class Game extends Observable
         initializePlayers(nbPlayers) ;
         initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
         initializeTilesRemaining() ;
+        initializeTilesAside() ;
+        // This will be the first round.
+        prepareForRound() ;
+    }
+
+    /**
+     * Prepare the game for a round.
+     * Can be called at the start of the game, and during the game before a round starts.
+     */
+    public void prepareForRound()
+    {
+        // Prepare the factories, with the tiles in the bag; if the bag is not empty, each factory gets 4 tiles.
+        for (TilesFactory factory : mTilesFactories)
+        {
+            factory.prepare(mTilesRemaining, mTilesAside) ;
+        }
     }
 
     private void initializePlayers(int nbPlayers)
@@ -88,6 +107,11 @@ public class Game extends Observable
         {
             mTilesRemaining.add(Tile.values()[i % (Tile.values().length - 2)]) ;
         }
+    }
+
+    private void initializeTilesAside()
+    {
+        mTilesAside.clear() ;
     }
 
     /**
@@ -130,11 +154,40 @@ public class Game extends Observable
      */
     public void playMove(PlayerMove move)
     {
-        getPlayer().play(move) ;
+        getPlayer().play(move, mTilesAside) ;
         // Notify the UI.
         notifyObservers() ;
         // Go to the next player.
         mCurrentPlayer ++ ;
+    }
+
+    /**
+     * Check if the game is over by checking all users' wall.
+     * According to the rules, if a row is full in a user wall, the game is over.
+     * @return true if the game is over.
+     */
+    public boolean isGameOver()
+    {
+        for (Player player : mPlayers)
+        {
+            if (player.checkGameOver())
+            {
+                return true ;
+            }
+        }
+
+        return false ;
+    }
+
+    /**
+     * Decorate the players' wall. Called at the end of a round.
+     */
+    public void decorateWalls()
+    {
+        for (Player player : mPlayers)
+        {
+            player.decorateWall(mTilesAside) ;
+        }
     }
 
     /**

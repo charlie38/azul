@@ -14,7 +14,8 @@ public class PlayerBoard
 
     // At the top of the board used to track user score.
     private int mScoreTrack ;
-    // The stair on the board, where you put your tiles.
+    // The stair on the board, where you put your tiles
+    // /!\ (the tiles are added from the left to the right but should be displayed from the right to the left).
     private ArrayList<Tile[]> mPatternLines ;
     // To the right of the pattern lines, where you put your tiles at the end.
     private ArrayList<Tile[]> mWall ;
@@ -32,6 +33,42 @@ public class PlayerBoard
         initializePatternLines() ;
         initializeWall() ;
         initializeFloorLine() ;
+    }
+
+    /**
+     * Decorate the wall with the tiles in the pattern lines and track the score.
+     * Called by the player at the end of the round.
+     * @param asideTiles the tiles in the box cover.
+     */
+    protected void decorateWall(ArrayList<Tile> asideTiles)
+    {
+        for (int i = 0 ; i < SIZE_PATTERN_LINES ; i ++)
+        {
+            if (mPatternLines.get(i)[0] != Tile.EMPTY && mPatternLines.get(i)[i] != Tile.EMPTY)
+            {
+                ArrayList<Tile> tiles = new ArrayList<>() ;
+                // If the pattern line is full, add the rightmost (leftmost in the array) tile to the wall.
+                try
+                {
+                    addToWall(mPatternLines.get(i)[0], i + 1) ;
+                }
+                catch (PlayerBoardException e)
+                {
+                    e.printStackTrace() ;
+                }
+                // Track the player's score.
+                // TODO Track the user score
+                // Remove the remaining tiles of this pattern line.
+                for (int j = 1 ; j <= i ; j ++)
+                {
+                    tiles.add(mPatternLines.get(i)[j]) ;
+                    // Initialize the pattern line (which is empty now).
+                    mPatternLines.get(i)[j] = Tile.EMPTY ;
+                }
+                // And put them inside the box cover.
+                asideTiles.addAll(tiles) ;
+            }
+        }
     }
 
     /**
@@ -86,13 +123,20 @@ public class PlayerBoard
      * Add tiles.
      */
 
-    public void addToPatternLine(Tile tile, int line) throws PlayerBoardException
+    public void addToPatternLine(Tile tile, int row) throws PlayerBoardException
     {
-        for (int i = 0 ; i < line ; i ++)
+        // Check if it's a good tile color for this row.
+        if (! canBePlacedOnPatternLine(tile, row))
         {
-            if (mPatternLines.get(line - 1)[i] != Tile.EMPTY)
+            // Try to add a tile on wall case of a different color than the tile one.
+            throw new PlayerBoardException(PlayerBoardException.COLOR_PATTERN_LINES) ;
+        }
+
+        for (int i = 0 ; i < row ; i ++)
+        {
+            if (mPatternLines.get(row - 1)[i] != Tile.EMPTY)
             {
-                mPatternLines.get(line - 1)[i] = tile ;
+                mPatternLines.get(row - 1)[i] = tile ;
                 return ;
             }
         }
@@ -100,22 +144,47 @@ public class PlayerBoard
         throw new PlayerBoardException(PlayerBoardException.FULL_PATTERN_LINES) ;
     }
 
-    public void addToWall(Tile tile, int line, int column) throws PlayerBoardException
+    public void addToWall(Tile tile, int row, int column) throws PlayerBoardException
     {
         // Check if it's a good tile color for this case.
-        if (! canBePlacedOnWall(tile, line, column))
+        if (! canBePlacedOnWall(tile, row, column))
         {
             // Try to add a tile on wall case of a different color than the tile one.
             throw new PlayerBoardException(PlayerBoardException.COLOR_WALL) ;
         }
         // Check if the case is full or empty.
-        if (! isWallCaseNotEmpty(line, column))
+        if (isWallCaseNotEmpty(row, column))
         {
-            // Try to add a tile on a not empty case.
+            // Try to add a tile in a not empty case.
             throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
         }
         // This case is empty.
-        mWall.get(line - 1)[column - 1] = tile ;
+        mWall.get(row - 1)[column - 1] = tile ;
+    }
+
+    public void addToWall(Tile tile, int row) throws PlayerBoardException
+    {
+        int i ;
+        // Search for the corresponding case in the wall, depending on the tile color.
+        for (i = 1 ; i <= SIZE_WALL ; i ++)
+        {
+            switch (tile)
+            {
+                case BLUE : if (isWallCaseBlue(row, i)) break ; break ;
+                case WHITE : if (isWallCaseWhite(row, i)) break ; break ;
+                case BLACK : if (isWallCaseBlack(row, i)) break ; break ;
+                case RED : if (isWallCaseRed(row, i)) break ; break ;
+                case ORANGE : if (isWallCaseOrange(row, i)) break ;
+            }
+        }
+
+        if (isWallCaseNotEmpty(row, i))
+        {
+            // Try to add a tile in a not empty case.
+            throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
+        }
+        // Add the tile to the wall.
+        mWall.get(row - 1)[i - 1] = tile ;
     }
 
     public void addToFloorLine(Tile tile) throws PlayerBoardException
@@ -171,14 +240,14 @@ public class PlayerBoard
         return mFloorLine.get(i) ;
     }
 
-    public boolean isPatterLineFull(int line)
+    public boolean isPatterLineFull(int row)
     {
-        return mPatternLines.get(line - 1)[line - 1] != Tile.EMPTY ;
+        return mPatternLines.get(row - 1)[row - 1] != Tile.EMPTY ;
     }
 
-    public boolean isWallCaseNotEmpty(int line, int column)
+    public boolean isWallCaseNotEmpty(int row, int column)
     {
-        return mWall.get(line - 1)[column - 1] != Tile.EMPTY ;
+        return mWall.get(row - 1)[column - 1] != Tile.EMPTY ;
     }
 
     public boolean isFloorLineFull()
@@ -186,40 +255,70 @@ public class PlayerBoard
         return mFloorLine.get(SIZE_FLOOR_LINES - 1) != Tile.EMPTY ;
     }
 
-    public boolean canBePlacedOnWall(Tile tile, int line, int column)
+    public boolean canBePlacedOnPatternLine(Tile tile, int row)
     {
-        return tile == Tile.BLUE && isWallCaseBlue(line, column)
-                || tile == Tile.WHITE && isWallCaseWhite(line, column)
-                || tile == Tile.BLACK && isWallCaseBlack(line, column)
-                || tile == Tile.RED && isWallCaseRed(line, column)
-                || tile == Tile.ORANGE && isWallCaseOrange(line, column) ;
+        // Tiles should be of the same color in a row.
+        // This will be the first tile / the tile in the row are of the same color.
+        return mPatternLines.get(row)[0] == Tile.EMPTY || mPatternLines.get(row)[0] == tile ;
     }
 
-    public boolean isWallCaseBlue(int line, int column)
+    public boolean canBePlacedOnWall(Tile tile, int row, int column)
     {
-        return line == column ;
+        // Check if the corresponding case in the wall is of the tile color.
+        return tile == Tile.BLUE && isWallCaseBlue(row, column)
+                || tile == Tile.WHITE && isWallCaseWhite(row, column)
+                || tile == Tile.BLACK && isWallCaseBlack(row, column)
+                || tile == Tile.RED && isWallCaseRed(row, column)
+                || tile == Tile.ORANGE && isWallCaseOrange(row, column) ;
     }
 
-    public boolean isWallCaseWhite(int line, int column)
+    public boolean isWallCaseBlue(int row, int column)
     {
-        return (line == 1 && column == 5) || (line != 1 && line - 1 == column) ;
+        return row == column ;
     }
 
-    public boolean isWallCaseBlack(int line, int column)
+    public boolean isWallCaseWhite(int row, int column)
     {
-        return (line == 1 && column == 4) || (line == 2 && column == 5)
-                || (line != 1 && line != 2 && line - 2 == column) ;
+        return (row == 1 && column == 5) || (row != 1 && row - 1 == column) ;
     }
 
-    public boolean isWallCaseRed(int line, int column)
+    public boolean isWallCaseBlack(int row, int column)
     {
-        return (line == 4 && column == 1) || (line == 5 && column == 2)
-                || (line != 4 && line != 5 && line + 2 == column) ;
+        return (row == 1 && column == 4) || (row == 2 && column == 5)
+                || (row != 1 && row != 2 && row - 2 == column) ;
     }
 
-    public boolean isWallCaseOrange(int line, int column)
+    public boolean isWallCaseRed(int row, int column)
     {
-        return (line == 5 && column == 1) || (line != 5 && line + 1 == column) ;
+        return (row == 4 && column == 1) || (row == 5 && column == 2)
+                || (row != 4 && row != 5 && row + 2 == column) ;
+    }
+
+    public boolean isWallCaseOrange(int row, int column)
+    {
+        return (row == 5 && column == 1) || (row != 5 && row + 1 == column) ;
+    }
+
+    public boolean isWallRowFull()
+    {
+        // Check if a row in the wall is full.
+        for (int i = 0 ; i < SIZE_WALL ; i ++)
+        {
+            for (int j = 0 ; j < SIZE_WALL ; j ++)
+            {
+                if (mWall.get(i)[j] == Tile.EMPTY)
+                {
+                    break ;
+                }
+
+                if (j == SIZE_WALL - 1)
+                {
+                    return true ;
+                }
+            }
+        }
+
+        return false ;
     }
 
     /**
@@ -270,8 +369,9 @@ public class PlayerBoard
     {
         // Messages that can be threw.
         private static final String FULL_PATTERN_LINES = "This pattern line is full." ;
-        private static final String FULL_WALL = "This wall case is full." ;
+        private static final String FULL_WALL = "This wall case is not empty." ;
         private static final String FULL_FLOOR_LINE = "The floor line full." ;
+        private static final String COLOR_PATTERN_LINES = "This pattern line is not of the tile color." ;
         private static final String COLOR_WALL = "This wall case is not of the tile color." ;
         private static final String OUT_SCORE_TRACK = "Score track outbound." ;
         private static final String OUT_PATTERN_LINES = "Pattern lines outbound." ;

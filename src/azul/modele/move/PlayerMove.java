@@ -14,7 +14,7 @@ public class PlayerMove extends Move
     private boolean mIsFirstToTakeFromTable ;
     // If a 'place tile' move.
     private Tile mTileSelected ;
-    private int mLine ;
+    private int mRow ;
     private int mColumn ;
 
     /**
@@ -45,30 +45,31 @@ public class PlayerMove extends Move
     /**
      * Contains the player's intentions during his turn ; he placed his tile on one of his pattern lines.
      * @param type can only be 'Type.PLAYER_PLACE_TILE_IN_PATTERN'.
-     * @param line the pattern line on which the player wants to put his tile (the top one is 1 and bottom one 5).
+     * @param row the pattern line on which the player wants to put his tile (the top one is 1 and bottom one 5).
      */
-    public PlayerMove(Type type, Player player, Tile tileSelected, int line)
+    public PlayerMove(Type type, Player player, Tile tileSelected, int row)
     {
         super(type, Type.PLAYER_PLACE_TILE_IN_PATTERN) ;
 
         mPlayer = player ;
         mTileSelected = tileSelected ;
-        mLine = line ;
+        mRow = row ;
     }
 
+    // TODO may be useless, depending if we use 'Player.decorateWall() -> automatised decoration'
     /**
      * Contains the player's intentions during his turn ; he placed his tile on the wall.
      * @param type can only be 'Type.PLAYER_PLACE_TILE_IN_WALL'.
-     * @param line the wall line on which the player wants to put his tile (the top one is 1 and bottom one 5).
+     * @param row the wall line on which the player wants to put his tile (the top one is 1 and bottom one 5).
      * @param column the wall column on which the player wants to put his tile (the left one is 1 and right one 5).
      */
-    public PlayerMove(Type type, Player player, Tile tileSelected, int line, int column)
+    public PlayerMove(Type type, Player player, Tile tileSelected, int row, int column)
     {
         super(type, Type.PLAYER_PLACE_TILE_IN_WALL) ;
 
         mPlayer = player ;
         mTileSelected = tileSelected ;
-        mLine = line ;
+        mRow = row ;
         mColumn = column ;
     }
 
@@ -108,9 +109,9 @@ public class PlayerMove extends Move
         return mTilesSelected ;
     }
 
-    public int getLine()
+    public int getRow()
     {
-        return mLine ;
+        return mRow ;
     }
 
     public int getColumn()

@@ -3,6 +3,8 @@ package azul.modele.player;
 import azul.modele.move.PlayerMove;
 import azul.modele.tiles.Tile;
 
+import java.util.ArrayList;
+
 public abstract class Player
 {
     private PlayerBoard mPlayerBoard ;
@@ -18,8 +20,9 @@ public abstract class Player
     /**
      * Play the player's intentions.
      * @param move contains the player's intentions.
+     * @param asideTiles contains the tiles in the box cover.
      */
-    public void play(PlayerMove move)
+    public void play(PlayerMove move, ArrayList<Tile> asideTiles)
     {
         switch (move.getType())
         {
@@ -27,7 +30,7 @@ public abstract class Player
             case PLAYER_TAKE_TABLE : takeTilesFromTable(move) ; break ;
             case PLAYER_PLACE_TILE_IN_PATTERN : addTileInPattern(move) ; break ;
             case PLAYER_PLACE_TILE_IN_WALL: addTileInWall(move) ; break ;
-            case PLAYER_PLACE_TILE_IN_FLOOR : addTileInFloor(move) ;
+            case PLAYER_PLACE_TILE_IN_FLOOR : addTileInFloor(move, asideTiles) ;
         }
     }
 
@@ -56,7 +59,7 @@ public abstract class Player
     {
         try
         {
-            mPlayerBoard.addToPatternLine(move.getTileSelected(), move.getLine()) ;
+            mPlayerBoard.addToPatternLine(move.getTileSelected(), move.getRow()) ;
         }
         catch (PlayerBoard.PlayerBoardException e)
         {
@@ -68,7 +71,7 @@ public abstract class Player
     {
         try
         {
-            mPlayerBoard.addToWall(move.getTileSelected(), move.getLine(), move.getColumn()) ;
+            mPlayerBoard.addToWall(move.getTileSelected(), move.getRow(), move.getColumn()) ;
         }
         catch (PlayerBoard.PlayerBoardException e)
         {
@@ -76,15 +79,42 @@ public abstract class Player
         }
     }
 
-    private void addTileInFloor(PlayerMove move)
+    private void addTileInFloor(PlayerMove move, ArrayList<Tile> asideTiles)
     {
-        try
+        if (mPlayerBoard.isFloorLineFull())
         {
-            mPlayerBoard.addToFloorLine(move.getTileSelected()) ;
+            // If full, according to the rules the tile should go to the box cover.
+            asideTiles.add(move.getTileSelected()) ;
         }
-        catch (PlayerBoard.PlayerBoardException e)
+        else
         {
-            e.printStackTrace() ;
+            try
+            {
+                mPlayerBoard.addToFloorLine(move.getTileSelected()) ;
+            }
+            catch (PlayerBoard.PlayerBoardException e)
+            {
+                e.printStackTrace() ;
+            }
         }
+    }
+
+    /**
+     * Decorate the wall with the tiles in the pattern lines and track the player's score.
+     * Called at the end of a round by each player.
+     * @param asideTiles the tiles in the box cover.
+     */
+    public void decorateWall(ArrayList<Tile> asideTiles)
+    {
+        mPlayerBoard.decorateWall(asideTiles) ;
+    }
+
+    /**
+     * Check if the game is over by checking the user's wall.
+     * @return true if the game is over
+     */
+    public boolean checkGameOver()
+    {
+        return mPlayerBoard.isWallRowFull() ;
     }
 }
