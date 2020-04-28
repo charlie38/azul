@@ -1,1 +1,55 @@
-<mxfile host="app.diagrams.net" modified="2020-04-28T11:45:45.390Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36" etag="K8tZI9mM184SL__WFo38" version="13.0.2" type="github"><diagram id="XCA9C4f2JsbgDVpI73ji" name="Page-1">7Vltb+I4EP41SOwHTiThrR8hhV51dOkWtJXum0kM+HDsyDEF9tffOHbemqQbukV3K1VCSjyeGdvzPJ6JTctxg9OdQOHugfuYtuyuf2o5ty3btnq23VK/rn/WkmGvrwVbQXyjlAmW5Ac2wq6RHoiPo4Ki5JxKEhaFHmcMe7IgQ0LwY1Ftw2lx1BBtcUmw9BAtS5+JL3daOrKHmfxPTLa7ZGRrcKN7ApQom5VEO+TzY07kTFuOKziX+i04uZiq4CVx0Xazmt50YgIz2cRgMRr73/bf/5r+/e1+s/5OXG/x3DFgvCB6MAt+pOiMxYQj4bfsQct2AAlnYpYgz0lcoiMJKGLQmmw4k0vTY0EbUbJl8O7BxLAAwQsWkkBIx6ZD8hCk3o5Qf47O/KCmH0nk7ZPWZMcF+QFuETU+oVtIww6YVV5jqSxBrKYpcAQ6j0lMrFeiB3QqKM5RJI3A45SiMCLrdBkBElvCJlxKHhglEyxYDj7VomCl2MKmwDzAUpxBxRj0DBvOxeYx45aTEGaX49XAMUJk+LxNPWeQw4tB/QIGDEoMILAS4O/S4wKvhApuxoOxEOg8J1Gs8YgkAMzmhMEOrdF5RmoK1X0zyrlQ1iV2QXxljLrge+xyyoFGt4xruhFKX4kSxlG8kbV8i0LkEbadxzq3vUzyZMKsRBxsNzTepjvi+5gprnCJJNLEUGsIOUQohqE/gR8A43b/6Lf6MHEX2lbWhp9SF9LlDNaCSMwRDKw7YsW8ZoSq37hllhla2YOGtOpdiVXDEqtKGFMSY6cxTnKr9S6AA4CK4gzRlQL8tmOVUHfKqDsVCFO0xvSRR0QSrvwLrfsK+f8K3JuGOWN0JWxHb9WM9pfcbn/h4AhqP4ZUgiRWuaCdZoAKRcIg4oC1ytdZaqlymWnGTt/USNNMlRry/RXPjdZeEaABfGTEDzd2pJIVfEnUWcczqDfLN6HKHAL2Tkd1Ztn6crZfCsU7fe107qar1fRp2enkpHqILZZZzi/EyvgFhXtWQEYbkvxE/6kzjFd3iUG2LmNVs6Y1fA9ixJRGpGenjGaHdLhXscvrq0m5KMJfuZwGoTy3G8KW95HOMx6yWstDbIJhm3jYX7DL6Vbj6JeYl3sND2tKPNCqCg3kOncxXzxBwntPdJSbJ34sxaZAymUFKQ3FowIr9YgMH2NZxY6IMo7WU1Q3anZL3lEtZxt7KJH4TcvPD6GPrpWjZrWy79hXqpbJaNXlcnrycBh/ZTQ8YHV/+eRUQZvf9TDVLx6m+qN+CW2rV4X21cC2GoGtEuHnRr9wo+cuTRoeeSqxT/Q+HvtexZlnQPWi9XO8VjHxoA4MtkaePJMKoOnyf7pucYa/cYboNbhvGVSy5Fr3LfZPrty6QaH5mSYuTRO9N9OEM2xKgGvhX75w+7wa+TB4B04zeK91N2KXL770dq4/+4zd1f3ia+XZJwTTtrZ/gA2okkP8UCeI3E2qLi76SJEUFFga8bGSRRVHE4n2um8meDCDisRFxUA/M1wpXjQyU/cUYJXeHlxmFJ/CLrKIT11XiVz1XdZFnqrP9Tvs7e9QgBcvJbJ81oCPTRJDq1mSsEY3F6cJaGZ/6cV9uT9Gnem/</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-04-28T11:54:12.169Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36" etag="Q8VPGgXdmZxF5bNTliNq" version="13.0.2" type="github">
+  <diagram id="XCA9C4f2JsbgDVpI73ji" name="Page-1">
+    <mxGraphModel dx="1808" dy="1683" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-10" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=117;tabHeight=51;tabPosition=left;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-30" y="-80" width="1220" height="810" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-5" value="PlayerBoard&#xa;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="320" height="630" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-6" value="int mScoreTrack&#xa;ArrayList mPatternLines&#xa;ArrayList mWall&#xa;ArrayList mFloorLine" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-5" vertex="1">
+          <mxGeometry y="26" width="320" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-5" vertex="1">
+          <mxGeometry y="90" width="320" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-8" value="PlayerBoard()&#xa;void decorateWall(ArrayList)&#xa;void initializePatternLines()&#xa;void initializeWall()&#xa;void initializeFloorLine()&#xa;void addToPatternLine(Tile tile, int row)&#xa;void addToWall(Tile tile, int row, int column)&#xa;void addToWall(Tile tile, int row)&#xa;void addToFloorLine(Tile tile)&#xa;&#xa;--GETTERS--&#xa;int getScoreTrack()&#xa;Tile getInPatternLines(int i, int j)&#xa;Tile getInWall(int i, int j)&#xa;Tile getInFloorLine(int i)&#xa;&#xa;boolean isPatterLineFull(int row)&#xa;boolean isWallCaseNotEmpty(int row, int column)&#xa;boolean isFloorLineFull()&#xa;boolean canBePlacedOnPatternLine(Tile tile, int row)&#xa;boolean canBePlacedOnWall(Tile tile, int row, int column)&#xa;&#xa;public boolean isWallCase[COLOR](int row, int column)&#xa;boolean isWallRowFull()&#xa;&#xa;--SETTERS--&#xa;void setScoreTrack(int newScore)&#xa;void setInPatterLines(int i, int j, Tile tile)&#xa;void setInWall(int i, int j, Tile tile)&#xa;void setInFloorLine(int i, Tile tile)&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-5" vertex="1">
+          <mxGeometry y="98" width="320" height="532" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-20" value="PlayerBoardException" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+          <mxGeometry x="50" y="585" width="140" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-21" value="PlayerBoardException()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-20" vertex="1">
+          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-11" value="player" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontSize=22;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="-70" width="100" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-24" value="&lt;&lt;Abstract&gt;&gt;&#xa;Player" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=37;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+          <mxGeometry x="700" y="40" width="360" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-25" value="PlayerBoard mPlayerBoard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-24" vertex="1">
+          <mxGeometry y="37" width="360" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-26" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-24" vertex="1">
+          <mxGeometry y="63" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="O8AdQkVKEZQIfbViCcOW-27" value="Player()&#xa;&#xa;--ACTIONS--&#xa;void play(PlayerMove move, ArrayList&lt;Tile&gt; asideTiles)&#xa;void takeTilesFromFactory(PlayerMove move)&#xa;void takeTilesFromTable(PlayerMove move)&#xa;void addTileInPattern(PlayerMove move)&#xa;void addTileInWall(PlayerMove move)&#xa;void addTileInFloor(PlayerMove move, ArrayList&lt;Tile&gt; asideTiles)&#xa;void decorateWall(ArrayList&lt;Tile&gt; asideTiles)&#xa;&#xa;boolean checkGameOver()&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="O8AdQkVKEZQIfbViCcOW-24" vertex="1">
+          <mxGeometry y="71" width="360" height="189" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-6" value="HumanPlayer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="700" y="470" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-8" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="b1CXoUU1IrnRyMRFLuJq-6">
+          <mxGeometry y="26" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-9" value="HumanPlayer()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="b1CXoUU1IrnRyMRFLuJq-6">
+          <mxGeometry y="34" width="360" height="26" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
