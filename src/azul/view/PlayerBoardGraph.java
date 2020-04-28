@@ -27,13 +27,31 @@ public class PlayerBoardGraph extends JComponent {
         brownCase = new ImageAzul("res/img/browncase.png");
         list= new ImageAzul[]{mushroomB, crystalB, eyeB, clawB, flowerB};
     }
+    
+    int Redimensionne(int x, int p) {
+        float A;
+        A=(((float) x)/1000)*p;
+        return (int) A;
+    }
 
     public void paint(Graphics g){
-        g.drawImage(board.image(),0,0,1000,1000,null);
+        int h=getHeight();
+        int w=getWidth();
+        double px,py;
+        int x,y,sx,sy;
+        sx=Redimensionne(70,w);
+        sy=Redimensionne(70,h);
+
+        g.drawImage(board.image(),0,0,w,h,null);
         for(int i =0 ; i<5; i++){
             for(int j =0 ; j<5; j++){
-                g.drawImage(greenCase.image(),i*90+430,j*100+330,85,85,null);
-                g.drawImage(list[(5-i+j)%5].image(),i*90+430,j*100+330,85,85,null);
+                g.drawImage(greenCase.image(),Redimensionne(i*90+430,w),Redimensionne(j*100+330,h),sx,sy,null);
+                g.drawImage(list[(5-i+j)%5].image(),Redimensionne(i*90+430,w),Redimensionne(j*100+330,h),sx,sy,null);
+            }
+        }
+        for(int i =0 ; i<5; i++){
+            for(int j = 4 ;  j>3-i; j--){
+                g.drawImage(brownCase.image(),Redimensionne(j*80-10,w),Redimensionne(i*100+330,h),sx,sy,null);
             }
         }
     }
