@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-04-28T12:36:04.848Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36" etag="zXu-H3HlitibK04lCiNL" version="13.0.2" type="github">
+<mxfile host="app.diagrams.net" modified="2020-04-28T12:39:42.714Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36" etag="M0W4jlM_oc5mg4k7QVvR" version="13.0.2" type="github">
   <diagram id="XCA9C4f2JsbgDVpI73ji" name="Page-1">
-    <mxGraphModel dx="3671" dy="2659" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2012" dy="1790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -144,6 +144,18 @@
         </mxCell>
         <mxCell id="b1CXoUU1IrnRyMRFLuJq-61" value="move" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=25;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="870" y="-900" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-62" value="Game" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="-720" y="-755" width="240" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-63" value="int SIZE_TILES_REMAINING&#xa;int NB_TILES_COLOR&#xa;ArrayList&lt;Player&gt; mPlayers&#xa;ArrayList&lt;TilesFactory&gt; mTilesFactories&#xa;ArrayList&lt;Tile&gt; mTilesRemaining&#xa;ArrayList&lt;Tile&gt; mTilesAside&#xa;int mCurrentPlayer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="b1CXoUU1IrnRyMRFLuJq-62">
+          <mxGeometry y="26" width="240" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-64" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="b1CXoUU1IrnRyMRFLuJq-62">
+          <mxGeometry y="140" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="b1CXoUU1IrnRyMRFLuJq-65" value="Game()&#xa;void startGame(int nbPlayers)&#xa;void prepareForRound()&#xa;void initializePlayers(int nbPlayers)&#xa;void initializeTilesFactories(int nbFactories)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="b1CXoUU1IrnRyMRFLuJq-62">
+          <mxGeometry y="148" width="240" height="252" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
