@@ -5,11 +5,11 @@ package azul.modele.tiles;
  */
 public enum Tile
 {
-    BLUE,
-    WHITE,
-    BLACK,
-    RED,
-    ORANGE,
+    CRYSTAL,
+    EYE,
+    CLAW,
+    FLOWER,
+    MUSHROOM,
     FIRST_PLAYER_MAKER,     // For the first player who will take tiles from the middle of the table.
     EMPTY ;                 // No tile.
 

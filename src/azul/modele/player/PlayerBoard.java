@@ -81,9 +81,9 @@ public class PlayerBoard
 
         for (int i = 1 ; i <= SIZE_PATTERN_LINES ; i ++)
         {
-            Tile[] tiles = new Tile[SIZE_WALL] ;
+            Tile[] tiles = new Tile[SIZE_PATTERN_LINES] ;
 
-            for (int j = 0 ; j < i ; j ++)
+            for (int j = SIZE_PATTERN_LINES-1 ; j > SIZE_PATTERN_LINES-1-i ; j --)
             {
                 tiles[j] = Tile.EMPTY ;
             }
@@ -170,11 +170,11 @@ public class PlayerBoard
         {
             switch (tile)
             {
-                case BLUE : if (isWallCaseBlue(row, i)) break ; break ;
-                case WHITE : if (isWallCaseWhite(row, i)) break ; break ;
-                case BLACK : if (isWallCaseBlack(row, i)) break ; break ;
-                case RED : if (isWallCaseRed(row, i)) break ; break ;
-                case ORANGE : if (isWallCaseOrange(row, i)) break ;
+                case CRYSTAL : if (isWallCaseCrystal(row, i)) break ; break ;
+                case EYE : if (isWallCaseEye(row, i)) break ; break ;
+                case CLAW : if (isWallCaseClaw(row, i)) break ; break ;
+                case FLOWER : if (isWallCaseFlower(row, i)) break ; break ;
+                case MUSHROOM : if (isWallCaseMushroom(row, i)) break ;
             }
         }
 
@@ -226,7 +226,6 @@ public class PlayerBoard
         {
             throw new PlayerBoardException(PlayerBoardException.OUT_WALL);
         }
-
         return mWall.get(i)[j] ;
     }
 
@@ -265,36 +264,36 @@ public class PlayerBoard
     public boolean canBePlacedOnWall(Tile tile, int row, int column)
     {
         // Check if the corresponding case in the wall is of the tile color.
-        return tile == Tile.BLUE && isWallCaseBlue(row, column)
-                || tile == Tile.WHITE && isWallCaseWhite(row, column)
-                || tile == Tile.BLACK && isWallCaseBlack(row, column)
-                || tile == Tile.RED && isWallCaseRed(row, column)
-                || tile == Tile.ORANGE && isWallCaseOrange(row, column) ;
+        return tile == Tile.CRYSTAL && isWallCaseCrystal(row, column)
+                || tile == Tile.EYE && isWallCaseEye(row, column)
+                || tile == Tile.CLAW && isWallCaseClaw(row, column)
+                || tile == Tile.FLOWER && isWallCaseFlower(row, column)
+                || tile == Tile.MUSHROOM && isWallCaseMushroom(row, column) ;
     }
 
-    public boolean isWallCaseBlue(int row, int column)
+    public boolean isWallCaseMushroom(int row, int column)
     {
         return row == column ;
     }
 
-    public boolean isWallCaseWhite(int row, int column)
+    public boolean isWallCaseCrystal(int row, int column)
     {
         return (row == 1 && column == 5) || (row != 1 && row - 1 == column) ;
     }
 
-    public boolean isWallCaseBlack(int row, int column)
+    public boolean isWallCaseEye(int row, int column)
     {
         return (row == 1 && column == 4) || (row == 2 && column == 5)
                 || (row != 1 && row != 2 && row - 2 == column) ;
     }
 
-    public boolean isWallCaseRed(int row, int column)
+    public boolean isWallCaseClaw(int row, int column)
     {
         return (row == 4 && column == 1) || (row == 5 && column == 2)
                 || (row != 4 && row != 5 && row + 2 == column) ;
     }
 
-    public boolean isWallCaseOrange(int row, int column)
+    public boolean isWallCaseFlower(int row, int column)
     {
         return (row == 5 && column == 1) || (row != 5 && row + 1 == column) ;
     }

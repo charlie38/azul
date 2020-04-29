@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
-    private PlayerBoard mPlayerBoard ;
+    public PlayerBoard mPlayerBoard ;
 
     /**
      * Extended by the IA or human player.
