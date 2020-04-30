@@ -32,8 +32,9 @@ public class MainDisplay implements Runnable
 	public void run()
 	{
 		//Initialization of components
-		frame = new JFrame("Azul");
-		frame.add(new PlayerBoardGraph());
+        frame = new JFrame("Azul");
+        ImageLoader iml = new ImageLoader();
+		frame.add(new PlayerBoardGraph(iml));
 		
 		
 		//Settings of the window

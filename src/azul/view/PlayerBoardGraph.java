@@ -10,29 +10,13 @@ import azul.model.player.PlayerBoard.PlayerBoardException;
 import azul.model.tiles.Tile;
 
 public class PlayerBoardGraph extends JComponent {
-	ImageAzul empty,flower,flowerB,claw,clawB,mushroom,mushroomB,crystal,crystalB,eye,eyeB,board,greenCase,brownCase;
-    ImageAzul list[]=new ImageAzul[5];
     Player pCurrent;
+    ImageLoader iml;
 
     //Setter
-    public PlayerBoardGraph() {
+    public PlayerBoardGraph(ImageLoader il) {
     	
-    	//Initialization of all images
-    	empty = new ImageAzul("res/img/empty.png");
-        flower = new ImageAzul("res/img/flower.png");
-        flowerB = new ImageAzul("res/img/flower_blur.png");
-        claw = new ImageAzul("res/img/claw.png");
-        clawB = new ImageAzul("res/img/claw_blur.png");
-        mushroom = new ImageAzul("res/img/mushroom.png");
-        mushroomB = new ImageAzul("res/img/mushroom_blur.png");
-        crystal = new ImageAzul("res/img/crystal.png");
-        crystalB = new ImageAzul("res/img/crystal_blur.png");
-        eye = new ImageAzul("res/img/eye.png");
-        eyeB = new ImageAzul("res/img/eye_blur.png");
-        board = new ImageAzul("res/img/board.png");
-        greenCase = new ImageAzul("res/img/greencase.png");
-        brownCase = new ImageAzul("res/img/browncase.png");
-        list= new ImageAzul[]{mushroomB, crystalB, eyeB, clawB, flowerB};
+    	iml = il;
     }
     
     int resizeBoard(int x, int p) 
@@ -42,33 +26,12 @@ public class PlayerBoardGraph extends JComponent {
         return (int) a;
     }
     
-    public ImageAzul paintIngredient(Tile t)
-    {
-    	switch(t)
-    	{
-    		case CRYSTAL:
-    			return crystal;
-    		case EYE:
-    			return eye;
-    		case CLAW:
-    			return claw;
-    		case FLOWER:
-    			return flower;
-    		case MUSHROOM:
-    			return mushroom;
-    		case EMPTY:
-    			return empty;
-    		default:
-    			return null;
-    	}
-    }
-    
     public void paintEmptyWall(Graphics g,int sx,int sy,int h,int w)
     {
     	for(int i =0 ; i<5; i++){
             for(int j =0 ; j<5; j++){
-                g.drawImage(greenCase.image(),resizeBoard(i*90+430,w),resizeBoard(j*100+330,h),sx,sy,null);
-                g.drawImage(list[(5-i+j)%5].image(),resizeBoard(i*90+430,w),resizeBoard(j*100+330,h),sx,sy,null);
+                g.drawImage(iml.greenCase.image(),resizeBoard(i*90+440,w),resizeBoard(j*132+130,h),sx,sy,null);
+                g.drawImage(iml.list[(5-i+j)%5].image(),resizeBoard(i*90+440,w),resizeBoard(j*132+130,h),sx,sy,null);
             }
         }
     }
@@ -77,7 +40,7 @@ public class PlayerBoardGraph extends JComponent {
     {
     	for(int i =0 ; i<5; i++){
             for(int j = 4 ;  j>3-i; j--){
-                g.drawImage(brownCase.image(),resizeBoard(j*80-10,w),resizeBoard(i*100+330,h),sx,sy,null);
+                g.drawImage(iml.brownCase.image(),resizeBoard(j*75+10,w),resizeBoard(i*132+130,h),sx,sy,null);
             }
         }
     }
@@ -86,7 +49,7 @@ public class PlayerBoardGraph extends JComponent {
         for(int i=0;i<5;i++){
             for(int j=0;j<5;j++){
                 Tile t = pCurrent.mPlayerBoard.getInWall(i,j);
-                g.drawImage(paintIngredient(t).image(),resizeBoard(j*90+430,w),resizeBoard(i*100+330,h),sx,sy,null);
+                g.drawImage(iml.paintIngredient(t).image(),resizeBoard(j*90+440,w),resizeBoard(i*150+110,h),sx,sy,null);
             }
         }
     }
@@ -96,7 +59,6 @@ public class PlayerBoardGraph extends JComponent {
     	for(int i =0 ; i<5; i++){
             for(int j = 4 ;  j>3-i; j--){
             	Tile t = pCurrent.mPlayerBoard.getInPatternLines(i,j);
-                g.drawImage(paintIngredient(Tile.EYE).image(),resizeBoard(j*80-10,w),resizeBoard(i*100+330,h),sx,sy,null);
             }
         }
     }
@@ -108,9 +70,9 @@ public class PlayerBoardGraph extends JComponent {
         int sx,sy;
         
         sx=resizeBoard(70,w);
-        sy=resizeBoard(70,h);
+        sy=resizeBoard(100,h);
 
-        g.drawImage(board.image(),0,0,w,h,null);
+        g.drawImage(iml.board.image(),0,0,w,h,null);
         paintEmptyWall(g,sx,sy,h,w);
         paintEmptyPatternLines(g,sx,sy,h,w);
         paintPlayerWall(g,sx,sy,h,w);
