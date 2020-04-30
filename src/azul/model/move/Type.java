@@ -1,4 +1,4 @@
-package azul.modele.move;
+package azul.model.move;
 
 /**
  * The different types of moves.

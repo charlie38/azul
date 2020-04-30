@@ -1,4 +1,4 @@
-package azul.modele.move;
+package azul.model.move;
 
 public abstract class Move
 {

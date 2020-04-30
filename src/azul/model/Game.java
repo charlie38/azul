@@ -1,10 +1,10 @@
-package azul.modele;
+package azul.model;
 
-import azul.modele.move.PlayerMove;
-import azul.modele.player.HumanPlayer;
-import azul.modele.player.Player;
-import azul.modele.tiles.Tile;
-import azul.modele.tiles.TilesFactory;
+import azul.model.move.PlayerMove;
+import azul.model.player.HumanPlayer;
+import azul.model.player.Player;
+import azul.model.tiles.Tile;
+import azul.model.tiles.TilesFactory;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -121,13 +121,7 @@ public class Game extends Observable
      */
     private int getNbTilesFactories(int nbPlayers)
     {
-        switch (nbPlayers)
-        {
-            case 2 : return 5 ;
-            case 3 : return 7 ;
-            case 4 : return 9 ;
-            default : return 0 ;
-        }
+        return 2 * nbPlayers + 1 ;
     }
 
     /**

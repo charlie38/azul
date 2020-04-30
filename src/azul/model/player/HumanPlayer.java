@@ -1,4 +1,4 @@
-package azul.modele.player;
+package azul.model.player;
 
 public class HumanPlayer extends Player
 {

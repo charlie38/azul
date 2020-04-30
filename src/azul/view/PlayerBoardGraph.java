@@ -4,11 +4,10 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
-import azul.modele.player.HumanPlayer;
-import azul.modele.player.Player;
-import azul.modele.player.PlayerBoard;
-import azul.modele.player.PlayerBoard.PlayerBoardException;
-import azul.modele.tiles.Tile;
+import azul.model.player.HumanPlayer;
+import azul.model.player.Player;
+import azul.model.player.PlayerBoard.PlayerBoardException;
+import azul.model.tiles.Tile;
 
 public class PlayerBoardGraph extends JComponent {
 	ImageAzul empty,flower,flowerB,claw,clawB,mushroom,mushroomB,crystal,crystalB,eye,eyeB,board,greenCase,brownCase;

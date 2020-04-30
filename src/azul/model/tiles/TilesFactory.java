@@ -1,4 +1,4 @@
-package azul.modele.tiles;
+package azul.model.tiles;
 
 import java.util.ArrayList;
 import java.util.Random;
