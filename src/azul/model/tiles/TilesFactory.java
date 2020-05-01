@@ -5,6 +5,9 @@ import java.util.Random;
 
 public class TilesFactory
 {
+    // Max nb of tiles in the factory.
+    public static final int SIZE_FACTORY = 4 ;
+
     // Current tiles in the factory.
     private ArrayList<Tile> mTiles ;
     // To choose randomly the tiles in the bag.
@@ -14,6 +17,10 @@ public class TilesFactory
     {
         mTiles = new ArrayList<>() ;
         mRandom = new Random() ;
+        for(int i=0;i<4;i++)
+        {
+        	mTiles.add(Tile.EYE);
+        }
     }
 
     /**
@@ -24,7 +31,7 @@ public class TilesFactory
     public void prepare(ArrayList<Tile> remainingTiles, ArrayList<Tile> sideTiles)
     {
         // Place 4 tiles in the factory.
-        for (int i = 1 ; i <= 4 ; i ++)
+        for (int i = 1 ; i <= SIZE_FACTORY ; i ++)
         {
             if (remainingTiles.isEmpty())
             {
@@ -38,7 +45,7 @@ public class TilesFactory
                 {
                     // The box cover is also empty.
                     // According to the rules, if there is no tiles remaining, the game start.
-                    return ;
+                    break ;
                 }
             }
             // Take a tile in the bag
@@ -46,6 +53,11 @@ public class TilesFactory
             // Add this tile from the bag to the factory.
             mTiles.add(tile) ;
             remainingTiles.remove(tile) ;
+        }
+
+        for (int i = mTiles.size() - 1 ; i < SIZE_FACTORY ; i ++)
+        {
+            mTiles.add(Tile.EMPTY) ;
         }
     }
 
@@ -66,7 +78,11 @@ public class TilesFactory
             }
         }
         // Remove them from the factory.
-        mTiles.removeAll(tiles) ;
+        for (Tile tile_ : tiles)
+        {
+            mTiles.add(mTiles.indexOf(tile_), Tile.EMPTY) ;
+            mTiles.remove(tile_) ;
+        }
 
         return tiles ;
     }
@@ -74,5 +90,10 @@ public class TilesFactory
     public ArrayList<Tile> getTiles()
     {
         return mTiles ;
+    }
+
+    public Tile getTile(int i)
+    {
+        return mTiles.get(i) ;
     }
 }
