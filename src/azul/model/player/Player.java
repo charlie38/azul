@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
-    public PlayerBoard mPlayerBoard ;
+    private PlayerBoard mPlayerBoard ;
 
     /**
      * Extended by the IA or human player.
@@ -116,5 +116,37 @@ public abstract class Player
     public boolean checkGameOver()
     {
         return mPlayerBoard.isWallRowFull() ;
+    }
+
+    public Tile getInPatternLines(int i, int j)
+    {
+        Tile tile = Tile.EMPTY ;
+
+        try
+        {
+            tile = mPlayerBoard.getInPatternLines(i, j) ;
+        }
+        catch (PlayerBoard.PlayerBoardException e)
+        {
+            e.printStackTrace() ;
+        }
+
+        return tile ;
+    }
+
+    public Tile getInWall(int i, int j)
+    {
+        Tile tile = Tile.EMPTY ;
+
+        try
+        {
+            tile = mPlayerBoard.getInWall(i, j) ;
+        }
+        catch (PlayerBoard.PlayerBoardException e)
+        {
+            e.printStackTrace() ;
+        }
+
+        return tile ;
     }
 }

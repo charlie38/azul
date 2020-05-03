@@ -83,7 +83,7 @@ public class PlayerBoard
         {
             Tile[] tiles = new Tile[SIZE_PATTERN_LINES] ;
 
-            for (int j = SIZE_PATTERN_LINES-1 ; j > SIZE_PATTERN_LINES-1-i ; j --)
+            for (int j = 0 ; j < i ; j ++)
             {
                 tiles[j] = Tile.EMPTY ;
             }

@@ -57,7 +57,7 @@ public class Game extends Observable
         }
         // Initialize the 'first player marker'.
         Tile.onGameStart() ;
-
+        // Initialize game objects.
         initializePlayers(nbPlayers) ;
         initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
         initializeTilesRemaining() ;
@@ -190,6 +190,16 @@ public class Game extends Observable
     public Player getPlayer()
     {
         return mPlayers.get(mCurrentPlayer) ;
+    }
+
+    public int getNbPlayers()
+    {
+        return mPlayers.size() ;
+    }
+
+    public TilesFactory getFactory(int i)
+    {
+        return mTilesFactories.get(i) ;
     }
 
     public ArrayList<Tile> getTilesRemaining()
