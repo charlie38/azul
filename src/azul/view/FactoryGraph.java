@@ -1,11 +1,10 @@
 package azul.view;
 
+import azul.model.tiles.TilesFactory;
+
 import java.awt.Graphics;
 
 import javax.swing.JComponent;
-
-import azul.model.tiles.Tile;
-import azul.model.tiles.TilesFactory;
 
 public class FactoryGraph extends JComponent {
 	ImageLoader iml;

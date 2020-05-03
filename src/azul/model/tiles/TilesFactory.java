@@ -17,9 +17,10 @@ public class TilesFactory
     {
         mTiles = new ArrayList<>() ;
         mRandom = new Random() ;
-        for(int i=0;i<4;i++)
+
+        for (int i = 0 ; i < 4 ; i ++)
         {
-        	mTiles.add(Tile.EYE);
+        	mTiles.add(Tile.EYE) ;
         }
     }
 

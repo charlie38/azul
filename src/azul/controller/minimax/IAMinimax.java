@@ -2,21 +2,40 @@ package azul.controller.minimax;
 
 import azul.controller.IA;
 import azul.model.move.Move;
+import azul.model.player.Player;
 
 import java.util.Collection;
 
 public class IAMinimax extends IA
 {
+    // Logs.
     private final String START_MESSAGE = "IA minimax starts" ;
     private final String END_MESSAGE = "IA minimax ends" ;
+    // The algorithm starting depth.
+    private final int EASY_STARTING_DEPTH = 3 ; // TODO Determinate (for efficiency, and IA difficulty)
+    private final int MIDDLE_STARTING_DEPTH = 4 ; // TODO Determinate (for efficiency, and IA difficulty)
+    private final int HARD_STARTING_DEPTH = 5 ; // TODO Determinate (for efficiency, and IA difficulty)
+    // Difficulty of the IA.
+    private enum Difficulty { EASY, MIDDLE, HARD }
 
-    private final float NAN_EVALUATION = 1f / 1000f ;
+    // Difficulty of the IA.
+    private Difficulty mDifficulty ;
+    // Starting depth, depends on the difficulty.
+    private int mStartingDepth ;
 
     /**
      * IA using the 'minimax' algorithm.
      */
-    public IAMinimax()
+    public IAMinimax(Difficulty difficulty)
     {
+        mDifficulty = difficulty ;
+
+        switch (mDifficulty)
+        {
+            case EASY : mStartingDepth = EASY_STARTING_DEPTH ; break ;
+            case MIDDLE : mStartingDepth = MIDDLE_STARTING_DEPTH ; break ;
+            case HARD : mStartingDepth = HARD_STARTING_DEPTH ;
+        }
     }
 
     @Override
@@ -39,25 +58,23 @@ public class IAMinimax extends IA
     {
         Position current = getCurrentPosition() ;
 
-        float eval = minimax(current, current.getDepth(), true) ;
+        float eval = minimax(current, mStartingDepth, true) ;
 
         return getMove(eval) ;
     }
 
     /**
      * Return an evaluation calculated by the 'minimax' algorithm.
-     * @param position current 'tree' state.
-     * @param depth current 'tree' depth.
-     * @param isMaximizingPlayer
-     * @return 'NAN_EVALUATION' if can't play/game is over, else return an evaluation.
+     * @param position current 'tree' node/state/value.
+     * @param depth current 'tree' depth <-> the number of moves ahead we want to search.
+     * @param isMaximizingPlayer true if it's the player's turn whose value we want to maximize (this IA).
+     * @return an evaluation used to determinate the next player move (for this IA).
      */
     public float minimax(Position position, int depth, boolean isMaximizingPlayer)
     {
-        // TODO Minimax for more than 2 players...
-        
         if (depth == 0 || mGame.isGameOver())
         {
-            return NAN_EVALUATION ;
+            return getStaticEvaluation(position) ;
         }
 
         Collection<Position> nodes = position.getAll(mGame) ;
@@ -88,19 +105,18 @@ public class IAMinimax extends IA
         }
     }
 
-    private Move getMove(float eval)
+    /**
+     * Return a static evaluation of the current position in the 'tree' (because can't be evaluated).
+     * @param position the current 'tree' node.
+     * @return the node value.
+     */
+    private float getStaticEvaluation(Position position)
     {
-        if (eval == NAN_EVALUATION)
-        {
-            return getMoveNAN() ;
-        }
-
-        Move move = null ;
-        // Todo
-        return move ;
+        // TODO
+        return 0f ;
     }
 
-    private Move getMoveNAN()
+    private Move getMove(float eval)
     {
         Move move = null ;
         // Todo
@@ -109,8 +125,12 @@ public class IAMinimax extends IA
 
     private Position getCurrentPosition()
     {
-        Position position = null ;
-        // TODO
-        return position ;
+        return new Position(evaluateValueFromPlayer(mGame.getPlayer()), true) ;
+    }
+
+    private int evaluateValueFromPlayer(Player player)
+    {
+        // TODO evaluate the current player value.
+        return 0 ;
     }
 }
