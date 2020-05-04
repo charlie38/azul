@@ -1,11 +1,14 @@
 package azul.view.images;
 
 import azul.model.tiles.Tile;
+import azul.view.ui.MainMenu;
 
 import java.awt.*;
 
 public class ImageLoader
 {
+    // Game title.
+    private ImageAzul mGameTitle ;
     // Game icon.
     private ImageAzul mGameIcon ;
     // Background.
@@ -35,6 +38,7 @@ public class ImageLoader
 
     private void loadImages()
     {
+        mGameTitle = new ImageAzul("res/img/title.png") ;
         mGameIcon = new ImageAzul("res/img/eye.png") ;
         mBgTile = new ImageAzul("res/img/bg.png") ;
         mTable = new ImageAzul("res/img/table.png") ;
@@ -68,6 +72,14 @@ public class ImageLoader
     		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
+    }
+
+    public Image getGameTitle()
+    {
+        return mGameTitle.get().getScaledInstance(
+                MainMenu.GAME_TITLE_WIDTH,
+                MainMenu.GAME_TITLE_HEIGHT,
+                Image.SCALE_SMOOTH) ;
     }
 
     public Image getGameIcon()

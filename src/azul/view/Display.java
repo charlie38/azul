@@ -10,6 +10,14 @@ import java.awt.*;
 
 public class Display implements Runnable
 {
+	// Menu/game states.
+	public enum State { MAIN_MENU, CREDITS, IN_GAME, SETTINGS }
+
+	// Background colors.
+	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
+	public static final Color BG_CREDITS = Color.RED ;
+	public static final Color BG_IN_GAME = Color.RED ;
+	public static final Color BG_SETTINGS = Color.GREEN ;
 	// Window title.
 	public static final String WINDOW_TITLE = "AZUL" ;
 	// Window sizes.
@@ -31,7 +39,9 @@ public class Display implements Runnable
 	private UIPanel mUIPanel ;
 	// To load images.
 	private ImageLoader mImgLoader ;
-	
+	// Current state.
+	private State mState ;
+
 	public Display(Game game)
 	{
 	    mGame = game ;
@@ -49,22 +59,63 @@ public class Display implements Runnable
 		mFrame.setIconImage(mImgLoader.getGameIcon()) ;
 		mFrame.setSize(new Dimension(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT)) ;
 		mFrame.setMinimumSize(new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)) ;
+		mFrame.setResizable(true) ;
 		mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
 		mFrame.setLocationRelativeTo(null) ;
-		mFrame.setContentPane(mDrawingPanel) ;
-		mFrame.add(mUIPanel) ;
+		mFrame.setLayout(new BorderLayout(0, 0)) ;
+		mFrame.add(mDrawingPanel, BorderLayout.CENTER) ;
+		mFrame.add(mUIPanel, BorderLayout.SOUTH) ;
+
 		mFrame.setVisible(true) ;
+
+		// Start in the main menu.
+		onGoMainMenu() ;
 	}
 
-	public void startGame(int nbPlayers)
+	/**
+	 * Called when user goes to the main menu.
+	 */
+	public void onGoMainMenu()
 	{
-	    SwingUtilities.invokeLater(
-	    		() ->
-				{
-					mGame.startGame(nbPlayers) ;
-					mDrawingPanel.startGame(nbPlayers) ;
-				}
-		) ;
+		mState = State.MAIN_MENU ;
+
+	    mUIPanel.onGoMainMenu() ;
+		mDrawingPanel.onGoMainMenu() ;
+	}
+
+	/**
+	 * Called when user selects the credits option.
+	 */
+	public void onGoCredits()
+	{
+		mState = State.CREDITS ;
+
+		mUIPanel.onGoCredits() ;
+		mDrawingPanel.onGoCredits() ;
+	}
+
+	/**
+	 * Called when user starts a game.
+	 */
+	public void onGoInGame()
+	{
+		mState = State.IN_GAME ;
+
+		mGame.startGame(4) ;
+
+		mUIPanel.onGoInGame() ;
+		mDrawingPanel.onGoInGame() ;
+	}
+
+	/**
+	 * Called when user goes to settings.
+	 */
+	public void onGoSettings()
+	{
+		mState = State.SETTINGS ;
+
+		mUIPanel.onGoSettings() ;
+		mDrawingPanel.onGoSettings() ;
 	}
 
 	/**
@@ -89,16 +140,6 @@ public class Display implements Runnable
 		return mFrame.getBounds().height - mFrame.getInsets().top - mFrame.getInsets().bottom ;
 	}
 
-	public float getResizeCoefWidth()
-	{
-		return (float) getWindowWidth() / WINDOW_DEFAULT_WIDTH ;
-	}
-
-	public float getResizeCoefHeight()
-	{
-		return (float) getWindowHeight() / WINDOW_DEFAULT_HEIGHT ;
-	}
-
 	public Game getGame()
 	{
 		return mGame ;
@@ -117,5 +158,10 @@ public class Display implements Runnable
 	public UIPanel getUIPanel()
 	{
 		return mUIPanel ;
+	}
+
+	public State getState()
+	{
+		return mState ;
 	}
 }

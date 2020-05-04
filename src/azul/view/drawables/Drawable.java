@@ -1,13 +1,11 @@
 package azul.view.drawables;
 
-import azul.Main;
 import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.images.ImageLoader;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 
 public abstract class Drawable extends JComponent
@@ -40,10 +38,11 @@ public abstract class Drawable extends JComponent
      */
     public Point computeCoef()
     {
-        mCoef = Math.min(mDisplay.getResizeCoefWidth(), mDisplay.getResizeCoefHeight()) ;
+        mCoef = Math.min(mDisplay.getDrawingPanel().getResizeCoefWidth(),
+                mDisplay.getDrawingPanel().getResizeCoefHeight()) ;
 
-        return new Point((int) (mDisplay.getWindowWidth() / 2f + mOriginalX * mCoef),
-                (int) (mDisplay.getWindowHeight() / 2f + mOriginalY * mCoef)) ;
+        return new Point((int) (mDisplay.getDrawingPanel().getWidth() / 2f + mOriginalX * mCoef),
+                (int) (mDisplay.getDrawingPanel().getHeight() / 2f + mOriginalY * mCoef)) ;
     }
 
     public Display getDisplay()

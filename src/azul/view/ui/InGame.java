@@ -2,6 +2,8 @@ package azul.view.ui;
 
 import azul.view.Display;
 
+import javax.swing.*;
+
 public class InGame extends Screen
 {
     /**
@@ -10,10 +12,11 @@ public class InGame extends Screen
      */
     public InGame(Display display)
     {
-        super(display) ;
+        super(display, 1, 1) ;
 
-        setBackground(UIPanel.BG_IN_GAME) ;
+        setBackground(Display.BG_IN_GAME) ;
         // Create components.
         // Add them.
+        add(new JButton("hey")) ;
     }
 }

@@ -2,17 +2,17 @@ package azul.view.ui;
 
 import azul.view.Display;
 
-public class Settings extends Screen
+public class Credits extends Screen
 {
     /**
-     * Contains the settings components <-> is the settings screen.
+     * Contains the credits components <-> is the credits screen.
      * @param display is the root.
      */
-    public Settings(Display display)
+    public Credits(Display display)
     {
         super(display, 1, 1) ;
 
-        setBackground(Display.BG_SETTINGS) ;
+        setBackground(Display.BG_CREDITS) ;
 
         // Create components.
         // Add them.

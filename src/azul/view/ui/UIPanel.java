@@ -7,12 +7,6 @@ import java.awt.*;
 
 public class UIPanel extends JPanel
 {
-    // Background colors.
-    public static final Color BG_MAIN_MENU = Color.DARK_GRAY ;
-    public static final Color BG_CREDITS = Color.RED ;
-    public static final Color BG_IN_GAME = Color.RED ;
-    public static final Color BG_SETTINGS = Color.GREEN ;
-
     // Root ref.
     private Display mDisplay ;
     // Screens.
