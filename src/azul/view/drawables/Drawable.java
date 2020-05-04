@@ -1,11 +1,13 @@
 package azul.view.drawables;
 
+import azul.Main;
 import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.images.ImageLoader;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 
 public abstract class Drawable extends JComponent
@@ -33,7 +35,7 @@ public abstract class Drawable extends JComponent
 
     /**
      * Compute the resizing coefficient, and return the new coordinates (center of the screen is (0, 0)).
-     * <!> Needs to be call in the 'paint' method of the drawable. </!>
+     * <!> Needs to be call in the 'paint' method of the drawable to have everything scaled. </!>
      * @return new drawable coordinates.
      */
     public Point computeCoef()

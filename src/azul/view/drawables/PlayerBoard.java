@@ -7,22 +7,22 @@ import java.awt.*;
 public class PlayerBoard extends Drawable
 {
     // Board bg.
-    public static final int WIDTH_BOARD = (int) (334 * Display.SIZE_COEF) ;
-    public static final int HEIGHT_BOARD = (int) (290 * Display.SIZE_COEF) ;
+    public static final int WIDTH_BOARD = (int) (349 * Display.SIZE_COEF) ;
+    public static final int HEIGHT_BOARD = (int) (234 * Display.SIZE_COEF) ;
     // Wall cases and tiles (bg).
     public static final int WIDTH_WALL_TILE = (int) (22 * Display.SIZE_COEF) ;
     public static final int HEIGHT_WALL_TILE = (int) (22 *Display.SIZE_COEF) ;
     public static final int SPACE_H_WALL_TILE = (int) (8 * Display.SIZE_COEF) ;
     public static final int SPACE_V_WALL_TILE = (int) (8 * Display.SIZE_COEF) ;
-    public static final int DISTANCE_LEFT_TO_WALL = (int) (145 * Display.SIZE_COEF) ;
-    public static final int DISTANCE_TOP_TO_WALL = (int) (95 *Display.SIZE_COEF) ;
+    public static final int DISTANCE_LEFT_TO_WALL = (int) (155 * Display.SIZE_COEF) ;
+    public static final int DISTANCE_TOP_TO_WALL = (int) (38 *Display.SIZE_COEF) ;
     // Pattern lines cases and tiles (bg).
     public static final int WIDTH_PL_TILE = (int) (22 * Display.SIZE_COEF) ;
     public static final int HEIGHT_PL_TILE = (int) (22 * Display.SIZE_COEF) ;
     public static final int SPACE_H_PL_TILE = (int) (0 * Display.SIZE_COEF) ;
     public static final int SPACE_V_PL_TILE = (int) (8 * Display.SIZE_COEF) ;
-    public static final int DISTANCE_LEFT_TO_PL = (int) (10 * Display.SIZE_COEF) ;
-    public static final int DISTANCE_TOP_TO_PL = (int) (95 * Display.SIZE_COEF) ;
+    public static final int DISTANCE_LEFT_TO_PL = (int) (23 * Display.SIZE_COEF) ;
+    public static final int DISTANCE_TOP_TO_PL = (int) (38 * Display.SIZE_COEF) ;
 
     /**
      * A player board graphical representation.
@@ -38,6 +38,8 @@ public class PlayerBoard extends Drawable
     @Override
     public void paint(Graphics g)
     {
+        super.paint(g) ;
+
         Point point = computeCoef() ;
         float x = point.x ;
         float y = point.y ;

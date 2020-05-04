@@ -35,6 +35,8 @@ public class TilesFactory extends Drawable
 
 	public void paint(Graphics g)
     {
+        super.paint(g) ;
+
         Point point = computeCoef() ;
         float x = point.x ;
         float y = point.y ;

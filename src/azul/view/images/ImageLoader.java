@@ -6,6 +6,12 @@ import java.awt.*;
 
 public class ImageLoader
 {
+    // Game icon.
+    private ImageAzul mGameIcon ;
+    // Background.
+    private ImageAzul mBgTile ;
+    // Bowls table.
+    private ImageAzul mTable ;
     // Tiles.
 	private ImageAzul mEmpty ;
 	private ImageAzul mFlower, mFlowerB ;
@@ -20,19 +26,18 @@ public class ImageLoader
     // Tiles factory.
     private ImageAzul mFactory ;
     private ImageAzul mFactoryCase ;
-    // TODO check utility
-    public ImageAzul mTilesB[] ;
 
     public ImageLoader()
     {
         // Initialization of all images.
         loadImages() ;
-
-        mTilesB = new ImageAzul[] { mMushroomB, mCrystalB, mEyeB, mClawB, mFlowerB } ;
     }
 
     private void loadImages()
     {
+        mGameIcon = new ImageAzul("res/img/eye.png") ;
+        mBgTile = new ImageAzul("res/img/bg.png") ;
+        mTable = new ImageAzul("res/img/table.png") ;
         mEmpty = new ImageAzul("res/img/empty.png") ;
         mFlower = new ImageAzul("res/img/flower.png") ;
         mFlowerB = new ImageAzul("res/img/flower_blur.png") ;
@@ -44,7 +49,7 @@ public class ImageLoader
         mCrystalB = new ImageAzul("res/img/crystal_blur.png") ;
         mEye = new ImageAzul("res/img/eye.png") ;
         mEyeB = new ImageAzul("res/img/eye_blur.png") ;
-        mBoard = new ImageAzul("res/img/board.png") ;
+        mBoard = new ImageAzul("res/img/board_borders.png") ;
         mWallCase = new ImageAzul("res/img/greencase.png") ;
         mPatternLineCase = new ImageAzul("res/img/browncase.png") ;
         mFactory = new ImageAzul("res/img/bowl.png") ;
@@ -63,6 +68,21 @@ public class ImageLoader
     		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
+    }
+
+    public Image getGameIcon()
+    {
+        return mGameIcon.get() ;
+    }
+
+    public Image getBgTile()
+    {
+        return mBgTile.get() ;
+    }
+
+    public Image getTable()
+    {
+        return mTable.get() ;
     }
 
     public Image getBoard()

@@ -12,9 +12,8 @@ public class Main
         int nbPlayer = 4 ;
 
         Game game = new Game() ;
-        game.startGame(nbPlayer) ;
 
         Display display = new Display(game) ;
-    	SwingUtilities.invokeLater(display) ;
+        SwingUtilities.invokeLater(display) ;
     }
 }

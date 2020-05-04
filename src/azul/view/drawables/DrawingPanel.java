@@ -10,6 +10,10 @@ public class DrawingPanel extends JPanel
 {
     // Root ref.
     private Display mDisplay ;
+    // Game background.
+    private Background mBackground ;
+    // Bowls table
+    private Table mTable ;
     // Players board.
     private ArrayList<PlayerBoard> mBoards ;
     // Tiles factories.
@@ -24,143 +28,69 @@ public class DrawingPanel extends JPanel
         mDisplay = display ;
         mBoards = new ArrayList<>() ;
         mFactories = new ArrayList<>() ;
-
-        setBackground(Display.WINDOW_BG) ;
     }
 
     public void startGame(int nbPlayers)
     {
         mBoards.clear() ;
         mFactories.clear() ;
+        // Create new game objects.
+        createBackground() ;
+        createTable() ;
+        createPlayers(nbPlayers) ;
+        createFactories(mDisplay.getGame().getNbTilesFactories(nbPlayers)) ;
+        // Refresh.
+        repaint() ;
+    }
 
-        switch (nbPlayers)
+    private void createBackground()
+    {
+        mBackground = new Background(mDisplay) ;
+    }
+
+    private void createTable()
+    {
+        mTable = new Table(mDisplay,
+                - Table.WIDTH_TABLE / 2,
+                Display.WINDOW_DEFAULT_HEIGHT / 2 - Table.HEIGHT_TABLE) ;
+    }
+
+    private void createPlayers(int nbPlayers)
+    {
+        for (int i = 0 ; i < nbPlayers ; i ++)
         {
-            case 2 :
-                createTwoPlayers() ;
-                createFiveFactories() ;
-                break ;
-            case 3 :
-                createThreePlayers() ;
-                createSevenFactories() ;
-                break ;
-            case 4 :
-                createFourPlayers() ;
-                createNineFactories() ;
+            mBoards.add(new PlayerBoard(mDisplay,
+                    (i % 2 != 0 ? -1 : 1) * Display.WINDOW_DEFAULT_WIDTH / 2
+                            - (i % 2 != 0 ? 0 : PlayerBoard.WIDTH_BOARD),
+                    (i < 2 ? -1 : 1) * Display.WINDOW_DEFAULT_HEIGHT / 2
+                            - (i < 2 ? 0 : PlayerBoard.HEIGHT_BOARD))) ;
         }
     }
 
-    private void createTwoPlayers()
+    private void createFactories(int nbFactories)
     {
-        mBoards.add(new PlayerBoard(mDisplay,
-                - mDisplay.getWindowWidth() / 2,
-                - PlayerBoard.HEIGHT_BOARD / 2)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                mDisplay.getWindowWidth() / 2 - PlayerBoard.WIDTH_BOARD,
-                - PlayerBoard.HEIGHT_BOARD / 2)) ;
-    }
+        int nbRows = nbFactories / 3 + nbFactories % 3 ;
+        int factory = 0 ;
 
-    private void createThreePlayers()
-    {
-        mBoards.add(new PlayerBoard(mDisplay,
-                - PlayerBoard.WIDTH_BOARD / 2,
-                mDisplay.getWindowHeight() / 2 - PlayerBoard.HEIGHT_BOARD)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                - mDisplay.getWindowWidth() / 2,
-                - mDisplay.getWindowHeight() / 2)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                mDisplay.getWindowWidth() / 2 - PlayerBoard.WIDTH_BOARD,
-                - mDisplay.getWindowHeight() / 2)) ;
-    }
+        for (int i = 0 ; i < nbRows ; i ++)
+        {
+            for (int j = 0 ; j < ((i == nbRows - 1 && nbFactories % 3 != 0 )? nbFactories % 3 : 3) ; j ++)
+            {
+                float deltaX = 0f ;
 
-    private void createFourPlayers()
-    {
-        mBoards.add(new PlayerBoard(mDisplay,
-                - mDisplay.getWindowWidth() / 2,
-                mDisplay.getWindowHeight() / 2 - PlayerBoard.HEIGHT_BOARD)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                mDisplay.getWindowWidth() / 2 - PlayerBoard.WIDTH_BOARD,
-                mDisplay.getWindowHeight() / 2 - PlayerBoard.HEIGHT_BOARD)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                - mDisplay.getWindowWidth() / 2,
-                - mDisplay.getWindowHeight() / 2)) ;
-        mBoards.add(new PlayerBoard(mDisplay,
-                mDisplay.getWindowWidth() / 2 - PlayerBoard.WIDTH_BOARD,
-                - mDisplay.getWindowHeight() / 2)) ;
-    }
+                switch (j)
+                {
+                    case 0 : deltaX = -2f ; break ;
+                    case 1 : deltaX = -.5f ; break ;
+                    case 2 : deltaX = 1f ; break ;
+                }
 
-    private void createFiveFactories()
-    {
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.25), 0)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.25), 1)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.25), 2)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -2.25), 3)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * .5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -2.25), 4)) ;
-    }
-
-    private void createSevenFactories()
-    {
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -4.), 0)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -2.75), 1)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -1.5), 2)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -.5), 3)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -4.), 4)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -2.75), 5)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * -1.5), 6)) ;
-    }
-
-    private void createNineFactories()
-    {
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.), 0)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.), 1)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 1.), 2)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 2.375), 3)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 2.375), 4)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 2.375), 5)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -2.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 3.75), 6)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * -.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 3.75), 7)) ;
-        mFactories.add(new TilesFactory(mDisplay,
-                (int) (TilesFactory.WIDTH_FACTORY * 1.5),
-                (int) (TilesFactory.HEIGHT_FACTORY * 3.75), 8)) ;
+                mFactories.add(new TilesFactory(mDisplay,
+                        (int) (TilesFactory.WIDTH_FACTORY * deltaX),
+                        (int) (TilesFactory.HEIGHT_FACTORY * (1.f + 1.45f * i)),
+                        factory ++)) ;
+            }
+        }
     }
 
     @Override
@@ -168,8 +98,23 @@ public class DrawingPanel extends JPanel
     {
         super.paint(g) ;
 
-        paintPlayersBoard(g) ;
-        paintTilesFactories(g) ;
+        if (mDisplay.getGame().isGameRunning())
+        {
+            paintBackground(g) ;
+            paintTable(g) ;
+            paintPlayersBoard(g) ;
+            paintTilesFactories(g) ;
+        }
+    }
+
+    private void paintBackground(Graphics g)
+    {
+        mBackground.paint(g) ;
+    }
+
+    private void paintTable(Graphics g)
+    {
+        mTable.paint(g) ;
     }
 
     private void paintPlayersBoard(Graphics g)

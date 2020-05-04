@@ -26,6 +26,8 @@ public class Game extends Observable
     private ArrayList<Tile> mTilesAside ;
     // The player who must play during this game turn.
     private int mCurrentPlayer ;
+    // True if a game is running.
+    private boolean mIsGameRunning ;
 
     /**
      * Contains the game objects ; players, tiles factories and tiles bag.
@@ -37,6 +39,7 @@ public class Game extends Observable
         mTilesFactories = new ArrayList<>() ;
         mTilesRemaining = new ArrayList<>() ;
         mTilesAside = new ArrayList<>() ;
+        mIsGameRunning = false ;
     }
 
     /**
@@ -64,6 +67,8 @@ public class Game extends Observable
         initializeTilesAside() ;
         // This will be the first round.
         prepareForRound() ;
+
+        mIsGameRunning = true ;
     }
 
     /**
@@ -119,7 +124,7 @@ public class Game extends Observable
      * @param nbPlayers the number of player for this game.
      * @return the number of factories needed.
      */
-    private int getNbTilesFactories(int nbPlayers)
+    public int getNbTilesFactories(int nbPlayers)
     {
         return 2 * nbPlayers + 1 ;
     }
@@ -156,6 +161,17 @@ public class Game extends Observable
     }
 
     /**
+     * Decorate the players' wall. Called at the end of a round.
+     */
+    public void decorateWalls()
+    {
+        for (Player player : mPlayers)
+        {
+            player.decorateWall(mTilesAside) ;
+        }
+    }
+
+    /**
      * Check if the game is over by checking all users' wall.
      * According to the rules, if a row is full in a user wall, the game is over.
      * @return true if the game is over.
@@ -173,15 +189,9 @@ public class Game extends Observable
         return false ;
     }
 
-    /**
-     * Decorate the players' wall. Called at the end of a round.
-     */
-    public void decorateWalls()
+    public boolean isGameRunning()
     {
-        for (Player player : mPlayers)
-        {
-            player.decorateWall(mTilesAside) ;
-        }
+        return mIsGameRunning ;
     }
 
     /**
