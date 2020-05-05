@@ -1,4 +1,4 @@
-package azul.view.drawables;
+package azul.view.drawable;
 
 import azul.view.Display;
 
@@ -16,7 +16,7 @@ public class Background extends Drawable
      */
     public Background(Display display)
     {
-        super(display, -1, -1) ;
+        super(display, -1, -1, WIDTH_TILE, HEIGHT_TILE) ;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Background extends Drawable
 
     public void paintBg(Graphics g, int x, int y)
     {
-        Image img = getImageLoader().getBgTile() ;
+        Image img = getResourcesLoader().getBgTile() ;
         int width = (int) (WIDTH_TILE * mCoef) ;
         int height = (int) (HEIGHT_TILE * mCoef) ;
 

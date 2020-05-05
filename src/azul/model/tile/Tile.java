@@ -1,4 +1,4 @@
-package azul.model.tiles;
+package azul.model.tile;
 
 /**
  * Tiles used in the game.

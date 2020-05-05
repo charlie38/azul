@@ -1,8 +1,8 @@
 package azul.view;
 
 import azul.model.Game;
-import azul.view.drawables.DrawingPanel;
-import azul.view.images.ImageLoader;
+import azul.view.drawable.DrawingPanel;
+import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 
 import javax.swing.*;
@@ -15,18 +15,18 @@ public class Display implements Runnable
 
 	// Background colors.
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
-	public static final Color BG_CREDITS = Color.RED ;
-	public static final Color BG_IN_GAME = Color.RED ;
+	public static final Color BG_CREDITS = new Color(0x4A4E49) ;
+	public static final Color BG_IN_GAME = new Color(0X4A4E49) ;
 	public static final Color BG_SETTINGS = Color.GREEN ;
 	// Window title.
 	public static final String WINDOW_TITLE = "AZUL" ;
 	// Window sizes.
 	public static final int WINDOW_DEFAULT_WIDTH = 1280 ;
 	public static final int WINDOW_DEFAULT_HEIGHT = 720 ;
-	public static final int WINDOW_MIN_WIDTH = 720 ;  // <!> Should not be more then the
+	public static final int WINDOW_MIN_WIDTH = 1280 ;  // <!> Should not be more then the
 	public static final int WINDOW_MIN_HEIGHT = 720 ; // min(DEFAULT_WIDTH, DEFAULT_HEIGHT). <!>
 	// Component size.
-	public static final float DEFAULT_COEF = 1f ;
+	public static final float DEFAULT_COEF = 1.f ;
 	public static final float SIZE_COEF = DEFAULT_COEF ;
 
 	// Game model.
@@ -38,14 +38,14 @@ public class Display implements Runnable
 	// UI.
 	private UIPanel mUIPanel ;
 	// To load images.
-	private ImageLoader mImgLoader ;
+	private ResourcesLoader mResourcesLoader;
 	// Current state.
 	private State mState ;
 
 	public Display(Game game)
 	{
 	    mGame = game ;
-		mImgLoader = new ImageLoader() ;
+		mResourcesLoader = new ResourcesLoader() ;
 		mDrawingPanel = new DrawingPanel(this) ;
 		mUIPanel = new UIPanel(this) ;
 	}
@@ -56,7 +56,7 @@ public class Display implements Runnable
 		// Initialization of the frame.
 		mFrame = new JFrame(WINDOW_TITLE) ;
 
-		mFrame.setIconImage(mImgLoader.getGameIcon()) ;
+		mFrame.setIconImage(mResourcesLoader.getGameIcon()) ;
 		mFrame.setSize(new Dimension(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT)) ;
 		mFrame.setMinimumSize(new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)) ;
 		mFrame.setResizable(true) ;
@@ -145,9 +145,9 @@ public class Display implements Runnable
 		return mGame ;
 	}
 
-	public ImageLoader getImageLoader()
+	public ResourcesLoader getResourcesLoader()
 	{
-		return mImgLoader ;
+		return mResourcesLoader;
 	}
 
 	public DrawingPanel getDrawingPanel()

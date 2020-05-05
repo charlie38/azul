@@ -1,4 +1,4 @@
-package azul.view.drawables;
+package azul.view.drawable;
 
 import azul.view.Display;
 
@@ -18,7 +18,7 @@ public class Table extends Drawable
      */
     public Table(Display display, int originalX, int originalY)
     {
-        super(display, originalX, originalY) ;
+        super(display, originalX, originalY, WIDTH_TABLE, HEIGHT_TABLE) ;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Table extends Drawable
 
     public void paintBg(Graphics g, int x, int y)
     {
-        Image img = getImageLoader().getTable() ;
+        Image img = getResourcesLoader().getTable() ;
         int width = (int) (WIDTH_TABLE * mCoef) ;
         int height = (int) (HEIGHT_TABLE * mCoef) ;
 

@@ -1,4 +1,4 @@
-package azul.view.images;
+package azul.view.resource;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

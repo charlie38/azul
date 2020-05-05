@@ -2,10 +2,13 @@ package azul.view.ui;
 
 import azul.model.Game;
 import azul.view.Display;
-import azul.view.images.ImageLoader;
+import azul.view.resource.ResourcesLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 public abstract class Screen extends JPanel
 {
@@ -29,22 +32,82 @@ public abstract class Screen extends JPanel
         setLayout(new GridLayout(nbRows, nbCols, HGAP, VGAP)) ;
     }
 
-    public Display getDisplay()
+    protected JButton createButton(String message, Color color, float pt, ActionListener listener)
+    {
+        JButton button = new JButton(message) ;
+        button.setFont(getResourcesLoader().getFont(pt)) ;
+        button.setBackground(color) ;
+        button.setBorderPainted(false) ;
+        button.setFocusPainted(false) ;
+        button.addActionListener(listener) ;
+
+        return button ;
+    }
+
+    protected JButton createButton(ImageIcon image, Color color, float pt, ActionListener listener)
+    {
+        JButton button = createButton("", color, pt, listener) ;
+        button.setIcon(image) ;
+
+        return button ;
+    }
+
+    protected JButton createButton(String message, ImageIcon image, Color color, float pt, ActionListener listener)
+    {
+        JButton button = createButton(message, color, pt, listener) ;
+        button.setIcon(image) ;
+
+        return button ;
+    }
+
+    protected JButton createButtonIconSide(String message, ImageIcon image, boolean iconRightSide, Color color, float pt,
+                                           ActionListener listener)
+    {
+        JButton button = createButton(
+                iconRightSide ? "<html><div align=left width=200px>" + message + "</dive></html>" : message,
+                image, color, pt, listener) ;
+        button.setIconTextGap(40) ;
+        button.setHorizontalAlignment(iconRightSide ? SwingConstants.LEFT : SwingConstants.RIGHT) ;
+        button.setHorizontalTextPosition(iconRightSide ? SwingConstants.RIGHT : SwingConstants.LEFT) ;
+
+        return button ;
+    }
+
+    protected JButton createButtonIconTop(String message, ImageIcon image, Color color, float pt, ActionListener listener)
+    {
+        JButton button = createButton(message, image, color, pt, listener) ;
+        button.setIconTextGap(10) ;
+        button.setVerticalTextPosition(SwingConstants.BOTTOM) ;
+        button.setHorizontalTextPosition(SwingConstants.CENTER) ;
+
+        return button ;
+    }
+
+    protected JLabel createLabel(String message, Color color, int pt)
+    {
+        JLabel label = new JLabel(message, SwingConstants.CENTER) ;
+        label.setFont(getResourcesLoader().getFont(pt)) ;
+        label.setForeground(color) ;
+
+        return label ;
+    }
+
+    protected Display getDisplay()
     {
         return mDisplay ;
     }
 
-    public ImageLoader getImageLoader()
+    protected ResourcesLoader getResourcesLoader()
     {
-        return mDisplay.getImageLoader() ;
+        return mDisplay.getResourcesLoader() ;
     }
 
-    public Game getGame()
+    protected Game getGame()
     {
         return mDisplay.getGame() ;
     }
 
-    public UIPanel getUIPanel()
+    protected UIPanel getUIPanel()
     {
         return mDisplay.getUIPanel() ;
     }

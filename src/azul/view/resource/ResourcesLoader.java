@@ -1,12 +1,17 @@
-package azul.view.images;
+package azul.view.resource;
 
-import azul.model.tiles.Tile;
+import azul.model.tile.Tile;
+import azul.view.ui.InGame;
 import azul.view.ui.MainMenu;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
-public class ImageLoader
+public class ResourcesLoader
 {
+    // Game font.
+    private Font mFont ;
     // Game title.
     private ImageAzul mGameTitle ;
     // Game icon.
@@ -29,11 +34,28 @@ public class ImageLoader
     // Tiles factory.
     private ImageAzul mFactory ;
     private ImageAzul mFactoryCase ;
+    // In game navigation.
+    private ImageAzul mPrevious ;
+    private ImageAzul mNext ;
+    private ImageAzul mSettings ;
 
-    public ImageLoader()
+    public ResourcesLoader()
     {
+        loadFont() ;
         // Initialization of all images.
         loadImages() ;
+    }
+
+    private void loadFont()
+    {
+        try
+        {
+            mFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/liquidism_part_2.ttf")) ;
+        }
+        catch (FontFormatException | IOException e)
+        {
+            e.printStackTrace() ;
+        }
     }
 
     private void loadImages()
@@ -58,6 +80,14 @@ public class ImageLoader
         mPatternLineCase = new ImageAzul("res/img/browncase.png") ;
         mFactory = new ImageAzul("res/img/bowl.png") ;
         mFactoryCase = new ImageAzul("res/img/bowlcase.png") ;
+        mPrevious = new ImageAzul("res/img/rewind.png") ;
+        mNext = new ImageAzul("res/img/forward.png") ;
+        mSettings = new ImageAzul("res/img/settings.png") ;
+    }
+
+    public Font getFont(float pt)
+    {
+        return mFont.deriveFont(pt) ;
     }
     
     public Image getIngredient(Tile t)
@@ -120,5 +150,29 @@ public class ImageLoader
     public Image getFactoryCase()
     {
         return mFactoryCase.get() ;
+    }
+
+    public Image getPrevious()
+    {
+        return mPrevious.get().getScaledInstance(
+                InGame.PREVIOUS_WIDTH,
+                InGame.PREVIOUS_HEIGHT,
+                Image.SCALE_SMOOTH) ;
+    }
+
+    public Image getNext()
+    {
+        return mNext.get().getScaledInstance(
+                InGame.NEXT_WIDTH,
+                InGame.NEXT_HEIGHT,
+                Image.SCALE_SMOOTH) ;
+    }
+
+    public Image getSettings()
+    {
+        return mSettings.get().getScaledInstance(
+                InGame.SETTINGS_WIDTH,
+                InGame.SETTINGS_HEIGHT,
+                Image.SCALE_SMOOTH) ;
     }
 }

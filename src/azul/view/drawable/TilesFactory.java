@@ -1,8 +1,9 @@
-package azul.view.drawables;
+package azul.view.drawable;
 
 import azul.view.Display;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class TilesFactory extends Drawable
 {
@@ -19,19 +20,50 @@ public class TilesFactory extends Drawable
 
     // Factory index in the game 'model' list.
     private int mIndex ;
+    // Drawables.
+    private ArrayList<FactoryTile> mFactoryTiles ;
 
     /**
      * A tiles factory graphical representation.
      * @param display root.
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
+     * @param index the factory index in the Game model list.
      */
     public TilesFactory(Display display, int originalX, int originalY, int index)
     {
-        super(display, originalX, originalY) ;
+        super(display, originalX, originalY, WIDTH_FACTORY, HEIGHT_FACTORY) ;
 
         mIndex = index ;
+
+        createFactoryTileList() ;
 	}
+
+	private void createFactoryTileList()
+    {
+        mFactoryTiles = new ArrayList<>() ;
+
+        int tileIndex = 0 ;
+
+        for (int i = 0 ; i < 2 ; i ++)
+        {
+            for (int j = 0 ; j < 2 ; j ++)
+            {
+                mFactoryTiles.add(new FactoryTile(getDisplay(), mOriginalX, mOriginalY, i, j, tileIndex ++)) ;
+            }
+        }
+    }
+
+    /**
+     * @param x the click x-coordinate on the Swing coordinate system.
+     * @param y the click y-coordinate on the Swing coordinate system.
+     * @return the drawable hit (if exists).
+     */
+    public Drawable onClick(int x, int y)
+    {
+        // TODO also create tile list
+        return null ;
+    }
 
 	public void paint(Graphics g)
     {
@@ -48,7 +80,7 @@ public class TilesFactory extends Drawable
 
     public void paintBg(Graphics g, int x, int y)
     {
-        Image img = getImageLoader().getFactory() ;
+        Image img = getResourcesLoader().getFactory() ;
         int width = (int) (WIDTH_FACTORY * mCoef) ;
         int height = (int) (HEIGHT_FACTORY * mCoef) ;
 
@@ -60,7 +92,7 @@ public class TilesFactory extends Drawable
 
     public void paintCases(Graphics g, int x, int y)
     {
-        Image img = getImageLoader().getFactoryCase() ;
+        Image img = getResourcesLoader().getFactoryCase() ;
         int width = (int) (WIDTH_TILE * mCoef) ;
         int height = (int) (HEIGHT_TILE * mCoef) ;
 
@@ -79,20 +111,9 @@ public class TilesFactory extends Drawable
 
     public void paintTiles(Graphics g, int x, int y)
     {
-        int width = (int) (WIDTH_TILE * mCoef) ;
-        int height = (int) (HEIGHT_TILE * mCoef) ;
-        int tile = 0 ;
-
-        for (int i = 0 ; i < 2 ; i ++)
+        for (FactoryTile tile : mFactoryTiles)
         {
-            for (int j = 0 ; j < 2 ; j ++)
-            {
-                g.drawImage(getImageLoader().getIngredient(getGame().getFactory(mIndex).getTile(tile ++)),
-                        x + j * (int) (width + SPACE_H_TILE * mCoef),
-                        y + i * (int) (height + SPACE_V_TILE * mCoef),
-                        width, height,
-                        null) ;
-            }
+            tile.paint(g) ;
         }
     }
 }

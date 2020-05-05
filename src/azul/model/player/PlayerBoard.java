@@ -1,6 +1,6 @@
 package azul.model.player;
 
-import azul.model.tiles.Tile;
+import azul.model.tile.Tile;
 
 import java.util.ArrayList;
 
@@ -85,7 +85,7 @@ public class PlayerBoard
 
             for (int j = 0 ; j < i ; j ++)
             {
-                tiles[j] = Tile.EMPTY ;
+                tiles[j] = Tile.EYE ;
             }
 
             mPatternLines.add(tiles) ;
@@ -102,7 +102,7 @@ public class PlayerBoard
 
             for (int j = 0 ; j < SIZE_WALL ; j ++)
             {
-                tiles[j] = Tile.EMPTY ;
+                tiles[j] = Tile.EYE ;
             }
 
             mWall.add(tiles) ;

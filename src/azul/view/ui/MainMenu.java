@@ -15,12 +15,6 @@ public class MainMenu extends Screen
     public static final String MESSAGE_START = "START" ;
     public static final String MESSAGE_CREDITS = "CREDITS" ;
 
-    // Title.
-    private JLabel mTitle ;
-    // Buttons.
-    private JButton mStart ;
-    private JButton mCredits ;
-
     /**
      * Contains the main menu components <-> is the starting screen.
      * @param display is the root.
@@ -31,36 +25,9 @@ public class MainMenu extends Screen
 
         setBackground(Display.BG_MAIN_MENU) ;
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
-        // Create components.
-        createTitle() ;
-        createStartButton() ;
-        createCreditsButton() ;
-        // Add them.
-        add(mTitle) ;
-        add(mStart) ;
-        add(mCredits) ;
-    }
-
-    public void createTitle()
-    {
-        mTitle = new JLabel(new ImageIcon(getImageLoader().getGameTitle())) ;
-    }
-
-    public void createStartButton()
-    {
-        mStart = new JButton(MESSAGE_START) ;
-        mStart.setBackground(Color.LIGHT_GRAY) ;
-        mStart.setBorderPainted(false) ;
-        mStart.setFocusPainted(false) ;
-        mStart.addActionListener(actionEvent -> getDisplay().onGoInGame()) ;
-    }
-
-    public void createCreditsButton()
-    {
-        mCredits = new JButton(MESSAGE_CREDITS) ;
-        mCredits.setBackground(Color.LIGHT_GRAY) ;
-        mCredits.setBorderPainted(false) ;
-        mCredits.setFocusPainted(false) ;
-        mCredits.addActionListener(actionEvent -> getDisplay().onGoCredits()) ;
+        // Create components and add them.
+        add(new JLabel(new ImageIcon(getResourcesLoader().getGameTitle()))) ;
+        add(createButton(MESSAGE_START, Color.LIGHT_GRAY, 40, (actionEvent) -> getDisplay().onGoInGame())) ;
+        add(createButton(MESSAGE_CREDITS, Color.LIGHT_GRAY, 40, (actionEvent) -> getDisplay().onGoCredits())) ;
     }
 }

@@ -1,7 +1,7 @@
 package azul.model.player;
 
 import azul.model.move.PlayerMove;
-import azul.model.tiles.Tile;
+import azul.model.tile.Tile;
 
 import java.util.ArrayList;
 

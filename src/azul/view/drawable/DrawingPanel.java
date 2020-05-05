@@ -1,7 +1,6 @@
-package azul.view.drawables;
+package azul.view.drawable;
 
 import azul.view.Display;
-import azul.view.ui.UIPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,7 +99,8 @@ public class DrawingPanel extends JPanel
                     (i % 2 != 0 ? -1 : 1) * Display.WINDOW_DEFAULT_WIDTH / 2
                             - (i % 2 != 0 ? 0 : PlayerBoard.WIDTH_BOARD),
                     (i < 2 ? -1 : 1) * Display.WINDOW_DEFAULT_HEIGHT / 2
-                            - (i < 2 ? 0 : PlayerBoard.HEIGHT_BOARD))) ;
+                            - (i < 2 ? 0 : PlayerBoard.HEIGHT_BOARD),
+                    i)) ;
         }
     }
 
@@ -130,14 +130,33 @@ public class DrawingPanel extends JPanel
         }
     }
 
-    protected float getResizeCoefWidth()
+    /**
+     * Called by the controller.
+     * @param x the click x-coordinate on the Swing coordinate system.
+     * @param y the click y-coordinate on the Swing coordinate system.
+     * @return the drawable hit (if exists).
+     */
+    public Drawable onClick(int x, int y)
     {
-        return (float) getWidth() / Display.WINDOW_DEFAULT_WIDTH ;
-    }
+        Drawable clicked ;
 
-    protected float getResizeCoefHeight()
-    {
-        return (float) getHeight() / Display.WINDOW_DEFAULT_HEIGHT ;
+        for (PlayerBoard board : mBoards)
+        {
+            if ((clicked = board.onClick(x, y)) != null)
+            {
+                return clicked ;
+            }
+        }
+
+        for (TilesFactory factory : mFactories)
+        {
+            if ((clicked = factory.onClick(x, y)) != null)
+            {
+                return clicked ;
+            }
+        }
+
+        return null ;
     }
 
     @Override
@@ -204,5 +223,15 @@ public class DrawingPanel extends JPanel
         {
             factory.paint(g) ;
         }
+    }
+
+    protected float getResizeCoefWidth()
+    {
+        return (float) getWidth() / Display.WINDOW_DEFAULT_WIDTH ;
+    }
+
+    protected float getResizeCoefHeight()
+    {
+        return (float) getHeight() / Display.WINDOW_DEFAULT_HEIGHT ;
     }
 }

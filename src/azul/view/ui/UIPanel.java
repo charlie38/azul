@@ -34,11 +34,6 @@ public class UIPanel extends JPanel
         mCredits = new Credits(mDisplay) ;
         mInGame = new InGame(mDisplay) ;
         mSettings = new Settings(mDisplay) ;
-        // Impossible to find a way of stacking the components...
-        add(mMainMenu, BorderLayout.SOUTH) ;
-        add(mCredits, BorderLayout.WEST) ;
-        add(mInGame, BorderLayout.CENTER) ;
-        add(mSettings, BorderLayout.NORTH) ;
     }
 
     /**
@@ -75,17 +70,20 @@ public class UIPanel extends JPanel
 
     private void setVisibilities()
     {
-        mMainMenu.setVisible(false) ;
-        mCredits.setVisible(false) ;
-        mInGame.setVisible(false) ;
-        mSettings.setVisible(false) ;
+        if (getComponentCount() != 0)
+        {
+            removeAll() ;
+        }
 
         switch (mDisplay.getState())
         {
-            case MAIN_MENU : mMainMenu.setVisible(true) ; break ;
-            case CREDITS : mCredits.setVisible(true) ; break ;
-            case IN_GAME : mInGame.setVisible(true) ; break ;
-            case SETTINGS : mSettings.setVisible(true) ;
+            case MAIN_MENU : add(mMainMenu) ; break ;
+            case CREDITS : add(mCredits, BorderLayout.CENTER) ; break ;
+            case IN_GAME : add(mInGame) ; break ;
+            case SETTINGS : add(mSettings) ;
         }
+        // Refresh.
+        getComponent(0).repaint() ;
+        repaint();
     }
 }

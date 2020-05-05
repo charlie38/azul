@@ -3,8 +3,8 @@ package azul.model;
 import azul.model.move.PlayerMove;
 import azul.model.player.HumanPlayer;
 import azul.model.player.Player;
-import azul.model.tiles.Tile;
-import azul.model.tiles.TilesFactory;
+import azul.model.tile.Tile;
+import azul.model.tile.TilesFactory;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -158,6 +158,14 @@ public class Game extends Observable
         notifyObservers() ;
         // Go to the next player.
         mCurrentPlayer ++ ;
+    }
+
+    public void goToPreviousMove()
+    {
+    }
+
+    public void goToNextMove()
+    {
     }
 
     /**

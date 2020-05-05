@@ -1,9 +1,9 @@
-package azul.view.drawables;
+package azul.view.drawable;
 
 import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
-import azul.view.images.ImageLoader;
+import azul.view.resource.ResourcesLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +15,9 @@ public abstract class Drawable extends JComponent
     // Original coordinates (center of screen is (0, 0)).
     protected int mOriginalX ;
     protected int mOriginalY ;
+    // Original width et heigth.
+    protected int mOriginalWidth ;
+    protected int mOriginalHeight ;
     // Coefficient to compute coordinate on window resize.
     protected float mCoef ;
 
@@ -24,11 +27,13 @@ public abstract class Drawable extends JComponent
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
      */
-    public Drawable(Display display, int originalX, int originalY)
+    public Drawable(Display display, int originalX, int originalY, int originalWidth, int originalHeight)
     {
         mDisplay = display ;
         mOriginalX = originalX ;
         mOriginalY = originalY ;
+        mOriginalWidth = originalWidth ;
+        mOriginalHeight = originalHeight ;
     }
 
     /**
@@ -45,14 +50,26 @@ public abstract class Drawable extends JComponent
                 (int) (mDisplay.getDrawingPanel().getHeight() / 2f + mOriginalY * mCoef)) ;
     }
 
+    /**
+     * Check if the drawable was hit.
+     * @param x the click x-coordinate on the Swing coordinate system.
+     * @param y the click y-coordinate on the Swing coordinate system.
+     * @return true if hit.
+     */
+    public boolean isClicked(int x, int y)
+    {
+        return x > (mOriginalX * mCoef) && x < ((mOriginalX + mOriginalWidth) * mCoef)
+                && y > (mOriginalY * mCoef) && y < ((mOriginalY + mOriginalHeight) * mCoef);
+    }
+
     public Display getDisplay()
     {
         return mDisplay ;
     }
 
-    public ImageLoader getImageLoader()
+    public ResourcesLoader getResourcesLoader()
     {
-        return mDisplay.getImageLoader() ;
+        return mDisplay.getResourcesLoader() ;
     }
 
     public Game getGame()
