@@ -1,4 +1,4 @@
-package azul.view.ui;
+package azul.view.ui.screen;
 
 import azul.view.Display;
 
@@ -12,8 +12,8 @@ public class MainMenu extends Screen
     public static final int GAME_TITLE_WIDTH = 150 ;
     public static final int GAME_TITLE_HEIGHT = 150 ;
     // Buttons message.
-    public static final String MESSAGE_START = "START" ;
-    public static final String MESSAGE_CREDITS = "CREDITS" ;
+    public final String MESSAGE_START = "START" ;
+    public final String MESSAGE_CREDITS = "CREDITS" ;
 
     /**
      * Contains the main menu components <-> is the starting screen.

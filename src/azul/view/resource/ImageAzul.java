@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 public class ImageAzul
 {
 	// Error messages that can be threw.
-	private static final String ERROR_PATH = "\nCan't load the image: path error." ;
-	private static final String ERROR_FORMAT = "\nCan't load the image: format error." ;
+	private final String ERROR_PATH = "\nCan't load the image: path error." ;
+	private final String ERROR_FORMAT = "\nCan't load the image: format error." ;
 
 	private Image mImage ;
 

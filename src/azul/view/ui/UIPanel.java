@@ -1,6 +1,10 @@
 package azul.view.ui;
 
 import azul.view.Display;
+import azul.view.ui.screen.Credits;
+import azul.view.ui.screen.InGame;
+import azul.view.ui.screen.MainMenu;
+import azul.view.ui.screen.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,12 +82,9 @@ public class UIPanel extends JPanel
         switch (mDisplay.getState())
         {
             case MAIN_MENU : add(mMainMenu) ; break ;
-            case CREDITS : add(mCredits, BorderLayout.CENTER) ; break ;
+            case CREDITS : add(mCredits) ; break ;
             case IN_GAME : add(mInGame) ; break ;
             case SETTINGS : add(mSettings) ;
         }
-        // Refresh.
-        getComponent(0).repaint() ;
-        repaint();
     }
 }

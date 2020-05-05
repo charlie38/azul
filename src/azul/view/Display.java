@@ -1,5 +1,6 @@
 package azul.view;
 
+import azul.controller.Mouse;
 import azul.model.Game;
 import azul.view.drawable.DrawingPanel;
 import azul.view.resource.ResourcesLoader;
@@ -17,17 +18,14 @@ public class Display implements Runnable
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
 	public static final Color BG_CREDITS = new Color(0x4A4E49) ;
 	public static final Color BG_IN_GAME = new Color(0X4A4E49) ;
-	public static final Color BG_SETTINGS = Color.GREEN ;
+	public static final Color BG_SETTINGS = new Color(0X4A4E49) ;
 	// Window title.
-	public static final String WINDOW_TITLE = "AZUL" ;
+	public final String WINDOW_TITLE = "AZUL" ;
 	// Window sizes.
 	public static final int WINDOW_DEFAULT_WIDTH = 1280 ;
 	public static final int WINDOW_DEFAULT_HEIGHT = 720 ;
-	public static final int WINDOW_MIN_WIDTH = 1280 ;  // <!> Should not be more then the
-	public static final int WINDOW_MIN_HEIGHT = 720 ; // min(DEFAULT_WIDTH, DEFAULT_HEIGHT). <!>
-	// Component size.
-	public static final float DEFAULT_COEF = 1.f ;
-	public static final float SIZE_COEF = DEFAULT_COEF ;
+	public final int WINDOW_MIN_WIDTH = 1280 ;  // <!> Should not be more then the
+	public final int WINDOW_MIN_HEIGHT = 720 ; // min(DEFAULT_WIDTH, DEFAULT_HEIGHT). <!>
 
 	// Game model.
 	private Game mGame ;
@@ -48,6 +46,8 @@ public class Display implements Runnable
 		mResourcesLoader = new ResourcesLoader() ;
 		mDrawingPanel = new DrawingPanel(this) ;
 		mUIPanel = new UIPanel(this) ;
+
+		mDrawingPanel.addMouseListener(new Mouse(this)) ;
 	}
 
 	@Override
@@ -81,6 +81,8 @@ public class Display implements Runnable
 
 	    mUIPanel.onGoMainMenu() ;
 		mDrawingPanel.onGoMainMenu() ;
+		// Refresh.
+		mFrame.validate() ;
 	}
 
 	/**
@@ -92,6 +94,8 @@ public class Display implements Runnable
 
 		mUIPanel.onGoCredits() ;
 		mDrawingPanel.onGoCredits() ;
+		// Refresh.
+		mFrame.validate() ;
 	}
 
 	/**
@@ -105,6 +109,8 @@ public class Display implements Runnable
 
 		mUIPanel.onGoInGame() ;
 		mDrawingPanel.onGoInGame() ;
+		// Refresh.
+		mFrame.validate() ;
 	}
 
 	/**
@@ -116,6 +122,8 @@ public class Display implements Runnable
 
 		mUIPanel.onGoSettings() ;
 		mDrawingPanel.onGoSettings() ;
+		// Refresh.
+		mFrame.validate() ;
 	}
 
 	/**
@@ -163,5 +171,10 @@ public class Display implements Runnable
 	public State getState()
 	{
 		return mState ;
+	}
+
+	public Frame getFrame()
+	{
+		return mFrame ;
 	}
 }

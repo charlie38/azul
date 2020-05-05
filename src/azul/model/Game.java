@@ -14,7 +14,7 @@ public class Game extends Observable
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
     // Number of tiles of the same color in the bag at the start.
-    public static final int NB_TILES_COLOR = 20 ;
+    public final int NB_TILES_COLOR = 20 ;
 
     // All the game players.
     private ArrayList<Player> mPlayers ;
@@ -202,12 +202,14 @@ public class Game extends Observable
         return mIsGameRunning ;
     }
 
-    /**
-     * @return the current player.
-     */
     public Player getPlayer()
     {
         return mPlayers.get(mCurrentPlayer) ;
+    }
+
+    public Player getPlayer(int index)
+    {
+        return mPlayers.get(index) ;
     }
 
     public int getNbPlayers()

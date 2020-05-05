@@ -1,6 +1,9 @@
 package azul.view.drawable;
 
 import azul.view.Display;
+import azul.view.drawable.board.PlayerBoard;
+import azul.view.drawable.table.Table;
+import azul.view.drawable.factory.TilesFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,8 +41,6 @@ public class DrawingPanel extends JPanel
      */
     public void onGoMainMenu()
     {
-        // Refresh.
-        repaint() ;
     }
 
     /**
@@ -47,8 +48,6 @@ public class DrawingPanel extends JPanel
      */
     public void onGoCredits()
     {
-        // Refresh.
-        repaint() ;
     }
 
     /**
@@ -57,8 +56,6 @@ public class DrawingPanel extends JPanel
     public void onGoInGame()
     {
         startGame(mDisplay.getGame().getNbPlayers()) ;
-        // Refresh.
-        repaint() ;
     }
 
     /**
@@ -66,8 +63,6 @@ public class DrawingPanel extends JPanel
      */
     public void onGoSettings()
     {
-        // Refresh.
-        repaint() ;
     }
 
     public void startGame(int nbPlayers)
@@ -88,7 +83,7 @@ public class DrawingPanel extends JPanel
     {
         mTable = new Table(mDisplay,
                 - Table.WIDTH_TABLE / 2,
-                Display.WINDOW_DEFAULT_HEIGHT / 2 - Table.HEIGHT_TABLE) ;
+                -Display.WINDOW_DEFAULT_HEIGHT / 2 + 10) ;
     }
 
     private void createPlayers(int nbPlayers)
@@ -111,20 +106,20 @@ public class DrawingPanel extends JPanel
 
         for (int i = 0 ; i < nbRows ; i ++)
         {
-            for (int j = 0 ; j < ((i == nbRows - 1 && nbFactories % 3 != 0 )? nbFactories % 3 : 3) ; j ++)
+            for (int j = 0 ; j < ((i == nbRows - 1 && nbFactories % 3 != 0 ) ? nbFactories % 3 : 3) ; j ++)
             {
                 float deltaX = 0f ;
 
                 switch (j)
                 {
-                    case 0 : deltaX = -2f ; break ;
+                    case 0 : deltaX = -1.75f ; break ;
                     case 1 : deltaX = -.5f ; break ;
-                    case 2 : deltaX = 1f ; break ;
+                    case 2 : deltaX = .75f ; break ;
                 }
 
                 mFactories.add(new TilesFactory(mDisplay,
                         (int) (TilesFactory.WIDTH_FACTORY * deltaX),
-                        (int) (TilesFactory.HEIGHT_FACTORY * (1.f + 1.45f * i)),
+                        Display.WINDOW_DEFAULT_HEIGHT / 2 - ((TilesFactory.HEIGHT_FACTORY + 10) * (i + 1)),
                         factory ++)) ;
             }
         }
@@ -225,12 +220,12 @@ public class DrawingPanel extends JPanel
         }
     }
 
-    protected float getResizeCoefWidth()
+    protected float getResizeWidthCoef()
     {
         return (float) getWidth() / Display.WINDOW_DEFAULT_WIDTH ;
     }
 
-    protected float getResizeCoefHeight()
+    protected float getResizeHeightCoef()
     {
         return (float) getHeight() / Display.WINDOW_DEFAULT_HEIGHT ;
     }

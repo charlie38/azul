@@ -6,12 +6,15 @@ import java.awt.*;
 
 public class Background extends Drawable
 {
+    // /!\ Change all background components size.
+    public static final float SIZE_COEF = 2.5f ;
     // Size of bg tiles.
-    public static final int WIDTH_TILE = (int) (72 * Display.SIZE_COEF) ;
-    public static final int HEIGHT_TILE = (int) (72 * Display.SIZE_COEF) ;
+    public static final int WIDTH_TILE = (int) (72 * SIZE_COEF) ;
+    public static final int HEIGHT_TILE = (int) (72 * SIZE_COEF) ;
 
     /**
      * The game bg (formed with a background tile)) coordinates not needed.
+     * <!> Special drawable. Width, height and coordinates are not corresponding. </!>
      * @param display root.
      */
     public Background(Display display)
@@ -24,27 +27,22 @@ public class Background extends Drawable
     {
         super.paint(g) ;
 
-        Point point = computeCoef() ;
-        float x = point.x ;
-        float y = point.y ;
+        computeCoef() ;
 
-        paintBg(g, (int) x, (int) y) ;
+        paintBg(g) ;
     }
 
-    public void paintBg(Graphics g, int x, int y)
+    private void paintBg(Graphics g)
     {
         Image img = getResourcesLoader().getBgTile() ;
-        int width = (int) (WIDTH_TILE * mCoef) ;
-        int height = (int) (HEIGHT_TILE * mCoef) ;
+        int width = (int) (mOriginalWidth * mCoef) ;
+        int height = (int) (mOriginalHeight * mCoef) ;
 
-        for (int i = 0 ; i < getDisplay().getWindowWidth() ; i += width)
+        for (int i = 0 ; i < getDisplay().getDrawingPanel().getWidth() ; i += width)
         {
-            for (int j = 0 ; j < getDisplay().getWindowHeight() ; j += height)
+            for (int j = 0 ; j < getDisplay().getDrawingPanel().getHeight() ; j += height)
             {
-                g.drawImage(img,
-                        i, j,
-                        width, height,
-                        null) ;
+                g.drawImage(img, i, j, width, height, null) ;
             }
         }
     }

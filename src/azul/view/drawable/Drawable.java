@@ -15,7 +15,7 @@ public abstract class Drawable extends JComponent
     // Original coordinates (center of screen is (0, 0)).
     protected int mOriginalX ;
     protected int mOriginalY ;
-    // Original width et heigth.
+    // Original width et height.
     protected int mOriginalWidth ;
     protected int mOriginalHeight ;
     // Coefficient to compute coordinate on window resize.
@@ -43,8 +43,8 @@ public abstract class Drawable extends JComponent
      */
     public Point computeCoef()
     {
-        mCoef = Math.min(mDisplay.getDrawingPanel().getResizeCoefWidth(),
-                mDisplay.getDrawingPanel().getResizeCoefHeight()) ;
+        mCoef = Math.min(mDisplay.getDrawingPanel().getResizeWidthCoef(),
+                mDisplay.getDrawingPanel().getResizeHeightCoef()) ;
 
         return new Point((int) (mDisplay.getDrawingPanel().getWidth() / 2f + mOriginalX * mCoef),
                 (int) (mDisplay.getDrawingPanel().getHeight() / 2f + mOriginalY * mCoef)) ;
@@ -58,8 +58,11 @@ public abstract class Drawable extends JComponent
      */
     public boolean isClicked(int x, int y)
     {
-        return x > (mOriginalX * mCoef) && x < ((mOriginalX + mOriginalWidth) * mCoef)
-                && y > (mOriginalY * mCoef) && y < ((mOriginalY + mOriginalHeight) * mCoef);
+        Point point = computeCoef() ;
+
+        return x >= point.x && x <= point.x + mOriginalWidth * mCoef
+                && y >= point.y && y <= point.y + mOriginalHeight * mCoef ;
+
     }
 
     public Display getDisplay()
@@ -80,5 +83,10 @@ public abstract class Drawable extends JComponent
     public Player getPlayer()
     {
         return mDisplay.getGame().getPlayer() ;
+    }
+
+    public Player getPlayer(int index)
+    {
+        return mDisplay.getGame().getPlayer(index) ;
     }
 }

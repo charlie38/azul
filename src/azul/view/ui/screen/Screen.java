@@ -1,8 +1,9 @@
-package azul.view.ui;
+package azul.view.ui.screen;
 
 import azul.model.Game;
 import azul.view.Display;
 import azul.view.resource.ResourcesLoader;
+import azul.view.ui.UIPanel;
 
 import javax.swing.*;
 import java.awt.*;

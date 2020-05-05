@@ -1,8 +1,8 @@
 package azul.view.resource;
 
 import azul.model.tile.Tile;
-import azul.view.ui.InGame;
-import azul.view.ui.MainMenu;
+import azul.view.ui.screen.InGame;
+import azul.view.ui.screen.MainMenu;
 
 import java.awt.*;
 import java.io.File;
@@ -102,6 +102,20 @@ public class ResourcesLoader
     		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
+    }
+
+    public Image getIngredientBlurred(Tile t)
+    {
+        switch(t)
+        {
+            case CRYSTAL : return mCrystalB.get() ;
+            case EYE : return mEyeB.get() ;
+            case CLAW : return mClawB.get() ;
+            case FLOWER : return mFlowerB.get() ;
+            case MUSHROOM : return mMushroomB.get() ;
+            case EMPTY : return mEmpty.get() ;
+            default : return null ;
+        }
     }
 
     public Image getGameTitle()
