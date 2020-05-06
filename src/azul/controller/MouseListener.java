@@ -34,12 +34,12 @@ public class MouseListener implements java.awt.event.MouseListener
         }
         else if (selected instanceof WallTile)
         {
-            // On click, the factory tile start blinking.
+            // On click, the wall tile start blinking.
             ((WallTile) selected).setIsAnimated(true) ;
         }
         else if (selected instanceof PatternLineTile)
         {
-            // On click, the factory tile start blinking.
+            // On click, the pattern line tile start blinking.
             ((PatternLineTile) selected).setIsAnimated(true) ;
         }
     }
