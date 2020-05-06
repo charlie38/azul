@@ -85,7 +85,7 @@ public class PlayerBoard
 
             for (int j = 0 ; j < i ; j ++)
             {
-                tiles[j] = Tile.EYE ;
+                tiles[j] = Tile.EMPTY ;
             }
 
             mPatternLines.add(tiles) ;
@@ -102,7 +102,7 @@ public class PlayerBoard
 
             for (int j = 0 ; j < SIZE_WALL ; j ++)
             {
-                tiles[j] = Tile.EYE ;
+                tiles[j] = Tile.EMPTY ;
             }
 
             mWall.add(tiles) ;
@@ -319,6 +319,31 @@ public class PlayerBoard
 
         return false ;
     }
+
+    public static Tile getWallTile(int row, int column)
+    {
+        if ((row == 1 && column == 5) || (row != 1 && row - 1 == column))
+        {
+            return Tile.CRYSTAL ;
+        }
+        else if ((row == 1 && column == 4) || (row == 2 && column == 5) || (row != 1 && row != 2 && row - 2 == column))
+        {
+            return Tile.EYE ;
+        }
+        else if ((row == 4 && column == 1) || (row == 5 && column == 2) || (row != 4 && row != 5 && row + 2 == column))
+        {
+            return Tile.CLAW ;
+        }
+        else if ((row == 5 && column == 1) || (row != 5 && row + 1 == column))
+        {
+            return Tile.FLOWER ;
+        }
+        else
+        {
+            return Tile.MUSHROOM ;
+        }
+    }
+
 
     /**
      * Setters.

@@ -1,8 +1,6 @@
 package azul.view;
 
-import azul.controller.Mouse;
 import azul.model.Game;
-import azul.view.drawable.DrawingPanel;
 import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 
@@ -12,13 +10,22 @@ import java.awt.*;
 public class Display implements Runnable
 {
 	// Menu/game states.
-	public enum State { MAIN_MENU, CREDITS, IN_GAME, SETTINGS }
+	public enum State { MAIN_MENU, PREPARE, CREDITS, IN_GAME, SETTINGS }
 
 	// Background colors.
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
+	public static final Color BG_PREPARE = new Color(0x4A4E49) ;
 	public static final Color BG_CREDITS = new Color(0x4A4E49) ;
 	public static final Color BG_IN_GAME = new Color(0X4A4E49) ;
 	public static final Color BG_SETTINGS = new Color(0X4A4E49) ;
+	// Text/component bg colors.
+	public static final Color CL_PRIMARY = new Color(0xB0B0B0) ;
+	public static final Color CL_SECONDARY = new Color(0xA0A0A0) ;
+	public static final Color CL_TERTIARY = new Color(0x909090) ;
+	public static final Color CL_QUATERNARY = new Color(0x808080) ;
+	public static final Color CD_PRIMARY = new Color(0x202020) ;
+	public static final Color CD_SECONDARY = new Color(0x303030) ;
+	public static final Color CD_TERTIARY = new Color(0x404040) ;
 	// Window title.
 	public final String WINDOW_TITLE = "AZUL" ;
 	// Window sizes.
@@ -31,8 +38,6 @@ public class Display implements Runnable
 	private Game mGame ;
 	// Window object.
 	private JFrame mFrame ;
-	// Drawing canvas.
-	private DrawingPanel mDrawingPanel ;
 	// UI.
 	private UIPanel mUIPanel ;
 	// To load images.
@@ -44,10 +49,8 @@ public class Display implements Runnable
 	{
 	    mGame = game ;
 		mResourcesLoader = new ResourcesLoader() ;
-		mDrawingPanel = new DrawingPanel(this) ;
+		// The panel.
 		mUIPanel = new UIPanel(this) ;
-
-		mDrawingPanel.addMouseListener(new Mouse(this)) ;
 	}
 
 	@Override
@@ -55,19 +58,14 @@ public class Display implements Runnable
 	{
 		// Initialization of the frame.
 		mFrame = new JFrame(WINDOW_TITLE) ;
-
 		mFrame.setIconImage(mResourcesLoader.getGameIcon()) ;
 		mFrame.setSize(new Dimension(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT)) ;
 		mFrame.setMinimumSize(new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)) ;
 		mFrame.setResizable(true) ;
 		mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
 		mFrame.setLocationRelativeTo(null) ;
-		mFrame.setLayout(new BorderLayout(0, 0)) ;
-		mFrame.add(mDrawingPanel, BorderLayout.CENTER) ;
-		mFrame.add(mUIPanel, BorderLayout.SOUTH) ;
-
+		mFrame.add(mUIPanel) ;
 		mFrame.setVisible(true) ;
-
 		// Start in the main menu.
 		onGoMainMenu() ;
 	}
@@ -78,39 +76,34 @@ public class Display implements Runnable
 	public void onGoMainMenu()
 	{
 		mState = State.MAIN_MENU ;
-
 	    mUIPanel.onGoMainMenu() ;
-		mDrawingPanel.onGoMainMenu() ;
-		// Refresh.
-		mFrame.validate() ;
 	}
 
 	/**
-	 * Called when user selects the credits option.
+	 * Called when user selects the "START" option.
+	 */
+	public void onGoPrepare()
+	{
+		mState = State.PREPARE ;
+		mUIPanel.onGoPrepare() ;
+	}
+
+	/**
+	 * Called when user selects the "CREDITS" option.
 	 */
 	public void onGoCredits()
 	{
 		mState = State.CREDITS ;
-
 		mUIPanel.onGoCredits() ;
-		mDrawingPanel.onGoCredits() ;
-		// Refresh.
-		mFrame.validate() ;
 	}
 
 	/**
-	 * Called when user starts a game.
+	 * Called when user goes in the game screen.
 	 */
 	public void onGoInGame()
 	{
 		mState = State.IN_GAME ;
-
-		mGame.startGame(4) ;
-
 		mUIPanel.onGoInGame() ;
-		mDrawingPanel.onGoInGame() ;
-		// Refresh.
-		mFrame.validate() ;
 	}
 
 	/**
@@ -119,11 +112,7 @@ public class Display implements Runnable
 	public void onGoSettings()
 	{
 		mState = State.SETTINGS ;
-
 		mUIPanel.onGoSettings() ;
-		mDrawingPanel.onGoSettings() ;
-		// Refresh.
-		mFrame.validate() ;
 	}
 
 	/**
@@ -156,11 +145,6 @@ public class Display implements Runnable
 	public ResourcesLoader getResourcesLoader()
 	{
 		return mResourcesLoader;
-	}
-
-	public DrawingPanel getDrawingPanel()
-	{
-		return mDrawingPanel ;
 	}
 
 	public UIPanel getUIPanel()

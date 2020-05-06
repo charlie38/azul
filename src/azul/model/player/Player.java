@@ -7,13 +7,17 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
+    // The player name.
+    private String mName ;
+    // His board.
     private PlayerBoard mPlayerBoard ;
 
     /**
      * Extended by the IA or human player.
      */
-    public Player()
+    public Player(String playerName)
     {
+        mName = playerName ;
         mPlayerBoard = new PlayerBoard() ;
     }
 
@@ -148,5 +152,15 @@ public abstract class Player
         }
 
         return tile ;
+    }
+
+    public String getName()
+    {
+        return mName ;
+    }
+
+    public int getScore()
+    {
+        return mPlayerBoard.getScoreTrack() ;
     }
 }

@@ -35,15 +35,15 @@ public class InGame extends Screen
         setBackground(Display.BG_IN_GAME) ;
         setBorder(new EmptyBorder(25, 25, 25, 25)) ;
         // Create components and add them.
-        mPrevious = createButtonIconTop(MESSAGE_PREVIOUS, new ImageIcon(getResourcesLoader().getPrevious()),
-                Color.lightGray, 20,
+        mPrevious = createButtonIconTop(MESSAGE_PREVIOUS, getResourcesLoader().getPrevious(), Display.CD_SECONDARY,
+                Display.CL_PRIMARY, 20,
                 actionEvent -> getGame().goToPreviousMove()) ;
         add(mPrevious) ;
-        add(createButtonIconTop(MESSAGE_SETTINGS, new ImageIcon(getResourcesLoader().getSettings()),
-                Color.lightGray, 20,
+        add(createButtonIconTop(MESSAGE_SETTINGS, getResourcesLoader().getSettings(), Display.CD_SECONDARY,
+                Display.CL_PRIMARY, 20,
                 actionEvent -> getDisplay().onGoSettings())) ;
-        mNext = createButtonIconTop(MESSAGE_NEXT, new ImageIcon(getResourcesLoader().getNext()),
-                Color.lightGray, 20,
+        mNext = createButtonIconTop(MESSAGE_NEXT, getResourcesLoader().getNext(), Display.CD_SECONDARY,
+                Display.CL_PRIMARY, 20,
                 actionEvent -> getGame().goToNextMove()) ;
         add(mNext) ;
     }

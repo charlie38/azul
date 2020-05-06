@@ -27,7 +27,9 @@ public class MainMenu extends Screen
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
         add(new JLabel(new ImageIcon(getResourcesLoader().getGameTitle()))) ;
-        add(createButton(MESSAGE_START, Color.LIGHT_GRAY, 40, (actionEvent) -> getDisplay().onGoInGame())) ;
-        add(createButton(MESSAGE_CREDITS, Color.LIGHT_GRAY, 40, (actionEvent) -> getDisplay().onGoCredits())) ;
+        add(createButton(MESSAGE_START, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+                actionEvent -> getDisplay().onGoPrepare())) ;
+        add(createButton(MESSAGE_CREDITS, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+                actionEvent -> getDisplay().onGoCredits())) ;
     }
 }

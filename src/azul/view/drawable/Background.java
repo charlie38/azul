@@ -38,9 +38,9 @@ public class Background extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        for (int i = 0 ; i < getDisplay().getDrawingPanel().getWidth() ; i += width)
+        for (int i = 0 ; i < getDrawingPanel().getWidth() ; i += width)
         {
-            for (int j = 0 ; j < getDisplay().getDrawingPanel().getHeight() ; j += height)
+            for (int j = 0 ; j < getDrawingPanel().getHeight() ; j += height)
             {
                 g.drawImage(img, i, j, width, height, null) ;
             }

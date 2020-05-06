@@ -1,10 +1,8 @@
 package azul.view.ui;
 
 import azul.view.Display;
-import azul.view.ui.screen.Credits;
-import azul.view.ui.screen.InGame;
-import azul.view.ui.screen.MainMenu;
-import azul.view.ui.screen.Settings;
+import azul.view.drawable.DrawingPanel;
+import azul.view.ui.screen.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +13,18 @@ public class UIPanel extends JPanel
     private Display mDisplay ;
     // Screens.
     private MainMenu mMainMenu ;
+    private Prepare mPrepare ;
     private Credits mCredits ;
     private InGame mInGame ;
     private Settings mSettings ;
+    // Drawing panel (canvas used to draw the game).
+    private DrawingPanel mCanvas ;
+    // To switch between screens.
+    private CardLayout mLayout ;
 
     /**
-     * Used to draw the UI.
-     * @param display the window.
+     * Used to draw the UI, and mainly, changing the current screen printed.
+     * @param display the window root.
      */
     public UIPanel(Display display)
     {
@@ -32,12 +35,25 @@ public class UIPanel extends JPanel
 
     private void initialize()
     {
-        setLayout(new BorderLayout(0, 0)) ;
-
+        // Create the components.
+        mLayout = new CardLayout(0, 0) ;
         mMainMenu = new MainMenu(mDisplay) ;
+        mPrepare = new Prepare(mDisplay) ;
         mCredits = new Credits(mDisplay) ;
         mInGame = new InGame(mDisplay) ;
         mSettings = new Settings(mDisplay) ;
+        mCanvas = new DrawingPanel(mDisplay) ;
+        // In game screen is different. It needs a UI part and a drawing part.
+        JPanel inGamePanel = new JPanel(new BorderLayout(0, 0)) ;
+        inGamePanel.add(mInGame, BorderLayout.SOUTH) ;
+        inGamePanel.add(mCanvas, BorderLayout.CENTER) ;
+        // Add the components.
+        setLayout(mLayout) ;
+        add(mMainMenu, Display.State.MAIN_MENU.toString()) ;
+        add(mPrepare, Display.State.PREPARE.toString()) ;
+        add(mCredits, Display.State.CREDITS.toString()) ;
+        add(inGamePanel, Display.State.IN_GAME.toString()) ;
+        add(mSettings, Display.State.SETTINGS.toString()) ;
     }
 
     /**
@@ -45,23 +61,33 @@ public class UIPanel extends JPanel
      */
     public void onGoMainMenu()
     {
-        setVisibilities() ;
+        mLayout.show(this, Display.State.MAIN_MENU.toString()) ;
     }
 
     /**
-     * Called when user selects the credits option.
+     * Called when user selects the "START" option.
+     */
+    public void onGoPrepare()
+    {
+        mPrepare.prepare() ;
+
+        mLayout.show(this, Display.State.PREPARE.toString()) ;
+    }
+
+    /**
+     * Called when user selects the "CREDITS" option.
      */
     public void onGoCredits()
     {
-        setVisibilities() ;
+        mLayout.show(this, Display.State.CREDITS.toString()) ;
     }
 
     /**
-     * Called when user starts a game.
+     * Called when user goes in game screen.
      */
     public void onGoInGame()
     {
-        setVisibilities() ;
+        mLayout.show(this, Display.State.IN_GAME.toString()) ;
     }
 
     /**
@@ -69,22 +95,11 @@ public class UIPanel extends JPanel
      */
     public void onGoSettings()
     {
-        setVisibilities() ;
+        mLayout.show(this, Display.State.SETTINGS.toString()) ;
     }
 
-    private void setVisibilities()
+    public DrawingPanel getDrawingPanel()
     {
-        if (getComponentCount() != 0)
-        {
-            removeAll() ;
-        }
-
-        switch (mDisplay.getState())
-        {
-            case MAIN_MENU : add(mMainMenu) ; break ;
-            case CREDITS : add(mCredits) ; break ;
-            case IN_GAME : add(mInGame) ; break ;
-            case SETTINGS : add(mSettings) ;
-        }
+        return mCanvas ;
     }
 }

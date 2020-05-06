@@ -1,5 +1,6 @@
 package azul.view.drawable;
 
+import azul.controller.MouseListener;
 import azul.view.Display;
 import azul.view.drawable.board.PlayerBoard;
 import azul.view.drawable.table.Table;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel
 {
+    // Animation minimum delay for update.
+    private final int ANIMATION_MIN_DELAY = 1000 / 60 ; // 60FPS
+
     // Root ref.
     private Display mDisplay ;
     // Game background.
@@ -34,35 +38,11 @@ public class DrawingPanel extends JPanel
 
         createBackground() ;
         createTable() ;
-    }
-
-    /**
-     * Called when user goes to the main menu.
-     */
-    public void onGoMainMenu()
-    {
-    }
-
-    /**
-     * Called when user selects the credits option.
-     */
-    public void onGoCredits()
-    {
-    }
-
-    /**
-     * Called when user starts a game.
-     */
-    public void onGoInGame()
-    {
-        startGame(mDisplay.getGame().getNbPlayers()) ;
-    }
-
-    /**
-     * Called when user goes to settings.
-     */
-    public void onGoSettings()
-    {
+        // To update all components animations, by redrawing the canvas once.
+        // (avoid calling "DrawingPanel.repaint()" each time a component animation should refresh UI <~> like a game loop)
+        new Timer(ANIMATION_MIN_DELAY, actionEvent -> repaint()).start() ;
+        // Add a mouse controller.
+        addMouseListener(new MouseListener(mDisplay)) ;
     }
 
     public void startGame(int nbPlayers)
@@ -101,7 +81,7 @@ public class DrawingPanel extends JPanel
 
     private void createFactories(int nbFactories)
     {
-        int nbRows = nbFactories / 3 + nbFactories % 3 ;
+        int nbRows = (nbFactories == 5) ? 2 : nbFactories / 3 + nbFactories % 3 ;
         int factory = 0 ;
 
         for (int i = 0 ; i < nbRows ; i ++)
@@ -159,39 +139,15 @@ public class DrawingPanel extends JPanel
     {
         super.paint(g) ;
 
-        switch (mDisplay.getState())
-        {
-            case MAIN_MENU : paintMainMenu(g) ; break ;
-            case CREDITS : paintCredits(g) ; break ;
-            case IN_GAME : paintInGame(g) ; break ;
-            case SETTINGS : paintSettings(g) ;
-        }
+        paintGame(g) ;
     }
 
-    private void paintMainMenu(Graphics g)
-    {
-        g.setColor(Display.BG_MAIN_MENU) ;
-        g.fillRect(0, 0, getWidth(), getHeight()) ;
-    }
-
-    private void paintCredits(Graphics g)
-    {
-        g.setColor(Display.BG_CREDITS) ;
-        g.fillRect(0, 0, getWidth(), getHeight()) ;
-    }
-
-    private void paintInGame(Graphics g)
+    private void paintGame(Graphics g)
     {
         paintBackground(g) ;
         paintTable(g) ;
         paintPlayersBoard(g) ;
         paintTilesFactories(g) ;
-    }
-
-    private void paintSettings(Graphics g)
-    {
-        g.setColor(Display.BG_SETTINGS) ;
-        g.fillRect(0, 0, getWidth(), getHeight()) ;
     }
 
     private void paintBackground(Graphics g)

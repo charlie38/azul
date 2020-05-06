@@ -28,17 +28,18 @@ public class Credits extends Screen
         // Create components and add them.
         JPanel content = new JPanel(new GridLayout(2, MESSAGE_DEVELOPERS.length / 2)) ;
         content.setBackground(Display.BG_CREDITS) ;
-        add(createLabel(MESSAGE_TITLE, Color.LIGHT_GRAY, 40)) ;
+        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40)) ;
         add(Box.createVerticalGlue()) ;
         add(Box.createVerticalGlue()) ;
-        add(createLabel(MESSAGE_SUBTITLE, Color.LIGHT_GRAY, 30)) ;
+        add(createLabel(MESSAGE_SUBTITLE, Display.CL_TERTIARY, 30)) ;
         add(content) ;
 
         for (String messageDeveloper : MESSAGE_DEVELOPERS)
         {
-            content.add(createLabel(messageDeveloper, Color.LIGHT_GRAY, 20)) ;
+            content.add(createLabel(messageDeveloper, Display.CL_PRIMARY, 20)) ;
         }
 
-        add(createButton(MESSAGE_EXIT, Color.LIGHT_GRAY, 40, actionEvent -> getDisplay().onGoMainMenu())) ;
+        add(createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+                actionEvent -> getDisplay().onGoMainMenu())) ;
     }
 }

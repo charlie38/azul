@@ -3,6 +3,7 @@ package azul.view.resource;
 import azul.model.tile.Tile;
 import azul.view.ui.screen.InGame;
 import azul.view.ui.screen.MainMenu;
+import azul.view.ui.screen.Prepare;
 
 import java.awt.*;
 import java.io.File;
@@ -29,15 +30,17 @@ public class ResourcesLoader
     private ImageAzul mEye, mEyeB ;
     // Player board.
     private ImageAzul mBoard ;
-    private ImageAzul mWallCase ;
-    private ImageAzul mPatternLineCase ;
+    private ImageAzul mWallCase, mWallCaseB ;
+    private ImageAzul mPatternLinesCase, mPatternLinesCaseB ;
     // Tiles factory.
     private ImageAzul mFactory ;
-    private ImageAzul mFactoryCase ;
+    private ImageAzul mFactoryCase, mFactoryCaseB ;
     // In game navigation.
     private ImageAzul mPrevious ;
     private ImageAzul mNext ;
     private ImageAzul mSettings ;
+    // Prepare screen.
+    private ImageAzul mDelete ;
 
     public ResourcesLoader()
     {
@@ -77,12 +80,16 @@ public class ResourcesLoader
         mEyeB = new ImageAzul("res/img/eye_blur.png") ;
         mBoard = new ImageAzul("res/img/board_borders.png") ;
         mWallCase = new ImageAzul("res/img/greencase.png") ;
-        mPatternLineCase = new ImageAzul("res/img/browncase.png") ;
+        mWallCaseB = new ImageAzul("res/img/greencase_blur.png") ;
+        mPatternLinesCase = new ImageAzul("res/img/browncase.png") ;
+        mPatternLinesCaseB = new ImageAzul("res/img/browncase_blur.png") ;
         mFactory = new ImageAzul("res/img/bowl.png") ;
         mFactoryCase = new ImageAzul("res/img/bowlcase.png") ;
+        mFactoryCaseB = new ImageAzul("res/img/bowlcase_blur.png") ;
         mPrevious = new ImageAzul("res/img/rewind.png") ;
         mNext = new ImageAzul("res/img/forward.png") ;
         mSettings = new ImageAzul("res/img/settings.png") ;
+        mDelete = new ImageAzul("res/img/trash.png") ;
     }
 
     public Font getFont(float pt)
@@ -151,9 +158,19 @@ public class ResourcesLoader
         return mWallCase.get() ;
     }
 
+    public Image getWallCaseBlurred()
+    {
+        return mWallCaseB.get() ;
+    }
+
     public Image getPatternLinesCase()
     {
-        return mPatternLineCase.get() ;
+        return mPatternLinesCase.get() ;
+    }
+
+    public Image getPatternLinesCaseBlurred()
+    {
+        return mPatternLinesCaseB.get() ;
     }
 
     public Image getFactory()
@@ -164,6 +181,11 @@ public class ResourcesLoader
     public Image getFactoryCase()
     {
         return mFactoryCase.get() ;
+    }
+
+    public Image getFactoryCaseBlurred()
+    {
+        return mFactoryCaseB.get() ;
     }
 
     public Image getPrevious()
@@ -187,6 +209,14 @@ public class ResourcesLoader
         return mSettings.get().getScaledInstance(
                 InGame.SETTINGS_WIDTH,
                 InGame.SETTINGS_HEIGHT,
+                Image.SCALE_SMOOTH) ;
+    }
+
+    public Image getDelete()
+    {
+        return mDelete.get().getScaledInstance(
+                Prepare.DELETE_WIDTH,
+                Prepare.DELETE_HEIGHT,
                 Image.SCALE_SMOOTH) ;
     }
 }

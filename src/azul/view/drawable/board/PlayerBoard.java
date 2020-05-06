@@ -28,13 +28,15 @@ public class PlayerBoard extends Drawable
     public final int DISTANCE_LEFT_TO_PL = (int) (23 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL = (int) (38 * SIZE_COEF) ;
     // Player name.
-    public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - (int) (WIDTH_BOARD / 2.8) ;
-    public final int DISTANCE_TOP_TO_NAME = HEIGHT_BOARD - HEIGHT_BOARD / 11 ;
-    public final Color COLOR_PLAYER_NAME = new Color(0xDB8E3C) ;
+    public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - (int) (WIDTH_BOARD / 3) ;
+    public final int DISTANCE_TOP_TO_NAME = HEIGHT_BOARD - HEIGHT_BOARD / 9 ;
+    public final Color COLOR_PLAYER_NAME = new Color(0x4A4E49) ;
+    public final int MAX_LENGTH_PLAYER_NAME = 12 ;
     // Player points.
-    public final int DISTANCE_LEFT_TO_POINTS = (int) (14 * SIZE_COEF) ;
-    public final int DISTANCE_TOP_TO_POINTS = (int) (30 * SIZE_COEF) ;
-    public final Color COLOR_PLAYER_POINTS = new Color(0x44C31D) ;
+    public final int DISTANCE_LEFT_TO_POINTS = DISTANCE_LEFT_TO_NAME ;
+    public final int DISTANCE_TOP_TO_POINTS = DISTANCE_TOP_TO_NAME + (int) (17 * SIZE_COEF) ;
+    public final Color COLOR_PLAYER_POINTS = new Color(0x696969) ;
+    public final String MESSAGE_POINTS = " points" ;
 
     // Player index in the game 'model' list.
     private int mIndex ;
@@ -161,18 +163,21 @@ public class PlayerBoard extends Drawable
 
     private void paintPlayerName(Graphics g, int x, int y)
     {
-        g.setFont(getResourcesLoader().getFont(30 * mCoef)) ;
+        String name = getPlayer(mIndex).getName() ;
+
+        g.setFont(getResourcesLoader().getFont(20 * mCoef)) ;
         g.setColor(COLOR_PLAYER_NAME) ;
-        g.drawString("J. Name", // TODO REPLACE
+        g.drawString((name.length() > MAX_LENGTH_PLAYER_NAME) ?
+                        name.substring(0, MAX_LENGTH_PLAYER_NAME).concat("..") : name,
                 x + (int) (DISTANCE_LEFT_TO_NAME * mCoef),
                 y + (int) (DISTANCE_TOP_TO_NAME * mCoef)) ;
     }
 
     private void paintPlayerPoints(Graphics g, int x, int y)
     {
-        g.setFont(getResourcesLoader().getFont(30 * mCoef)) ;
+        g.setFont(getResourcesLoader().getFont(18 * mCoef)) ;
         g.setColor(COLOR_PLAYER_POINTS) ;
-        g.drawString("50 points", // TODO REPLACE
+        g.drawString(String.valueOf(getPlayer(mIndex).getScore()).concat(MESSAGE_POINTS),
                 x + (int) (DISTANCE_LEFT_TO_POINTS * mCoef),
                 y + (int) (DISTANCE_TOP_TO_POINTS * mCoef)) ;
     }

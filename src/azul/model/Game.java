@@ -46,7 +46,7 @@ public class Game extends Observable
      * Initialize a new game, depending on the number of players.
      * @param nbPlayers the number of players.
      */
-    public void startGame(int nbPlayers)
+    public void startGame(int nbPlayers, String[] playerNames)
     {
         try
         {
@@ -61,7 +61,7 @@ public class Game extends Observable
         // Initialize the 'first player marker'.
         Tile.onGameStart() ;
         // Initialize game objects.
-        initializePlayers(nbPlayers) ;
+        initializePlayers(nbPlayers, playerNames) ;
         initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
         initializeTilesRemaining() ;
         initializeTilesAside() ;
@@ -84,13 +84,13 @@ public class Game extends Observable
         }
     }
 
-    private void initializePlayers(int nbPlayers)
+    private void initializePlayers(int nbPlayers, String[] playersNames)
     {
         mPlayers.clear() ;
 
         for (int i = 1 ; i <= nbPlayers ; i ++)
         {
-            mPlayers.add(new HumanPlayer()) ;
+            mPlayers.add(new HumanPlayer(playersNames[i - 1])) ;
         }
     }
 

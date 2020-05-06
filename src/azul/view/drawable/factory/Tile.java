@@ -9,7 +9,7 @@ import java.awt.*;
 public class Tile extends Drawable
 {
     // Request a select animation.
-    private final int ANIMATION_DELAY = 250 ;
+    private final int ANIMATION_DELAY = 200 ;
 
     // Tile index in model representations.
     private int mFactoryIndex ;
@@ -42,7 +42,6 @@ public class Tile extends Drawable
                     if (mIsAnimated)
                     {
                         mIsBlurred = ! mIsBlurred ;
-                        getDisplay().getDrawingPanel().repaint() ;
                     }
                 }
         ).start() ;
@@ -63,7 +62,7 @@ public class Tile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = getResourcesLoader().getFactoryCase() ;
+        Image bg = mIsBlurred ? getResourcesLoader().getFactoryCaseBlurred() : getResourcesLoader().getFactoryCase() ;
         Image ingredient = mIsBlurred ?
                 getResourcesLoader().getIngredientBlurred(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
                 getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;

@@ -41,13 +41,12 @@ public abstract class Drawable extends JComponent
      * <!> Needs to be call in the 'paint' method of the drawable to have everything scaled. </!>
      * @return new drawable coordinates.
      */
-    public Point computeCoef()
+    protected Point computeCoef()
     {
-        mCoef = Math.min(mDisplay.getDrawingPanel().getResizeWidthCoef(),
-                mDisplay.getDrawingPanel().getResizeHeightCoef()) ;
+        mCoef = Math.min(getDrawingPanel().getResizeWidthCoef(), getDrawingPanel().getResizeHeightCoef()) ;
 
-        return new Point((int) (mDisplay.getDrawingPanel().getWidth() / 2f + mOriginalX * mCoef),
-                (int) (mDisplay.getDrawingPanel().getHeight() / 2f + mOriginalY * mCoef)) ;
+        return new Point((int) (getDrawingPanel().getWidth() / 2f + mOriginalX * mCoef),
+                (int) (getDrawingPanel().getHeight() / 2f + mOriginalY * mCoef)) ;
     }
 
     /**
@@ -65,27 +64,32 @@ public abstract class Drawable extends JComponent
 
     }
 
-    public Display getDisplay()
+    protected Display getDisplay()
     {
         return mDisplay ;
     }
 
-    public ResourcesLoader getResourcesLoader()
+    protected ResourcesLoader getResourcesLoader()
     {
         return mDisplay.getResourcesLoader() ;
     }
 
-    public Game getGame()
+    protected Game getGame()
     {
         return mDisplay.getGame() ;
     }
 
-    public Player getPlayer()
+    protected DrawingPanel getDrawingPanel()
+    {
+        return mDisplay.getUIPanel().getDrawingPanel() ;
+    }
+
+    protected Player getPlayer()
     {
         return mDisplay.getGame().getPlayer() ;
     }
 
-    public Player getPlayer(int index)
+    protected Player getPlayer(int index)
     {
         return mDisplay.getGame().getPlayer(index) ;
     }
