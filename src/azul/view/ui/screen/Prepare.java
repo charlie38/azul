@@ -108,7 +108,7 @@ public class Prepare extends Screen
         mNavFooter.add(createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 25,
                 actionEvent -> getDisplay().onGoMainMenu())) ;
         mNavFooter.add(Box.createHorizontalGlue()) ;
-        mNavFooter.add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+        mNavFooter.add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 33,
                 actionEvent ->
                 {
                     getGame().startGame(mNbPlayers, getPlayersNames()) ;
