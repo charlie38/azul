@@ -31,10 +31,10 @@ public class PlayerBoard extends Drawable
     public final int DISTANCE_LEFT_TO_PL = (int) (43 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL = (int) (38 * SIZE_COEF) ;
     // Pattern lines arrows.
-    public static final int WIDTH_PL_ARROW = (int) (12 * SIZE_COEF) ;
+    public static final int WIDTH_PL_ARROW = (int) (25 * SIZE_COEF) ;
     public static final int HEIGHT_PL_ARROW = (int) (25 * SIZE_COEF) ;
     public final int SPACE_V_PL_ARROW = (int) (4.5 * SIZE_COEF) ;
-    public final int DISTANCE_LEFT_TO_PL_ARROW = (int) (5 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_PL_ARROW = (int) (-8 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL_ARROW = (int) (35 * SIZE_COEF) ;
     // Floor line tiles (bg).
     public static final int WIDTH_FL_TILE = (int) (22 * SIZE_COEF) ;
