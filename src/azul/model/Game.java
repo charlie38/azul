@@ -12,7 +12,7 @@ import java.util.Observable;
 public class Game extends Observable
 {
     // Game states.
-    public enum State { CHOOSE_TILES, SELECT_ROW, VALIDATE }
+    public enum State { CHOOSE_TILES, SELECT_ROW }
 
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
@@ -99,7 +99,7 @@ public class Game extends Observable
 
         for (int i = 1 ; i <= nbPlayers ; i ++)
         {
-            mPlayers.add(new HumanPlayer(playersNames[i - 1])) ;
+            mPlayers.add(new HumanPlayer(this, playersNames[i - 1])) ;
         }
     }
 
@@ -163,6 +163,14 @@ public class Game extends Observable
     public void playMove(PlayerMove move)
     {
         getPlayer().play(move, mTilesAside) ;
+        // Change the game state.
+        switch (move.getType())
+        {
+            case PLAYER_PLACE_TILES_IN_FLOOR :
+            case PLAYER_PLACE_TILES_IN_PATTERN : mState = State.CHOOSE_TILES ; break ;
+            case PLAYER_TAKE_TABLE :
+            case PLAYER_TAKE_FACTORY : mState = State.SELECT_ROW ;
+        }
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
@@ -170,9 +178,18 @@ public class Game extends Observable
 
     public void changePlayer()
     {
-        mState = State.CHOOSE_TILES ;
-        // Go to the next player.
-        mCurrentPlayer = (mCurrentPlayer == getNbPlayers() - 1) ? 0 : mCurrentPlayer + 1 ;
+        if (isFactoriesEmpty())
+        {
+            // Factories are empty, needs to decorate the wall before maybe starting a new round.
+            decorateWalls() ;
+        }
+        else
+        {
+            // Go to the next player.
+            mCurrentPlayer = (mCurrentPlayer == getNbPlayers() - 1) ? 0 : mCurrentPlayer + 1 ;
+            // Change the game state.
+            mState = State.CHOOSE_TILES ;
+        }
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
@@ -213,6 +230,19 @@ public class Game extends Observable
         }
 
         return false ;
+    }
+
+    public boolean isFactoriesEmpty()
+    {
+        for (TilesFactory factory : mTilesFactories)
+        {
+            if (! factory.isEmpty())
+            {
+                return false ;
+            }
+        }
+
+        return true ;
     }
 
     public boolean isGameRunning()

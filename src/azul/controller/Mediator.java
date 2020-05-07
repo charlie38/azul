@@ -1,10 +1,13 @@
 package azul.controller;
 
 import azul.model.Game;
+import azul.model.move.PlayerMove;
+import azul.model.move.Type;
 import azul.view.drawable.Drawable;
-import azul.view.drawable.board.PatternLineTile;
-import azul.view.drawable.board.WallTile;
+import azul.view.drawable.board.PatternLineArrow;
 import azul.view.drawable.factory.Tile;
+
+import java.util.ArrayList;
 
 public class Mediator
 {
@@ -18,22 +21,37 @@ public class Mediator
 
     public void onClick(Drawable selected)
     {
-        mGame.changePlayer() ;
+        switch (mGame.getState())
+        {
+            case CHOOSE_TILES :
 
-        if (selected instanceof Tile)
-        {
-            // On click, the factory tile start blinking.
-            ((Tile) selected).setIsAnimated(true) ;
-        }
-        else if (selected instanceof WallTile)
-        {
-            // On click, the wall tile start blinking.
-            ((WallTile) selected).setIsAnimated(true) ;
-        }
-        else if (selected instanceof PatternLineTile)
-        {
-            // On click, the pattern line tile start blinking.
-            ((PatternLineTile) selected).setIsAnimated(true) ;
+                // Check if user choose tiles in a factory.
+                if (selected instanceof Tile)
+                {
+                    int factory = ((Tile) selected).getFactoryIndex() ;
+                    int tile = ((Tile) selected).getTileIndex() ;
+                    // Get the tile selected by the user.
+                    azul.model.tile.Tile tileSelected = mGame.getFactory(factory).getTile(tile) ;
+                    // And get all the factory tiles of this color.
+                    ArrayList<azul.model.tile.Tile> tilesSelected = mGame.getFactory(factory).take(tileSelected) ;
+                    // Play it.
+                    mGame.playMove(new PlayerMove(Type.PLAYER_TAKE_FACTORY, mGame.getPlayer(), tilesSelected)) ;
+                }
+
+                break ;
+
+            case SELECT_ROW :
+
+                // Check if user select a pattern line to put his selected tiles.
+                if (selected instanceof PatternLineArrow
+                        && ((PatternLineArrow) selected).getPlayerIndex() == mGame.getPlayerIndex())
+                {
+                    // Get the selected row.
+                    int row = ((PatternLineArrow) selected).getRowIndex() ;
+                    // Play it.
+                    mGame.playMove(new PlayerMove(Type.PLAYER_PLACE_TILES_IN_PATTERN, mGame.getPlayer(), row)) ;
+                    mGame.changePlayer() ;
+                }
         }
     }
 }

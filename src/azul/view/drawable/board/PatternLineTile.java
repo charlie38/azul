@@ -3,7 +3,6 @@ package azul.view.drawable.board;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -26,8 +25,8 @@ public class PatternLineTile extends Drawable
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
      * @param playerIndex index in the model representation of the player.
-     * @param indexI index in the model representation, and Y delta in the view representation of the wall.
-     * @param indexJ index in the model representation, and X delta in the view representation of the wall.
+     * @param indexI index in the model representation, and Y delta in the view representation.
+     * @param indexJ index in the model representation, and X delta in the view representation.
      */
     public PatternLineTile(Display display, int originalX, int originalY, int playerIndex, int indexI, int indexJ)
     {
@@ -85,5 +84,15 @@ public class PatternLineTile extends Drawable
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
+    }
+
+    public int getRowIndex()
+    {
+        return mIndexI ;
+    }
+
+    public int getColumnIndex()
+    {
+        return mIndexJ ;
     }
 }

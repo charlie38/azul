@@ -1,10 +1,12 @@
 package azul.model.player;
 
+import azul.model.Game;
+
 public class HumanPlayer extends Player
 {
-    public HumanPlayer(String playerName)
+    public HumanPlayer(Game game, String playerName)
     {
-        super(playerName) ;
+        super(game, playerName) ;
     }
 
     // TODO after implementing 'Move.java' and 'Player.java'

@@ -44,7 +44,7 @@ public class PlayerBoard
     {
         for (int i = 0 ; i < SIZE_PATTERN_LINES ; i ++)
         {
-            if (mPatternLines.get(i)[0] != Tile.EMPTY && mPatternLines.get(i)[i] != Tile.EMPTY)
+            if (isPatterLineFull(i + 1))
             {
                 ArrayList<Tile> tiles = new ArrayList<>() ;
                 // If the pattern line is full, add the rightmost (leftmost in the array) tile to the wall.
@@ -58,8 +58,9 @@ public class PlayerBoard
                 }
                 // Track the player's score.
                 // TODO Track the user score
+                mScoreTrack += 10 ;
                 // Remove the remaining tiles of this pattern line.
-                for (int j = 1 ; j <= i ; j ++)
+                for (int j = 0 ; j <= i ; j ++)
                 {
                     tiles.add(mPatternLines.get(i)[j]) ;
                     // Initialize the pattern line (which is empty now).
@@ -134,7 +135,7 @@ public class PlayerBoard
 
         for (int i = 0 ; i < row ; i ++)
         {
-            if (mPatternLines.get(row - 1)[i] != Tile.EMPTY)
+            if (mPatternLines.get(row - 1)[i] == Tile.EMPTY)
             {
                 mPatternLines.get(row - 1)[i] = tile ;
                 return ;
@@ -164,34 +165,51 @@ public class PlayerBoard
 
     public void addToWall(Tile tile, int row) throws PlayerBoardException
     {
-        int i ;
         // Search for the corresponding case in the wall, depending on the tile color.
-        for (i = 1 ; i <= SIZE_WALL ; i ++)
+        for (int i = 1 ; i <= SIZE_WALL ; i ++)
         {
-            switch (tile)
+            if (tile == Tile.CRYSTAL && isWallCaseCrystal(row, i) && ! isWallCaseNotEmpty(row, i))
             {
-                case CRYSTAL : if (isWallCaseCrystal(row, i)) break ; break ;
-                case EYE : if (isWallCaseEye(row, i)) break ; break ;
-                case CLAW : if (isWallCaseClaw(row, i)) break ; break ;
-                case FLOWER : if (isWallCaseFlower(row, i)) break ; break ;
-                case MUSHROOM : if (isWallCaseMushroom(row, i)) break ;
+                // Add the tile to the wall.
+                mWall.get(row - 1)[i - 1] = tile ;
+                return ;
+            }
+            else if (tile == Tile.EYE && isWallCaseEye(row, i) && ! isWallCaseNotEmpty(row, i))
+            {
+                // Add the tile to the wall.
+                mWall.get(row - 1)[i - 1] = tile ;
+                return ;
+            }
+            else if (tile == Tile.CLAW && isWallCaseClaw(row, i) && ! isWallCaseNotEmpty(row, i))
+            {
+                // Add the tile to the wall.
+                mWall.get(row - 1)[i - 1] = tile ;
+                return ;
+            }
+
+            else if (tile == Tile.FLOWER && isWallCaseFlower(row, i) && ! isWallCaseNotEmpty(row, i))
+            {
+                // Add the tile to the wall.
+                mWall.get(row - 1)[i - 1] = tile ;
+                return ;
+            }
+            else if (tile == Tile.MUSHROOM && isWallCaseMushroom(row, i) && ! isWallCaseNotEmpty(row, i))
+            {
+                // Add the tile to the wall.
+                mWall.get(row - 1)[i - 1] = tile ;
+                return ;
             }
         }
 
-        if (isWallCaseNotEmpty(row, i))
-        {
-            // Try to add a tile in a not empty case.
-            throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
-        }
-        // Add the tile to the wall.
-        mWall.get(row - 1)[i - 1] = tile ;
+        // Tried to add a tile in a not empty case.
+        throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
     }
 
     public void addToFloorLine(Tile tile) throws PlayerBoardException
     {
         for (int i = 0 ; i < SIZE_FLOOR_LINES ; i ++)
         {
-            if (mFloorLine.get(i) != Tile.EMPTY)
+            if (mFloorLine.get(i) == Tile.EMPTY)
             {
                 mFloorLine.set(i, tile) ;
                 return ;
@@ -258,10 +276,10 @@ public class PlayerBoard
     {
         // Tiles should be of the same color in a row.
         // This will be the first tile / the tile in the row are of the same color.
-        return mPatternLines.get(row)[0] == Tile.EMPTY || mPatternLines.get(row)[0] == tile ;
+        return mPatternLines.get(row - 1)[0] == Tile.EMPTY || mPatternLines.get(row - 1)[0] == tile ;
     }
 
-    public boolean canBePlacedOnWall(Tile tile, int row, int column)
+    public static boolean canBePlacedOnWall(Tile tile, int row, int column)
     {
         // Check if the corresponding case in the wall is of the tile color.
         return tile == Tile.CRYSTAL && isWallCaseCrystal(row, column)
@@ -271,29 +289,29 @@ public class PlayerBoard
                 || tile == Tile.MUSHROOM && isWallCaseMushroom(row, column) ;
     }
 
-    public boolean isWallCaseMushroom(int row, int column)
+    public static boolean isWallCaseMushroom(int row, int column)
     {
         return row == column ;
     }
 
-    public boolean isWallCaseCrystal(int row, int column)
+    public static boolean isWallCaseCrystal(int row, int column)
     {
         return (row == 1 && column == 5) || (row != 1 && row - 1 == column) ;
     }
 
-    public boolean isWallCaseEye(int row, int column)
+    public static boolean isWallCaseEye(int row, int column)
     {
         return (row == 1 && column == 4) || (row == 2 && column == 5)
                 || (row != 1 && row != 2 && row - 2 == column) ;
     }
 
-    public boolean isWallCaseClaw(int row, int column)
+    public static boolean isWallCaseClaw(int row, int column)
     {
         return (row == 4 && column == 1) || (row == 5 && column == 2)
                 || (row != 4 && row != 5 && row + 2 == column) ;
     }
 
-    public boolean isWallCaseFlower(int row, int column)
+    public static boolean isWallCaseFlower(int row, int column)
     {
         return (row == 5 && column == 1) || (row != 5 && row + 1 == column) ;
     }

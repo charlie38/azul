@@ -111,8 +111,8 @@ public class Prepare extends Screen
         mNavFooter.add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 33,
                 actionEvent ->
                 {
-                    getGame().startGame(mNbPlayers, getPlayersNames()) ;
                     getDisplay().getUIPanel().getDrawingPanel().startGame(mNbPlayers) ;
+                    getGame().startGame(mNbPlayers, getPlayersNames()) ;
                     getDisplay().onGoInGame() ;
                 }
         )) ;

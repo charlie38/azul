@@ -1,5 +1,6 @@
 package azul.model.player;
 
+import azul.model.Game;
 import azul.model.move.PlayerMove;
 import azul.model.tile.Tile;
 
@@ -7,18 +8,24 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
+    // Model root ref.
+    private Game mGame ;
     // The player name.
     private String mName ;
     // His board.
     private PlayerBoard mPlayerBoard ;
+    // The tiles selected in the factory, or empty.
+    private ArrayList<Tile> mTilesSelected ;
 
     /**
      * Extended by the IA or human player.
      */
-    public Player(String playerName)
+    public Player(Game game, String playerName)
     {
+        mGame = game ;
         mName = playerName ;
         mPlayerBoard = new PlayerBoard() ;
+        mTilesSelected = new ArrayList<>() ;
     }
 
     /**
@@ -32,15 +39,14 @@ public abstract class Player
         {
             case PLAYER_TAKE_FACTORY : takeTilesFromFactory(move) ; break ;
             case PLAYER_TAKE_TABLE : takeTilesFromTable(move) ; break ;
-            case PLAYER_PLACE_TILE_IN_PATTERN : addTileInPattern(move) ; break ;
-            case PLAYER_PLACE_TILE_IN_WALL: addTileInWall(move) ; break ;
-            case PLAYER_PLACE_TILE_IN_FLOOR : addTileInFloor(move, asideTiles) ;
+            case PLAYER_PLACE_TILES_IN_PATTERN : addTilesInPattern(move) ; break ;
+            case PLAYER_PLACE_TILES_IN_FLOOR : addTilesInFloor(move, asideTiles) ;
         }
     }
 
     private void takeTilesFromFactory(PlayerMove move)
     {
-        // Nothing to do here, this move is just to update the UI and factory.
+        mTilesSelected = move.getTilesSelected() ;
     }
 
     private void takeTilesFromTable(PlayerMove move)
@@ -59,11 +65,16 @@ public abstract class Player
         }
     }
 
-    private void addTileInPattern(PlayerMove move)
+    private void addTilesInPattern(PlayerMove move)
     {
         try
         {
-            mPlayerBoard.addToPatternLine(move.getTileSelected(), move.getRow()) ;
+            for (Tile tile : mTilesSelected)
+            {
+                mPlayerBoard.addToPatternLine(tile, move.getRow() + 1) ;
+            }
+
+            mTilesSelected.clear() ;
         }
         catch (PlayerBoard.PlayerBoardException e)
         {
@@ -71,6 +82,7 @@ public abstract class Player
         }
     }
 
+    /*
     private void addTileInWall(PlayerMove move)
     {
         try
@@ -81,20 +93,23 @@ public abstract class Player
         {
             e.printStackTrace() ;
         }
-    }
+    }*/
 
-    private void addTileInFloor(PlayerMove move, ArrayList<Tile> asideTiles)
+    private void addTilesInFloor(PlayerMove move, ArrayList<Tile> asideTiles)
     {
         if (mPlayerBoard.isFloorLineFull())
         {
             // If full, according to the rules the tile should go to the box cover.
-            asideTiles.add(move.getTileSelected()) ;
+            asideTiles.addAll(move.getTilesSelected()) ;
         }
         else
         {
             try
             {
-                mPlayerBoard.addToFloorLine(move.getTileSelected()) ;
+                for (Tile tile : move.getTilesSelected())
+                {
+                    mPlayerBoard.addToFloorLine(tile) ;
+                }
             }
             catch (PlayerBoard.PlayerBoardException e)
             {
@@ -162,5 +177,11 @@ public abstract class Player
     public int getScore()
     {
         return mPlayerBoard.getScoreTrack() ;
+    }
+
+    public boolean isPatternLineRowAccessible(int row)
+    {
+        return ! (mPlayerBoard.isPatterLineFull(row) ||
+                (mTilesSelected.size() != 0 && ! mPlayerBoard.canBePlacedOnPatternLine(mTilesSelected.get(0), row))) ;
     }
 }

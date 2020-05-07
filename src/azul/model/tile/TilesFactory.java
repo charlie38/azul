@@ -92,4 +92,17 @@ public class TilesFactory
     {
         return mTiles.get(i) ;
     }
+
+    public boolean isEmpty()
+    {
+        for (Tile tile : mTiles)
+        {
+            if (tile != Tile.EMPTY)
+            {
+                return false ;
+            }
+        }
+
+        return true ;
+    }
 }

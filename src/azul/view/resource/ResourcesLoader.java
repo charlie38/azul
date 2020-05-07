@@ -23,13 +23,14 @@ public class ResourcesLoader
     private ImageAzul mTable ;
     // Tiles.
 	private ImageAzul mEmpty ;
-	private ImageAzul mFlower, mFlowerB ;
-	private ImageAzul mClaw, mClawB ;
-	private ImageAzul mMushroom, mMushroomB ;
-    private ImageAzul mCrystal, mCrystalB ;
-    private ImageAzul mEye, mEyeB ;
+	private ImageAzul mFlower, mFlowerS, mFlowerB ;
+	private ImageAzul mClaw, mClawS, mClawB ;
+	private ImageAzul mMushroom, mMushroomS, mMushroomB ;
+    private ImageAzul mCrystal, mCrystalS, mCrystalB ;
+    private ImageAzul mEye, mEyeS, mEyeB ;
     // Player board.
     private ImageAzul mBoard, mBoardF ;
+    private ImageAzul mPatternLinesArrow, mPatternLinesArrowF ;
     private ImageAzul mWallCase, mWallCaseS ;
     private ImageAzul mPatternLinesCase, mPatternLinesCaseS ;
     // Tiles factory.
@@ -69,17 +70,24 @@ public class ResourcesLoader
         mTable = new ImageAzul("res/img/table.png") ;
         mEmpty = new ImageAzul("res/img/empty.png") ;
         mFlower = new ImageAzul("res/img/flower.png") ;
+        mFlowerS = new ImageAzul("res/img/flower_selected.png") ;
         mFlowerB = new ImageAzul("res/img/flower_blur.png") ;
         mClaw = new ImageAzul("res/img/claw.png") ;
+        mClawS = new ImageAzul("res/img/claw_selected.png") ;
         mClawB = new ImageAzul("res/img/claw_blur.png") ;
         mMushroom = new ImageAzul("res/img/mushroom.png") ;
+        mMushroomS = new ImageAzul("res/img/mushroom_selected.png") ;
         mMushroomB = new ImageAzul("res/img/mushroom_blur.png") ;
         mCrystal = new ImageAzul("res/img/crystal.png") ;
+        mCrystalS = new ImageAzul("res/img/crystal_selected.png") ;
         mCrystalB = new ImageAzul("res/img/crystal_blur.png") ;
         mEye = new ImageAzul("res/img/eye.png") ;
+        mEyeS = new ImageAzul("res/img/eye_selected.png") ;
         mEyeB = new ImageAzul("res/img/eye_blur.png") ;
         mBoard = new ImageAzul("res/img/board_borders.png") ;
         mBoardF = new ImageAzul("res/img/board_borders_focused.png") ;
+        mPatternLinesArrow = new ImageAzul("res/img/board_arrow.png") ;
+        mPatternLinesArrowF = new ImageAzul("res/img/board_arrow_focused.png") ;
         mWallCase = new ImageAzul("res/img/greencase.png") ;
         mWallCaseS = new ImageAzul("res/img/greencase_blur.png") ;
         mPatternLinesCase = new ImageAzul("res/img/browncase.png") ;
@@ -101,6 +109,8 @@ public class ResourcesLoader
     
     public Image getIngredient(Tile t)
     {
+        return getIngredientSelected(t) ;
+        /*
     	switch(t)
     	{
     		case CRYSTAL : return mCrystal.get() ;
@@ -111,6 +121,21 @@ public class ResourcesLoader
     		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
+         */
+    }
+
+    public Image getIngredientSelected(Tile t)
+    {
+        switch(t)
+        {
+            case CRYSTAL : return mCrystalS.get() ;
+            case EYE : return mEyeS.get() ;
+            case CLAW : return mClawS.get() ;
+            case FLOWER : return mFlowerS.get() ;
+            case MUSHROOM : return mMushroomS.get() ;
+            case EMPTY : return mEmpty.get() ;
+            default : return null ;
+        }
     }
 
     public Image getIngredientBlurred(Tile t)
@@ -178,6 +203,16 @@ public class ResourcesLoader
     public Image getPatternLinesCaseSelected()
     {
         return mPatternLinesCaseS.get() ;
+    }
+
+    public Image getPatternLinesArrow()
+    {
+        return mPatternLinesArrow.get() ;
+    }
+
+    public Image getPatternLinesArrowFocused()
+    {
+        return mPatternLinesArrowF.get() ;
     }
 
     public Image getFactory()

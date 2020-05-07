@@ -81,4 +81,14 @@ public class Tile extends Drawable
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
     }
+
+    public int getFactoryIndex()
+    {
+        return mFactoryIndex ;
+    }
+
+    public int getTileIndex()
+    {
+        return mIndex ;
+    }
 }

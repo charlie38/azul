@@ -13,9 +13,7 @@ public class PlayerMove extends Move
     // If a 'take tiles from table' move.
     private boolean mIsFirstToTakeFromTable ;
     // If a 'place tile' move.
-    private Tile mTileSelected ;
     private int mRow ;
-    private int mColumn ;
 
     /**
      * Contains the player's intentions during his turn ; he selected tiles from factory.
@@ -43,46 +41,27 @@ public class PlayerMove extends Move
     }
 
     /**
-     * Contains the player's intentions during his turn ; he placed his tile on one of his pattern lines.
-     * @param type can only be 'Type.PLAYER_PLACE_TILE_IN_PATTERN'.
+     * Contains the player's intentions during his turn ; he placed his tiles on one of his pattern lines.
+     * @param type can only be 'Type.PLAYER_PLACE_TILES_IN_PATTERN'.
      * @param row the pattern line on which the player wants to put his tile (the top one is 1 and bottom one 5).
      */
-    public PlayerMove(Type type, Player player, Tile tileSelected, int row)
+    public PlayerMove(Type type, Player player, int row)
     {
-        super(type, Type.PLAYER_PLACE_TILE_IN_PATTERN) ;
+        super(type, Type.PLAYER_PLACE_TILES_IN_PATTERN) ;
 
         mPlayer = player ;
-        mTileSelected = tileSelected ;
         mRow = row ;
     }
 
-    // TODO may be useless, depending if we use 'Player.decorateWall() -> automatised decoration'
     /**
-     * Contains the player's intentions during his turn ; he placed his tile on the wall.
-     * @param type can only be 'Type.PLAYER_PLACE_TILE_IN_WALL'.
-     * @param row the wall line on which the player wants to put his tile (the top one is 1 and bottom one 5).
-     * @param column the wall column on which the player wants to put his tile (the left one is 1 and right one 5).
+     * Contains the player's intentions during his turn ; he placed his tiles on his floor line.
+     * @param type can only be 'Type.PLAYER_PLACE_TILES_IN_FLOOR'.
      */
-    public PlayerMove(Type type, Player player, Tile tileSelected, int row, int column)
+    public PlayerMove(Type type, Player player)
     {
-        super(type, Type.PLAYER_PLACE_TILE_IN_WALL) ;
+        super(type, Type.PLAYER_PLACE_TILES_IN_FLOOR) ;
 
         mPlayer = player ;
-        mTileSelected = tileSelected ;
-        mRow = row ;
-        mColumn = column ;
-    }
-
-    /**
-     * Contains the player's intentions during his turn ; he placed his tile on his floor line.
-     * @param type can only be 'Type.PLAYER_PLACE_TILE_IN_FLOOR'.
-     */
-    public PlayerMove(Type type, Player player, Tile tileSelected)
-    {
-        super(type, Type.PLAYER_PLACE_TILE_IN_FLOOR) ;
-
-        mPlayer = player ;
-        mTileSelected = tileSelected ;
     }
 
     /**
@@ -92,11 +71,6 @@ public class PlayerMove extends Move
     public Player getPlayer()
     {
         return mPlayer ;
-    }
-
-    public Tile getTileSelected()
-    {
-        return mTileSelected ;
     }
 
     public boolean isFirstToTakeFromTable()
@@ -112,10 +86,5 @@ public class PlayerMove extends Move
     public int getRow()
     {
         return mRow ;
-    }
-
-    public int getColumn()
-    {
-        return mColumn ;
     }
 }

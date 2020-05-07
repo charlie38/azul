@@ -89,8 +89,8 @@ public class TilesFactory extends Drawable
     public void update(java.util.Observable observable, Object object)
     {
         // If the game model change the current player, and he needs to choose tiles in factories,
-        // start the focus animation.
-        setIsAnimated(getGame().getState() == Game.State.CHOOSE_TILES) ;
+        // start the focus animation (also if the factory is not empty).
+        setIsAnimated(getGame().getState() == Game.State.CHOOSE_TILES && ! getGame().getFactory(mIndex).isEmpty()) ;
     }
 
     @Override

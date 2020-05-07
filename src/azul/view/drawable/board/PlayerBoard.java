@@ -28,8 +28,14 @@ public class PlayerBoard extends Drawable
     public static final int HEIGHT_PL_TILE = (int) (22 * SIZE_COEF) ;
     public final int SPACE_H_PL_TILE = (int) (0 * SIZE_COEF) ;
     public final int SPACE_V_PL_TILE = (int) (8 * SIZE_COEF) ;
-    public final int DISTANCE_LEFT_TO_PL = (int) (23 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_PL = (int) (43 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL = (int) (38 * SIZE_COEF) ;
+    // Pattern lines arrows.
+    public static final int WIDTH_PL_ARROW = (int) (12 * SIZE_COEF) ;
+    public static final int HEIGHT_PL_ARROW = (int) (25 * SIZE_COEF) ;
+    public final int SPACE_V_PL_ARROW = (int) (4.5 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_PL_ARROW = DISTANCE_LEFT_TO_PL - WIDTH_PL_ARROW - (int) (10 * SIZE_COEF) ;
+    public final int DISTANCE_TOP_TO_PL_ARROW = (int) (35 * SIZE_COEF) ;
     // Player name.
     public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - (int) (WIDTH_BOARD / 3) ;
     public final int DISTANCE_TOP_TO_NAME = HEIGHT_BOARD - HEIGHT_BOARD / 9 ;
@@ -45,6 +51,7 @@ public class PlayerBoard extends Drawable
     private int mIndex ;
     // Drawables.
     private ArrayList<WallTile> mWallTiles ;
+    private ArrayList<PatternLineArrow> mPatternLinesArrows ;
     private ArrayList<PatternLineTile> mPatternLinesTiles ;
     // True if this board is focused (current player board).
     private boolean mIsFocused ;
@@ -62,9 +69,9 @@ public class PlayerBoard extends Drawable
 
         mIndex = index ;
         mIsFocused = false ;
-        
 
         createWallTiles() ;
+        createPatternLinesArrows() ;
         createPatternLinesTiles() ;
     }
 
@@ -81,6 +88,19 @@ public class PlayerBoard extends Drawable
                         mOriginalY + DISTANCE_TOP_TO_WALL + i * (HEIGHT_WALL_TILE + SPACE_V_WALL_TILE),
                         mIndex, i, j)) ;
             }
+        }
+    }
+
+    public void createPatternLinesArrows()
+    {
+        mPatternLinesArrows = new ArrayList<>() ;
+
+        for (int i = 0 ; i < azul.model.player.PlayerBoard.SIZE_PATTERN_LINES ; i ++)
+        {
+            mPatternLinesArrows.add(new PatternLineArrow(getDisplay(),
+                    mOriginalX + DISTANCE_LEFT_TO_PL_ARROW,
+                    mOriginalY + DISTANCE_TOP_TO_PL_ARROW + i * (HEIGHT_PL_ARROW + SPACE_V_PL_ARROW),
+                    mIndex, i)) ;
         }
     }
 
@@ -116,6 +136,14 @@ public class PlayerBoard extends Drawable
             }
         }
 
+        for (PatternLineArrow arrow : mPatternLinesArrows)
+        {
+            if (arrow.isClicked(x, y))
+            {
+                return arrow ;
+            }
+        }
+
         for (PatternLineTile tile : mPatternLinesTiles)
         {
             if (tile.isClicked(x, y))
@@ -143,13 +171,7 @@ public class PlayerBoard extends Drawable
     @Override
     protected ActionListener onAnimationChanged()
     {
-        return actionEvent ->
-        {
-            if (mIsAnimated)
-            {
-                mIsFocused = ! mIsFocused ;
-            }
-        } ;
+        return null ;
     }
 
     @Override
@@ -166,6 +188,7 @@ public class PlayerBoard extends Drawable
         Point point = computeCoef() ;
         // Board.
         paintBg(g, point.x, point.y) ;
+        paintPatternLinesArrows(g) ;
         // Player tiles.
         paintWallTiles(g) ;
         paintPatternLinesTiles(g) ;
@@ -176,7 +199,7 @@ public class PlayerBoard extends Drawable
 
     private void paintBg(Graphics g, int x, int y)
     {
-        Image img = mIsFocused ? getResourcesLoader().getBoardFocused() : getResourcesLoader().getBoard() ;
+        Image img = mIsAnimated ? getResourcesLoader().getBoardFocused() : getResourcesLoader().getBoard() ;
         int width = (int) (WIDTH_BOARD * mCoef) ;
         int height = (int) (HEIGHT_BOARD * mCoef) ;
 
@@ -188,6 +211,14 @@ public class PlayerBoard extends Drawable
         for (WallTile tile : mWallTiles)
         {
             tile.paint(g) ;
+        }
+    }
+
+    private void paintPatternLinesArrows(Graphics g)
+    {
+        for (PatternLineArrow arrow : mPatternLinesArrows)
+        {
+            arrow.paint(g) ;
         }
     }
 
