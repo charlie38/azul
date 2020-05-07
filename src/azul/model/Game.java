@@ -87,6 +87,8 @@ public class Game extends Observable
         {
             factory.prepare(mTilesRemaining, mTilesAside) ;
         }
+        // Set the token.
+        mTilesTable.set(0, Tile.FIRST_PLAYER_MAKER) ;
         // Initialize the 'first player marker'.
         Tile.onRoundStart() ;
 
