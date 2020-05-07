@@ -19,9 +19,10 @@ public class ResourcesLoader
     private ImageAzul mGameIcon ;
     // Background.
     private ImageAzul mBgTile ;
-    // Bowls table.
+    // Tiles table.
     private ImageAzul mTable ;
     // Tiles.
+    private ImageAzul mToken, mTokenF ;
 	private ImageAzul mEmpty ;
 	private ImageAzul mFlower, mFlowerS, mFlowerB ;
 	private ImageAzul mClaw, mClawS, mClawB ;
@@ -30,7 +31,7 @@ public class ResourcesLoader
     private ImageAzul mEye, mEyeS, mEyeB ;
     // Player board.
     private ImageAzul mBoard, mBoardF ;
-    private ImageAzul mPatternLinesArrow, mPatternLinesArrowF ;
+    private ImageAzul mArrow, mArrowF;
     private ImageAzul mWallCase, mWallCaseS ;
     private ImageAzul mPatternLinesCase, mPatternLinesCaseS ;
     // Tiles factory.
@@ -68,6 +69,8 @@ public class ResourcesLoader
         mGameIcon = new ImageAzul("res/img/eye.png") ;
         mBgTile = new ImageAzul("res/img/bg.png") ;
         mTable = new ImageAzul("res/img/table.png") ;
+        mToken = new ImageAzul("res/img/token.png") ;
+        mTokenF = new ImageAzul("res/img/token_focused.png") ;
         mEmpty = new ImageAzul("res/img/empty.png") ;
         mFlower = new ImageAzul("res/img/flower.png") ;
         mFlowerS = new ImageAzul("res/img/flower_selected.png") ;
@@ -86,8 +89,8 @@ public class ResourcesLoader
         mEyeB = new ImageAzul("res/img/eye_blur.png") ;
         mBoard = new ImageAzul("res/img/board_borders.png") ;
         mBoardF = new ImageAzul("res/img/board_borders_focused.png") ;
-        mPatternLinesArrow = new ImageAzul("res/img/board_arrow.png") ;
-        mPatternLinesArrowF = new ImageAzul("res/img/board_arrow_focused.png") ;
+        mArrow = new ImageAzul("res/img/board_arrow.png") ;
+        mArrowF = new ImageAzul("res/img/board_arrow_focused.png") ;
         mWallCase = new ImageAzul("res/img/greencase.png") ;
         mWallCaseS = new ImageAzul("res/img/greencase_blur.png") ;
         mPatternLinesCase = new ImageAzul("res/img/browncase.png") ;
@@ -118,6 +121,7 @@ public class ResourcesLoader
     		case CLAW : return mClaw.get() ;
     		case FLOWER : return mFlower.get() ;
     		case MUSHROOM : return mMushroom.get() ;
+            case FIRST_PLAYER_MAKER : return mToken.get() ;
     		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
@@ -133,6 +137,7 @@ public class ResourcesLoader
             case CLAW : return mClawS.get() ;
             case FLOWER : return mFlowerS.get() ;
             case MUSHROOM : return mMushroomS.get() ;
+            case FIRST_PLAYER_MAKER : return mTokenF.get() ;
             case EMPTY : return mEmpty.get() ;
             default : return null ;
         }
@@ -147,6 +152,7 @@ public class ResourcesLoader
             case CLAW : return mClawB.get() ;
             case FLOWER : return mFlowerB.get() ;
             case MUSHROOM : return mMushroomB.get() ;
+            case FIRST_PLAYER_MAKER : return mToken.get() ;
             case EMPTY : return mEmpty.get() ;
             default : return null ;
         }
@@ -205,14 +211,14 @@ public class ResourcesLoader
         return mPatternLinesCaseS.get() ;
     }
 
-    public Image getPatternLinesArrow()
+    public Image getArrow()
     {
-        return mPatternLinesArrow.get() ;
+        return mArrow.get() ;
     }
 
-    public Image getPatternLinesArrowFocused()
+    public Image getArrowFocused()
     {
-        return mPatternLinesArrowF.get() ;
+        return mArrowF.get() ;
     }
 
     public Image getFactory()

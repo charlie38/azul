@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
-    // Model root ref.
-    private Game mGame ;
     // The player name.
     private String mName ;
     // His board.
@@ -20,9 +18,8 @@ public abstract class Player
     /**
      * Extended by the IA or human player.
      */
-    public Player(Game game, String playerName)
+    public Player(String playerName)
     {
-        mGame = game ;
         mName = playerName ;
         mPlayerBoard = new PlayerBoard() ;
         mTilesSelected = new ArrayList<>() ;
@@ -32,24 +29,44 @@ public abstract class Player
      * Play the player's intentions.
      * @param move contains the player's intentions.
      * @param asideTiles contains the tiles in the box cover.
+     * @param tableTiles contains the tiles on the table.
      */
-    public void play(PlayerMove move, ArrayList<Tile> asideTiles)
+    public void play(PlayerMove move, ArrayList<Tile> asideTiles, ArrayList<Tile> tableTiles)
     {
         switch (move.getType())
         {
-            case PLAYER_TAKE_FACTORY : takeTilesFromFactory(move) ; break ;
-            case PLAYER_TAKE_TABLE : takeTilesFromTable(move) ; break ;
+            case PLAYER_TAKE_FACTORY : takeTilesFromFactory(move, tableTiles) ; break ;
+            case PLAYER_TAKE_TABLE : takeTilesFromTable(move, tableTiles) ; break ;
             case PLAYER_PLACE_TILES_IN_PATTERN : addTilesInPattern(move) ; break ;
             case PLAYER_PLACE_TILES_IN_FLOOR : addTilesInFloor(move, asideTiles) ;
         }
     }
 
-    private void takeTilesFromFactory(PlayerMove move)
+    private void takeTilesFromFactory(PlayerMove move, ArrayList<Tile> tableTiles)
     {
         mTilesSelected = move.getTilesSelected() ;
+        // Add the remaining tiles in the factory on the table.
+        for (int i = 0 ; i < 4 ; i ++)
+        {
+            Tile tile = move.getFactory().getTile(i) ;
+
+            if (tile != Tile.EMPTY)
+            {
+                for (int j = 0 ; j < Game.SIZE_TILES_TABLE ; j ++)
+                {
+                    if (tableTiles.get(j) == Tile.EMPTY)
+                    {
+                        tableTiles.set(j, tile) ;
+                        break ;
+                    }
+                }
+
+                move.getFactory().getTiles().set(i, Tile.EMPTY) ;
+            }
+        }
     }
 
-    private void takeTilesFromTable(PlayerMove move)
+    private void takeTilesFromTable(PlayerMove move, ArrayList<Tile> tableTiles)
     {
         // Check if the player have to take the 'first player marker'.
         if (move.isFirstToTakeFromTable())
@@ -57,12 +74,15 @@ public abstract class Player
             try
             {
                 mPlayerBoard.addToFloorLine(Tile.takeFirstPlayerMaker()) ;
+                tableTiles.set(0, Tile.EMPTY) ;
             }
             catch (Tile.FirstPlayerMarkerException | PlayerBoard.PlayerBoardException e)
             {
                 e.printStackTrace() ;
             }
         }
+
+        mTilesSelected = move.getTilesSelected() ;
     }
 
     private void addTilesInPattern(PlayerMove move)
@@ -71,7 +91,16 @@ public abstract class Player
         {
             for (Tile tile : mTilesSelected)
             {
-                mPlayerBoard.addToPatternLine(tile, move.getRow() + 1) ;
+                if (! mPlayerBoard.isPatterLineFull(move.getRow() + 1))
+                {
+                    // Add to pattern line.
+                    mPlayerBoard.addToPatternLine(tile, move.getRow() + 1) ;
+                }
+                else
+                {
+                    // If full, finish to add in the floor line.
+                    mPlayerBoard.addToFloorLine(tile) ;
+                }
             }
 
             mTilesSelected.clear() ;
@@ -81,19 +110,6 @@ public abstract class Player
             e.printStackTrace() ;
         }
     }
-
-    /*
-    private void addTileInWall(PlayerMove move)
-    {
-        try
-        {
-            mPlayerBoard.addToWall(move.getTileSelected(), move.getRow(), move.getColumn()) ;
-        }
-        catch (PlayerBoard.PlayerBoardException e)
-        {
-            e.printStackTrace() ;
-        }
-    }*/
 
     private void addTilesInFloor(PlayerMove move, ArrayList<Tile> asideTiles)
     {
@@ -106,7 +122,7 @@ public abstract class Player
         {
             try
             {
-                for (Tile tile : move.getTilesSelected())
+                for (Tile tile : mTilesSelected)
                 {
                     mPlayerBoard.addToFloorLine(tile) ;
                 }
@@ -153,6 +169,22 @@ public abstract class Player
         return tile ;
     }
 
+    public Tile getInFloorLine(int i)
+    {
+        Tile tile = Tile.EMPTY ;
+
+        try
+        {
+            tile = mPlayerBoard.getInFloorLine(i) ;
+        }
+        catch (PlayerBoard.PlayerBoardException e)
+        {
+            e.printStackTrace() ;
+        }
+
+        return tile ;
+    }
+
     public Tile getInWall(int i, int j)
     {
         Tile tile = Tile.EMPTY ;
@@ -179,9 +211,14 @@ public abstract class Player
         return mPlayerBoard.getScoreTrack() ;
     }
 
-    public boolean isPatternLineRowAccessible(int row)
+    public boolean isPatternLineAccessible(int row)
     {
-        return ! (mPlayerBoard.isPatterLineFull(row) ||
-                (mTilesSelected.size() != 0 && ! mPlayerBoard.canBePlacedOnPatternLine(mTilesSelected.get(0), row))) ;
+        return ! mPlayerBoard.isPatterLineFull(row) && mTilesSelected.size() != 0
+                && mPlayerBoard.canBePlacedOnPatternLine(mTilesSelected.get(0), row) ;
+    }
+
+    public boolean isFloorLineAccessible()
+    {
+        return ! mPlayerBoard.isFloorLineFull() ;
     }
 }

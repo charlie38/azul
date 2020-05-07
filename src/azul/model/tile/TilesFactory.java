@@ -26,6 +26,7 @@ public class TilesFactory
      */
     public void prepare(ArrayList<Tile> remainingTiles, ArrayList<Tile> sideTiles)
     {
+        mTiles.clear() ;
         // Place 4 tiles in the factory.
         for (int i = 1 ; i <= SIZE_FACTORY ; i ++)
         {

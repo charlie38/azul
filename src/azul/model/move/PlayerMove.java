@@ -2,6 +2,7 @@ package azul.model.move;
 
 import azul.model.player.Player;
 import azul.model.tile.Tile;
+import azul.model.tile.TilesFactory;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,8 @@ public class PlayerMove extends Move
     private Player mPlayer ;
     // If a 'take tiles' move.
     private ArrayList<Tile> mTilesSelected ;
+    // If a 'take tile in factory' move.
+    private TilesFactory mFactory ;
     // If a 'take tiles from table' move.
     private boolean mIsFirstToTakeFromTable ;
     // If a 'place tile' move.
@@ -19,12 +22,13 @@ public class PlayerMove extends Move
      * Contains the player's intentions during his turn ; he selected tiles from factory.
      * @param type can only be 'Type.PLAYER_TAKE_FACTORY'.
      */
-    public PlayerMove(Type type, Player player, ArrayList<Tile> tilesSelected)
+    public PlayerMove(Type type, Player player, ArrayList<Tile> tilesSelected, TilesFactory factory)
     {
         super(type, Type.PLAYER_TAKE_FACTORY) ;
 
         mPlayer = player ;
         mTilesSelected = tilesSelected ;
+        mFactory = factory ;
     }
 
     /**
@@ -86,5 +90,10 @@ public class PlayerMove extends Move
     public int getRow()
     {
         return mRow ;
+    }
+
+    public TilesFactory getFactory()
+    {
+        return mFactory ;
     }
 }

@@ -6,10 +6,10 @@ import azul.view.drawable.Drawable;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class Tile extends Drawable
+public class FactoryTile extends Drawable
 {
     // Request a select animation.
-    private static final int ANIMATION_DELAY = 200 ;
+    private static final int ANIMATION_DELAY = 400 ;
 
     // Tile index in model representations.
     private int mFactoryIndex ;
@@ -25,7 +25,7 @@ public class Tile extends Drawable
      * @param factoryIndex index of its container in the model representation.
      * @param index index in the model representation.
      */
-    public Tile(Display display, int originalX, int originalY, int factoryIndex, int index)
+    public FactoryTile(Display display, int originalX, int originalY, int factoryIndex, int index)
     {
         super(display, originalX, originalY, TilesFactory.WIDTH_TILE, TilesFactory.HEIGHT_TILE, ANIMATION_DELAY) ;
 

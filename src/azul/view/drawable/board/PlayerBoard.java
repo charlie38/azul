@@ -34,10 +34,21 @@ public class PlayerBoard extends Drawable
     public static final int WIDTH_PL_ARROW = (int) (12 * SIZE_COEF) ;
     public static final int HEIGHT_PL_ARROW = (int) (25 * SIZE_COEF) ;
     public final int SPACE_V_PL_ARROW = (int) (4.5 * SIZE_COEF) ;
-    public final int DISTANCE_LEFT_TO_PL_ARROW = DISTANCE_LEFT_TO_PL - WIDTH_PL_ARROW - (int) (10 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_PL_ARROW = (int) (5 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL_ARROW = (int) (35 * SIZE_COEF) ;
+    // Floor line tiles (bg).
+    public static final int WIDTH_FL_TILE = (int) (22 * SIZE_COEF) ;
+    public static final int HEIGHT_FL_TILE = (int) (22 * SIZE_COEF) ;
+    public final int SPACE_H_FL_TILE = (int) (7.5 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_FL = (int) (21 * SIZE_COEF) ;
+    public final int DISTANCE_TOP_TO_FL = (int) (4.15 * HEIGHT_BOARD / 5) ;
+    // Floor line arrow.
+    public static final int WIDTH_FL_ARROW = WIDTH_PL_ARROW ;
+    public static final int HEIGHT_FL_ARROW = HEIGHT_PL_ARROW ;
+    public final int DISTANCE_LEFT_TO_FL_ARROW = DISTANCE_LEFT_TO_PL_ARROW ;
+    public final int DISTANCE_TOP_TO_FL_ARROW = (int) (4.1 * HEIGHT_BOARD / 5) ;
     // Player name.
-    public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - (int) (WIDTH_BOARD / 3) ;
+    public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - WIDTH_BOARD / 3 ;
     public final int DISTANCE_TOP_TO_NAME = HEIGHT_BOARD - HEIGHT_BOARD / 9 ;
     public final Color COLOR_PLAYER_NAME = new Color(0x4A4E49) ;
     public final int MAX_LENGTH_PLAYER_NAME = 12 ;
@@ -53,6 +64,8 @@ public class PlayerBoard extends Drawable
     private ArrayList<WallTile> mWallTiles ;
     private ArrayList<PatternLineArrow> mPatternLinesArrows ;
     private ArrayList<PatternLineTile> mPatternLinesTiles ;
+    private ArrayList<FloorLineTile> mFloorLineTiles ;
+    private FloorLineArrow mFloorLineArrow ;
     // True if this board is focused (current player board).
     private boolean mIsFocused ;
 
@@ -73,6 +86,8 @@ public class PlayerBoard extends Drawable
         createWallTiles() ;
         createPatternLinesArrows() ;
         createPatternLinesTiles() ;
+        createFloorLineArrow() ;
+        createFloorLineTiles() ;
     }
 
     public void createWallTiles()
@@ -121,6 +136,27 @@ public class PlayerBoard extends Drawable
         }
     }
 
+    public void createFloorLineTiles()
+    {
+        mFloorLineTiles = new ArrayList<>() ;
+
+        for (int i = 0 ; i < azul.model.player.PlayerBoard.SIZE_FLOOR_LINE ; i ++)
+        {
+            mFloorLineTiles.add(new FloorLineTile(getDisplay(),
+                    mOriginalX + DISTANCE_LEFT_TO_FL + i * (WIDTH_FL_TILE + SPACE_H_FL_TILE),
+                    mOriginalY + DISTANCE_TOP_TO_FL,
+                    mIndex, i)) ;
+        }
+    }
+
+    public void createFloorLineArrow()
+    {
+        mFloorLineArrow = new FloorLineArrow(getDisplay(),
+                mOriginalX + DISTANCE_LEFT_TO_FL_ARROW,
+                mOriginalY + DISTANCE_TOP_TO_FL_ARROW,
+                mIndex) ;
+    }
+
     /**
      * @param x the click x-coordinate on the Swing coordinate system.
      * @param y the click y-coordinate on the Swing coordinate system.
@@ -150,6 +186,19 @@ public class PlayerBoard extends Drawable
             {
                 return tile ;
             }
+        }
+
+        for (FloorLineTile tile : mFloorLineTiles)
+        {
+            if (tile.isClicked(x, y))
+            {
+                return tile ;
+            }
+        }
+
+        if (mFloorLineArrow.isClicked(x, y))
+        {
+            return mFloorLineArrow ;
         }
 
         return null ;
@@ -189,9 +238,11 @@ public class PlayerBoard extends Drawable
         // Board.
         paintBg(g, point.x, point.y) ;
         paintPatternLinesArrows(g) ;
+        paintFloorLineArrow(g) ;
         // Player tiles.
         paintWallTiles(g) ;
         paintPatternLinesTiles(g) ;
+        paintFloorLinesTiles(g) ;
         // Player information.
         paintPlayerName(g, point.x, point.y) ;
         paintPlayerPoints(g, point.x, point.y) ;
@@ -228,6 +279,19 @@ public class PlayerBoard extends Drawable
         {
             tile.paint(g) ;
         }
+    }
+
+    private void paintFloorLinesTiles(Graphics g)
+    {
+        for (FloorLineTile tile : mFloorLineTiles)
+        {
+            tile.paint(g) ;
+        }
+    }
+
+    private void paintFloorLineArrow(Graphics g)
+    {
+        mFloorLineArrow.paint(g) ;
     }
 
     private void paintPlayerName(Graphics g, int x, int y)

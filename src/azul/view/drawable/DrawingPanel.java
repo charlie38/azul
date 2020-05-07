@@ -128,6 +128,11 @@ public class DrawingPanel extends JPanel
             }
         }
 
+        if ((clicked = mTable.onClick(x, y)) != null)
+        {
+            return clicked ;
+        }
+
         return null ;
     }
 

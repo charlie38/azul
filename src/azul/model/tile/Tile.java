@@ -16,9 +16,9 @@ public enum Tile
     private static boolean mIsFirstMakerTaken = false ;
 
     /**
-     * Called before the game start.
+     * Called before the game round start.
      */
-    public static void onGameStart()
+    public static void onRoundStart()
     {
         mIsFirstMakerTaken = false ;
     }

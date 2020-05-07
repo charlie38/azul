@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class TilesFactory extends Drawable
 {
-    // Request a select animation.
+    // Request a focus animation.
     private static final int ANIMATION_DELAY = 400 ;
     // /!\ Change all factory components size.
     public static final float SIZE_COEF = 1.2f ;
@@ -28,7 +28,7 @@ public class TilesFactory extends Drawable
     // Factory index in the game 'model' list.
     private int mIndex ;
     // Drawables.
-    private ArrayList<Tile> mTiles;
+    private ArrayList<FactoryTile> mTiles;
     // True if this factory is focused (the player needs to choose a tile).
     private boolean mIsFocused ;
 
@@ -59,7 +59,7 @@ public class TilesFactory extends Drawable
         {
             for (int j = 0 ; j < 2 ; j ++)
             {
-                mTiles.add(new Tile(getDisplay(),
+                mTiles.add(new FactoryTile(getDisplay(),
                         mOriginalX + DISTANCE_LEFT_TO_TILE + j * (WIDTH_TILE + SPACE_H_TILE),
                         mOriginalY + DISTANCE_TOP_TO_TILE + i * (HEIGHT_TILE + SPACE_V_TILE),
                         mIndex, tileIndex ++)) ;
@@ -74,7 +74,7 @@ public class TilesFactory extends Drawable
      */
     public Drawable onClick(int x, int y)
     {
-        for (Tile tile : mTiles)
+        for (FactoryTile tile : mTiles)
         {
             if (tile.isClicked(x, y))
             {
@@ -97,6 +97,11 @@ public class TilesFactory extends Drawable
     protected void onAnimationStarts()
     {
         mIsFocused = true ;
+
+        for (FactoryTile tile : mTiles)
+        {
+            tile.setIsAnimated(true) ;
+        }
     }
 
     @Override
@@ -115,6 +120,11 @@ public class TilesFactory extends Drawable
     protected void onAnimationEnds()
     {
         mIsFocused = false ;
+
+        for (FactoryTile tile : mTiles)
+        {
+            tile.setIsAnimated(false) ;
+        }
     }
 
     @Override
@@ -140,7 +150,7 @@ public class TilesFactory extends Drawable
 
     private void paintTiles(Graphics g)
     {
-        for (Tile tile : mTiles)
+        for (FactoryTile tile : mTiles)
         {
             tile.paint(g) ;
         }

@@ -5,6 +5,7 @@ import azul.model.player.HumanPlayer;
 import azul.model.player.Player;
 import azul.model.tile.Tile;
 import azul.model.tile.TilesFactory;
+import azul.view.drawable.factory.FactoryTile;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -12,10 +13,12 @@ import java.util.Observable;
 public class Game extends Observable
 {
     // Game states.
-    public enum State { CHOOSE_TILES, SELECT_ROW }
+    public enum State { CHOOSE_TILES, SELECT_ROW, GAME_OVER }
 
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
+    // Size of the tiles on the table.
+    public static final int SIZE_TILES_TABLE = 9 * 4 ;
     // Number of tiles of the same color in the bag at the start.
     public final int NB_TILES_COLOR = 20 ;
 
@@ -27,10 +30,10 @@ public class Game extends Observable
     private ArrayList<Tile> mTilesRemaining ;
     // Tiles in the box cover.
     private ArrayList<Tile> mTilesAside ;
+    // Tiles on the table.
+    private ArrayList<Tile> mTilesTable ;
     // The player who must play during this game turn.
     private int mCurrentPlayer ;
-    // True if a game is running.
-    private boolean mIsGameRunning ;
     // Current game state.
     private State mState ;
 
@@ -44,7 +47,7 @@ public class Game extends Observable
         mTilesFactories = new ArrayList<>() ;
         mTilesRemaining = new ArrayList<>() ;
         mTilesAside = new ArrayList<>() ;
-        mIsGameRunning = false ;
+        mTilesTable = new ArrayList<>() ;
     }
 
     /**
@@ -63,21 +66,14 @@ public class Game extends Observable
             e.printStackTrace() ;
             return ;
         }
-        // Initialize the 'first player marker'.
-        Tile.onGameStart() ;
         // Initialize game objects.
         initializePlayers(nbPlayers, playerNames) ;
-        initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
         initializeTilesRemaining() ;
         initializeTilesAside() ;
+        initializeTilesTable() ;
+        initializeTilesFactories(getNbTilesFactories(mPlayers.size())) ;
         // This will be the first round.
         prepareForRound() ;
-        mCurrentPlayer = 0 ;
-        mIsGameRunning = true ;
-        mState = State.CHOOSE_TILES ;
-        // Notify the UI.
-        setChanged() ;
-        notifyObservers() ;
     }
 
     /**
@@ -91,6 +87,14 @@ public class Game extends Observable
         {
             factory.prepare(mTilesRemaining, mTilesAside) ;
         }
+        // Initialize the 'first player marker'.
+        Tile.onRoundStart() ;
+
+        mCurrentPlayer = 0 ;
+        mState = State.CHOOSE_TILES ;
+        // Notify the UI.
+        setChanged() ;
+        notifyObservers() ;
     }
 
     private void initializePlayers(int nbPlayers, String[] playersNames)
@@ -99,7 +103,7 @@ public class Game extends Observable
 
         for (int i = 1 ; i <= nbPlayers ; i ++)
         {
-            mPlayers.add(new HumanPlayer(this, playersNames[i - 1])) ;
+            mPlayers.add(new HumanPlayer(playersNames[i - 1])) ;
         }
     }
 
@@ -126,6 +130,18 @@ public class Game extends Observable
     private void initializeTilesAside()
     {
         mTilesAside.clear() ;
+    }
+
+    private void initializeTilesTable()
+    {
+        mTilesTable.clear() ;
+
+        mTilesTable.add(Tile.FIRST_PLAYER_MAKER) ;
+
+        for (int i = 2 ; i <= SIZE_TILES_TABLE ; i ++)
+        {
+            mTilesTable.add(Tile.EMPTY) ;
+        }
     }
 
     /**
@@ -162,13 +178,37 @@ public class Game extends Observable
      */
     public void playMove(PlayerMove move)
     {
-        getPlayer().play(move, mTilesAside) ;
+        getPlayer().play(move, mTilesAside, mTilesTable) ;
         // Change the game state.
         switch (move.getType())
         {
             case PLAYER_PLACE_TILES_IN_FLOOR :
-            case PLAYER_PLACE_TILES_IN_PATTERN : mState = State.CHOOSE_TILES ; break ;
+            case PLAYER_PLACE_TILES_IN_PATTERN :
+
+                mState = State.CHOOSE_TILES ;
+                // Check if game over, or round over.
+                if (isGameOver())
+                {
+                    decorateWalls() ;
+                    mState = State.GAME_OVER ;
+                }
+                else if (isRoundOver())
+                {
+                    decorateWalls() ;
+                    prepareForRound() ;
+                }
+
+                break ;
+
             case PLAYER_TAKE_TABLE :
+
+                if (move.getTilesSelected().get(0) == Tile.FIRST_PLAYER_MAKER)
+                {
+                    // User chosen the token, needs to be automatically placed on the floor line.
+                    changePlayer() ;
+                    break ;
+                }
+
             case PLAYER_TAKE_FACTORY : mState = State.SELECT_ROW ;
         }
         // Notify the UI.
@@ -178,18 +218,10 @@ public class Game extends Observable
 
     public void changePlayer()
     {
-        if (isFactoriesEmpty())
-        {
-            // Factories are empty, needs to decorate the wall before maybe starting a new round.
-            decorateWalls() ;
-        }
-        else
-        {
-            // Go to the next player.
-            mCurrentPlayer = (mCurrentPlayer == getNbPlayers() - 1) ? 0 : mCurrentPlayer + 1 ;
-            // Change the game state.
-            mState = State.CHOOSE_TILES ;
-        }
+        // Go to the next player.
+        mCurrentPlayer = (mCurrentPlayer == getNbPlayers() - 1) ? 0 : mCurrentPlayer + 1 ;
+        // Change the game state.
+        mState = State.CHOOSE_TILES ;
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
@@ -215,6 +247,27 @@ public class Game extends Observable
     }
 
     /**
+     * Take all the tiles of the same color on the table.
+     * @param selected the tiles chosen by the player.
+     * @return the tiles of the same color as 'selected'.
+     */
+    public ArrayList<Tile> takeOnTable(Tile selected)
+    {
+        ArrayList<Tile> tilesSelected = new ArrayList<>() ;
+
+        for (int i = 0 ; i < SIZE_TILES_TABLE ; i ++)
+        {
+            if (mTilesTable.get(i) == selected)
+            {
+                tilesSelected.add(mTilesTable.get(i)) ;
+                mTilesTable.set(i, Tile.EMPTY) ;
+            }
+        }
+
+        return tilesSelected ;
+    }
+
+    /**
      * Check if the game is over by checking all users' wall.
      * According to the rules, if a row is full in a user wall, the game is over.
      * @return true if the game is over.
@@ -232,6 +285,24 @@ public class Game extends Observable
         return false ;
     }
 
+    /**
+     * Check if the round is over by checking all the factories and table.
+     * According to the rules, if the factories and the table are empty, the round is over.
+     * @return true if the round is over.
+     */
+    public boolean isRoundOver()
+    {
+        for (Tile tile : mTilesTable)
+        {
+            if (tile != Tile.EMPTY)
+            {
+                return false ;
+            }
+        }
+
+        return isFactoriesEmpty() ;
+    }
+
     public boolean isFactoriesEmpty()
     {
         for (TilesFactory factory : mTilesFactories)
@@ -245,9 +316,9 @@ public class Game extends Observable
         return true ;
     }
 
-    public boolean isGameRunning()
+    public boolean isTableEmpty()
     {
-        return mIsGameRunning ;
+        return mTilesTable.size() == 0 ;
     }
 
     public Player getPlayer()
@@ -275,14 +346,19 @@ public class Game extends Observable
         return mTilesFactories.get(i) ;
     }
 
-    public ArrayList<Tile> getTilesRemaining()
+    public Tile getInTilesRemaining(int i)
     {
-        return mTilesRemaining ;
+        return mTilesRemaining.get(i) ;
     }
 
-    public ArrayList<TilesFactory> getTilesFactories()
+    public Tile getInTilesAside(int i)
     {
-        return mTilesFactories ;
+        return mTilesAside.get(i) ;
+    }
+
+    public Tile getInTilesTable(int i)
+    {
+        return mTilesTable.get(i) ;
     }
 
     public State getState()

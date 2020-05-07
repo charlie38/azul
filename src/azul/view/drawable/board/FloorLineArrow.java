@@ -7,32 +7,28 @@ import azul.view.drawable.Drawable;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class PatternLineArrow extends Drawable
+public class FloorLineArrow extends Drawable
 {
     // Request a select animation.
     private static final int ANIMATION_DELAY = 400 ;
 
     // Player index in the model representation.
     private int mPlayerIndex ;
-    // Row index in the pattern lines graphical and model representations.
-    private int mIndex ;
     // True if the current arrow image is focused.
     private boolean mIsFocused ;
 
     /**
-     * A player's board pattern line arrow graphical representation.
+     * The player's board floor line arrow graphical representation.
      * @param display root.
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
      * @param playerIndex index in the model representation of the player.
-     * @param index index in the model representation, and Y delta in the view representation.
      */
-    public PatternLineArrow(Display display, int originalX, int originalY, int playerIndex, int index)
+    public FloorLineArrow(Display display, int originalX, int originalY, int playerIndex)
     {
-        super(display, originalX, originalY, PlayerBoard.WIDTH_PL_ARROW, PlayerBoard.HEIGHT_PL_ARROW, ANIMATION_DELAY) ;
+        super(display, originalX, originalY, PlayerBoard.WIDTH_FL_ARROW, PlayerBoard.HEIGHT_FL_ARROW, ANIMATION_DELAY) ;
 
         mPlayerIndex = playerIndex ;
-        mIndex = index ;
         mIsFocused = false ;
     }
 
@@ -79,7 +75,7 @@ public class PatternLineArrow extends Drawable
 
     private void paintTile(Graphics g, int x, int y)
     {
-        if (! mIsAnimated || ! getPlayer(mPlayerIndex).isPatternLineAccessible(mIndex + 1))
+        if (! mIsAnimated || ! getPlayer(mPlayerIndex).isFloorLineAccessible())
         {
             // Arrows are drawn only when user needs to select a pattern/floor line, and if this line is accessible.
             return ;
@@ -91,11 +87,6 @@ public class PatternLineArrow extends Drawable
         Image img = mIsFocused ? getResourcesLoader().getArrowFocused() : getResourcesLoader().getArrow() ;
 
         g.drawImage(img, x, y, width, height, null) ;
-    }
-
-    public int getRowIndex()
-    {
-        return mIndex ;
     }
 
     public int getPlayerIndex()

@@ -10,7 +10,7 @@ public class PlayerBoard
     public static final int MAX_SCORE_TRACK = 100 ;
     public static final int SIZE_WALL = 5 ;
     public static final int SIZE_PATTERN_LINES = 5 ;
-    public static final int SIZE_FLOOR_LINES = 7 ;
+    public static final int SIZE_FLOOR_LINE = 7 ;
 
     // At the top of the board used to track user score.
     private int mScoreTrack ;
@@ -42,6 +42,30 @@ public class PlayerBoard
      */
     protected void decorateWall(ArrayList<Tile> asideTiles)
     {
+        // Remove floor line tiles.
+        for (int i = 0 ; i < SIZE_FLOOR_LINE ; i ++)
+        {
+            Tile tile = mFloorLine.get(i) ;
+
+            if (tile != Tile.EMPTY)
+            {
+                asideTiles.add(tile) ;
+
+                switch (i)
+                {
+                    case 0 :
+                    case 1 : mScoreTrack -- ; break ;
+                    case 2 :
+                    case 3 :
+                    case 4 : mScoreTrack -= 2 ; break ;
+                    case 5 :
+                    case 6 : mScoreTrack -= 3 ;
+                }
+            }
+
+            mFloorLine.set(i, Tile.EMPTY) ;
+        }
+
         for (int i = 0 ; i < SIZE_PATTERN_LINES ; i ++)
         {
             if (isPatterLineFull(i + 1))
@@ -114,7 +138,7 @@ public class PlayerBoard
     {
         mFloorLine = new ArrayList<>() ;
 
-        for (int i = 1 ; i <= SIZE_FLOOR_LINES ; i ++)
+        for (int i = 1; i <= SIZE_FLOOR_LINE; i ++)
         {
             mFloorLine.add(Tile.EMPTY) ;
         }
@@ -143,24 +167,6 @@ public class PlayerBoard
         }
         // Try to add a tile on a full line.
         throw new PlayerBoardException(PlayerBoardException.FULL_PATTERN_LINES) ;
-    }
-
-    public void addToWall(Tile tile, int row, int column) throws PlayerBoardException
-    {
-        // Check if it's a good tile color for this case.
-        if (! canBePlacedOnWall(tile, row, column))
-        {
-            // Try to add a tile on wall case of a different color than the tile one.
-            throw new PlayerBoardException(PlayerBoardException.COLOR_WALL) ;
-        }
-        // Check if the case is full or empty.
-        if (isWallCaseNotEmpty(row, column))
-        {
-            // Try to add a tile in a not empty case.
-            throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
-        }
-        // This case is empty.
-        mWall.get(row - 1)[column - 1] = tile ;
     }
 
     public void addToWall(Tile tile, int row) throws PlayerBoardException
@@ -207,7 +213,7 @@ public class PlayerBoard
 
     public void addToFloorLine(Tile tile) throws PlayerBoardException
     {
-        for (int i = 0 ; i < SIZE_FLOOR_LINES ; i ++)
+        for (int i = 0; i < SIZE_FLOOR_LINE; i ++)
         {
             if (mFloorLine.get(i) == Tile.EMPTY)
             {
@@ -249,7 +255,7 @@ public class PlayerBoard
 
     public Tile getInFloorLine(int i) throws PlayerBoardException
     {
-        if (i >= SIZE_FLOOR_LINES || i < 0)
+        if (i >= SIZE_FLOOR_LINE || i < 0)
         {
             throw new PlayerBoardException(PlayerBoardException.OUT_FLOOR_LINE);
         }
@@ -269,7 +275,7 @@ public class PlayerBoard
 
     public boolean isFloorLineFull()
     {
-        return mFloorLine.get(SIZE_FLOOR_LINES - 1) != Tile.EMPTY ;
+        return mFloorLine.get(SIZE_FLOOR_LINE - 1) != Tile.EMPTY ;
     }
 
     public boolean canBePlacedOnPatternLine(Tile tile, int row)
@@ -399,7 +405,7 @@ public class PlayerBoard
 
     public void setInFloorLine(int i, Tile tile) throws PlayerBoardException
     {
-        if (i >= SIZE_FLOOR_LINES || i < 0)
+        if (i >= SIZE_FLOOR_LINE || i < 0)
         {
             throw new PlayerBoardException(PlayerBoardException.OUT_FLOOR_LINE);
         }
