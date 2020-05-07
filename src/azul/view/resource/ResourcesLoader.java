@@ -29,12 +29,12 @@ public class ResourcesLoader
     private ImageAzul mCrystal, mCrystalB ;
     private ImageAzul mEye, mEyeB ;
     // Player board.
-    private ImageAzul mBoard ;
-    private ImageAzul mWallCase, mWallCaseB ;
-    private ImageAzul mPatternLinesCase, mPatternLinesCaseB ;
+    private ImageAzul mBoard, mBoardF ;
+    private ImageAzul mWallCase, mWallCaseS ;
+    private ImageAzul mPatternLinesCase, mPatternLinesCaseS ;
     // Tiles factory.
-    private ImageAzul mFactory ;
-    private ImageAzul mFactoryCase, mFactoryCaseB ;
+    private ImageAzul mFactory, mFactoryF ;
+    private ImageAzul mFactoryCase, mFactoryCaseS ;
     // In game navigation.
     private ImageAzul mPrevious ;
     private ImageAzul mNext ;
@@ -79,13 +79,15 @@ public class ResourcesLoader
         mEye = new ImageAzul("res/img/eye.png") ;
         mEyeB = new ImageAzul("res/img/eye_blur.png") ;
         mBoard = new ImageAzul("res/img/board_borders.png") ;
+        mBoardF = new ImageAzul("res/img/board_borders_focused.png") ;
         mWallCase = new ImageAzul("res/img/greencase.png") ;
-        mWallCaseB = new ImageAzul("res/img/greencase_blur.png") ;
+        mWallCaseS = new ImageAzul("res/img/greencase_blur.png") ;
         mPatternLinesCase = new ImageAzul("res/img/browncase.png") ;
-        mPatternLinesCaseB = new ImageAzul("res/img/browncase_blur.png") ;
+        mPatternLinesCaseS = new ImageAzul("res/img/browncase_blur.png") ;
         mFactory = new ImageAzul("res/img/bowl.png") ;
+        mFactoryF = new ImageAzul("res/img/bowl_focused.png") ;
         mFactoryCase = new ImageAzul("res/img/bowlcase.png") ;
-        mFactoryCaseB = new ImageAzul("res/img/bowlcase_blur.png") ;
+        mFactoryCaseS = new ImageAzul("res/img/bowlcase_blur.png") ;
         mPrevious = new ImageAzul("res/img/rewind.png") ;
         mNext = new ImageAzul("res/img/forward.png") ;
         mSettings = new ImageAzul("res/img/settings.png") ;
@@ -153,14 +155,19 @@ public class ResourcesLoader
         return mBoard.get() ;
     }
 
+    public Image getBoardFocused()
+    {
+        return mBoardF.get() ;
+    }
+
     public Image getWallCase()
     {
         return mWallCase.get() ;
     }
 
-    public Image getWallCaseBlurred()
+    public Image getWallCaseSelected()
     {
-        return mWallCaseB.get() ;
+        return mWallCaseS.get() ;
     }
 
     public Image getPatternLinesCase()
@@ -168,9 +175,9 @@ public class ResourcesLoader
         return mPatternLinesCase.get() ;
     }
 
-    public Image getPatternLinesCaseBlurred()
+    public Image getPatternLinesCaseSelected()
     {
-        return mPatternLinesCaseB.get() ;
+        return mPatternLinesCaseS.get() ;
     }
 
     public Image getFactory()
@@ -178,14 +185,19 @@ public class ResourcesLoader
         return mFactory.get() ;
     }
 
+    public Image getFactoryFocused()
+    {
+        return mFactoryF.get() ;
+    }
+
     public Image getFactoryCase()
     {
         return mFactoryCase.get() ;
     }
 
-    public Image getFactoryCaseBlurred()
+    public Image getFactoryCaseSelected()
     {
-        return mFactoryCaseB.get() ;
+        return mFactoryCaseS.get() ;
     }
 
     public Image getPrevious()

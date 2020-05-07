@@ -4,6 +4,7 @@ import azul.view.Display;
 import azul.view.drawable.Drawable;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Table extends Drawable
 {
@@ -21,8 +22,17 @@ public class Table extends Drawable
      */
     public Table(Display display, int originalX, int originalY)
     {
-        super(display, originalX, originalY, WIDTH_TABLE, HEIGHT_TABLE) ;
+        super(display, originalX, originalY, WIDTH_TABLE, HEIGHT_TABLE, Drawable.DEFAULT_ANIMATION_DELAY) ;
     }
+
+    @Override
+    protected void onAnimationStarts() { }
+
+    @Override
+    protected ActionListener onAnimationChanged() { return null ; }
+
+    @Override
+    protected void onAnimationEnds() { }
 
     @Override
     public void paint(Graphics g)

@@ -1,13 +1,17 @@
 package azul.view.drawable.factory;
 
+import azul.model.Game;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class TilesFactory extends Drawable
 {
+    // Request a select animation.
+    private static final int ANIMATION_DELAY = 400 ;
     // /!\ Change all factory components size.
     public static final float SIZE_COEF = 1.2f ;
     // Factory bg.
@@ -25,6 +29,8 @@ public class TilesFactory extends Drawable
     private int mIndex ;
     // Drawables.
     private ArrayList<Tile> mTiles;
+    // True if this factory is focused (the player needs to choose a tile).
+    private boolean mIsFocused ;
 
     /**
      * A tiles factory graphical representation.
@@ -35,9 +41,10 @@ public class TilesFactory extends Drawable
      */
     public TilesFactory(Display display, int originalX, int originalY, int index)
     {
-        super(display, originalX, originalY, WIDTH_FACTORY, HEIGHT_FACTORY) ;
+        super(display, originalX, originalY, WIDTH_FACTORY, HEIGHT_FACTORY, ANIMATION_DELAY) ;
 
         mIndex = index ;
+        mIsFocused = false ;
 
         createFactoryTileList() ;
 	}
@@ -79,6 +86,38 @@ public class TilesFactory extends Drawable
     }
 
     @Override
+    public void update(java.util.Observable observable, Object object)
+    {
+        // If the game model change the current player, and he needs to choose tiles in factories,
+        // start the focus animation.
+        setIsAnimated(getGame().getState() == Game.State.CHOOSE_TILES) ;
+    }
+
+    @Override
+    protected void onAnimationStarts()
+    {
+        mIsFocused = true ;
+    }
+
+    @Override
+    protected ActionListener onAnimationChanged()
+    {
+        return actionEvent ->
+        {
+            if (mIsAnimated)
+            {
+                mIsFocused = ! mIsFocused ;
+            }
+        } ;
+    }
+
+    @Override
+    protected void onAnimationEnds()
+    {
+        mIsFocused = false ;
+    }
+
+    @Override
 	public void paint(Graphics g)
     {
         super.paint(g) ;
@@ -92,7 +131,7 @@ public class TilesFactory extends Drawable
 
     private void paintBg(Graphics g, int x, int y)
     {
-        Image img = getResourcesLoader().getFactory() ;
+        Image img = mIsFocused ? getResourcesLoader().getFactoryFocused() : getResourcesLoader().getFactory() ;
         int width = (int) (WIDTH_FACTORY * mCoef) ;
         int height = (int) (HEIGHT_FACTORY * mCoef) ;
 

@@ -5,21 +5,20 @@ import azul.view.drawable.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class WallTile extends Drawable
 {
     // Request a select animation.
-    private final int ANIMATION_DELAY = 200 ;
+    private static final int ANIMATION_DELAY = 200 ;
 
     // Player index in the model representation.
     private int mPlayerIndex ;
     // Tile indexes in the wall graphical and model representations.
     private int mIndexI ;
     private int mIndexJ ;
-    // True if the current tile image is blurred.
-    private boolean mIsBlurred ;
-    // True if animated.
-    private boolean mIsAnimated ;
+    // True if the current tile image is selected.
+    private boolean mIsSelected ;
 
     /**
      * A player wall tile graphical representation.
@@ -32,23 +31,36 @@ public class WallTile extends Drawable
      */
     public WallTile(Display display, int originalX, int originalY, int playerIndex, int indexI, int indexJ)
     {
-        super(display, originalX, originalY, PlayerBoard.WIDTH_WALL_TILE, PlayerBoard.HEIGHT_WALL_TILE) ;
+        super(display, originalX, originalY, PlayerBoard.WIDTH_WALL_TILE, PlayerBoard.HEIGHT_WALL_TILE, ANIMATION_DELAY) ;
 
         mPlayerIndex = playerIndex ;
         mIndexI = indexI ;
         mIndexJ = indexJ ;
-        mIsBlurred = false ;
-        mIsAnimated = false ;
+        mIsSelected = false ;
+    }
 
-        new Timer(ANIMATION_DELAY,
-                actionEvent ->
-                {
-                    if (mIsAnimated)
-                    {
-                        mIsBlurred = ! mIsBlurred ;
-                    }
-                }
-        ).start() ;
+    @Override
+    protected void onAnimationStarts()
+    {
+        mIsSelected = true ;
+    }
+
+    @Override
+    protected ActionListener onAnimationChanged()
+    {
+        return actionEvent ->
+        {
+            if (mIsAnimated)
+            {
+                mIsSelected = ! mIsSelected ;
+            }
+        } ;
+    }
+
+    @Override
+    protected void onAnimationEnds()
+    {
+        mIsSelected = false ;
     }
 
     @Override
@@ -66,7 +78,7 @@ public class WallTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsBlurred ? getResourcesLoader().getWallCaseBlurred() : getResourcesLoader().getWallCase() ;
+        Image bg = mIsSelected ? getResourcesLoader().getWallCaseSelected() : getResourcesLoader().getWallCase() ;
         Image ingredientBlurred = getResourcesLoader().getIngredientBlurred(
                 azul.model.player.PlayerBoard.getWallTile(mIndexI + 1, mIndexJ + 1)) ;
         Image ingredient = getResourcesLoader().getIngredient(getPlayer(mPlayerIndex).getInWall(mIndexI, mIndexJ)) ;
@@ -74,11 +86,5 @@ public class WallTile extends Drawable
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredientBlurred, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
-    }
-
-    public void setIsAnimated(boolean isAnimated)
-    {
-        mIsAnimated = isAnimated ;
-        mIsBlurred = isAnimated ;
     }
 }

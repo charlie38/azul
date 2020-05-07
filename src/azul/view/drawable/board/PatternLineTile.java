@@ -5,21 +5,20 @@ import azul.view.drawable.Drawable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class PatternLineTile extends Drawable
 {
     // Request a select animation.
-    private final int ANIMATION_DELAY = 200 ;
+    private static final int ANIMATION_DELAY = 200 ;
 
     // Player index in the model representation.
     private int mPlayerIndex ;
     // Tile indexes in the pattern lines graphical and model representations.
     private int mIndexI ;
     private int mIndexJ ;
-    // True if the current tile image is blurred.
-    private boolean mIsBlurred ;
-    // True if animated.
-    private boolean mIsAnimated ;
+    // True if the current tile image is selected.
+    private boolean mIsSelected ;
 
     /**
      * A player pattern tile graphical representation.
@@ -32,23 +31,36 @@ public class PatternLineTile extends Drawable
      */
     public PatternLineTile(Display display, int originalX, int originalY, int playerIndex, int indexI, int indexJ)
     {
-        super(display, originalX, originalY, PlayerBoard.WIDTH_PL_TILE, PlayerBoard.HEIGHT_PL_TILE) ;
+        super(display, originalX, originalY, PlayerBoard.WIDTH_PL_TILE, PlayerBoard.HEIGHT_PL_TILE, ANIMATION_DELAY) ;
 
         mPlayerIndex = playerIndex ;
         mIndexI = indexI ;
         mIndexJ = indexJ ;
-        mIsBlurred = false ;
-        mIsAnimated = false ;
+        mIsSelected = false ;
+    }
 
-        new Timer(ANIMATION_DELAY,
-                actionEvent ->
-                {
-                    if (mIsAnimated)
-                    {
-                        mIsBlurred = ! mIsBlurred ;
-                    }
-                }
-        ).start() ;
+    @Override
+    public void onAnimationStarts()
+    {
+        mIsSelected = true ;
+    }
+
+    @Override
+    public ActionListener onAnimationChanged()
+    {
+        return actionEvent ->
+        {
+            if (mIsAnimated)
+            {
+                mIsSelected = ! mIsSelected ;
+            }
+        } ;
+    }
+
+    @Override
+    public void onAnimationEnds()
+    {
+        mIsSelected = false ;
     }
 
     @Override
@@ -66,18 +78,12 @@ public class PatternLineTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsBlurred ? getResourcesLoader().getPatternLinesCaseBlurred() : getResourcesLoader().getPatternLinesCase() ;
-        Image ingredient = mIsBlurred ?
+        Image bg = mIsSelected ? getResourcesLoader().getPatternLinesCaseSelected() : getResourcesLoader().getPatternLinesCase() ;
+        Image ingredient = mIsSelected ?
                 getResourcesLoader().getIngredientBlurred(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) :
                 getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) ;
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
-    }
-
-    public void setIsAnimated(boolean isAnimated)
-    {
-        mIsAnimated = isAnimated ;
-        mIsBlurred = isAnimated ;
     }
 }

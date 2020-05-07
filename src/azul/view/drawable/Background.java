@@ -3,6 +3,7 @@ package azul.view.drawable;
 import azul.view.Display;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Background extends Drawable
 {
@@ -19,8 +20,17 @@ public class Background extends Drawable
      */
     public Background(Display display)
     {
-        super(display, -1, -1, WIDTH_TILE, HEIGHT_TILE) ;
+        super(display, -1, -1, WIDTH_TILE, HEIGHT_TILE, Drawable.DEFAULT_ANIMATION_DELAY) ;
     }
+
+    @Override
+    protected void onAnimationStarts() { }
+
+    @Override
+    protected ActionListener onAnimationChanged() { return null ; }
+
+    @Override
+    protected void onAnimationEnds() { }
 
     @Override
     public void paint(Graphics g)

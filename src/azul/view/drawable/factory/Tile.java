@@ -3,21 +3,19 @@ package azul.view.drawable.factory;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Tile extends Drawable
 {
     // Request a select animation.
-    private final int ANIMATION_DELAY = 200 ;
+    private static final int ANIMATION_DELAY = 200 ;
 
     // Tile index in model representations.
     private int mFactoryIndex ;
     private int mIndex ;
-    // True if the current tile image is blurred.
-    private boolean mIsBlurred ;
-    // True if animated.
-    private boolean mIsAnimated ;
+    // True if the current tile image is selected.
+    private boolean mIsSelected ;
 
     /**
      * A player wall tile graphical representation.
@@ -29,22 +27,35 @@ public class Tile extends Drawable
      */
     public Tile(Display display, int originalX, int originalY, int factoryIndex, int index)
     {
-        super(display, originalX, originalY, TilesFactory.WIDTH_TILE, TilesFactory.HEIGHT_TILE) ;
+        super(display, originalX, originalY, TilesFactory.WIDTH_TILE, TilesFactory.HEIGHT_TILE, ANIMATION_DELAY) ;
 
         mFactoryIndex = factoryIndex ;
         mIndex = index ;
-        mIsBlurred = false ;
-        mIsAnimated = false ;
+        mIsSelected = false ;
+    }
 
-        new Timer(ANIMATION_DELAY,
-                actionEvent ->
-                {
-                    if (mIsAnimated)
-                    {
-                        mIsBlurred = ! mIsBlurred ;
-                    }
-                }
-        ).start() ;
+    @Override
+    protected void onAnimationStarts()
+    {
+        mIsSelected = true ;
+    }
+
+    @Override
+    protected ActionListener onAnimationChanged()
+    {
+        return actionEvent ->
+        {
+            if (mIsAnimated)
+            {
+                mIsSelected = ! mIsSelected ;
+            }
+        } ;
+    }
+
+    @Override
+    protected void onAnimationEnds()
+    {
+        mIsSelected = false ;
     }
 
     @Override
@@ -62,18 +73,12 @@ public class Tile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsBlurred ? getResourcesLoader().getFactoryCaseBlurred() : getResourcesLoader().getFactoryCase() ;
-        Image ingredient = mIsBlurred ?
+        Image bg = mIsSelected ? getResourcesLoader().getFactoryCaseSelected() : getResourcesLoader().getFactoryCase() ;
+        Image ingredient = mIsSelected ?
                 getResourcesLoader().getIngredientBlurred(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
                 getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
-    }
-
-    public void setIsAnimated(boolean isAnimated)
-    {
-        mIsAnimated = isAnimated ;
-        mIsBlurred = isAnimated ;
     }
 }

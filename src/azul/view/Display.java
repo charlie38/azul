@@ -1,6 +1,8 @@
 package azul.view;
 
+import azul.controller.Mediator;
 import azul.model.Game;
+import azul.view.adapter.MouseAdapter;
 import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 
@@ -36,6 +38,8 @@ public class Display implements Runnable
 
 	// Game model.
 	private Game mGame ;
+	// Controller part.
+	private Mediator mMediator ;
 	// Window object.
 	private JFrame mFrame ;
 	// UI.
@@ -45,12 +49,21 @@ public class Display implements Runnable
 	// Current state.
 	private State mState ;
 
-	public Display(Game game)
+	public Display(Game game, Mediator mediator)
 	{
 	    mGame = game ;
+	    mMediator = mediator ;
 		mResourcesLoader = new ResourcesLoader() ;
+
+		initializeUI() ;
+	}
+
+	private void initializeUI()
+	{
 		// The panel.
 		mUIPanel = new UIPanel(this) ;
+		// Adapters.
+		mUIPanel.addMouseListener(new MouseAdapter(this, mMediator)) ;
 	}
 
 	@Override
@@ -58,6 +71,7 @@ public class Display implements Runnable
 	{
 		// Initialization of the frame.
 		mFrame = new JFrame(WINDOW_TITLE) ;
+		// Settings.
 		mFrame.setIconImage(mResourcesLoader.getGameIcon()) ;
 		mFrame.setSize(new Dimension(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT)) ;
 		mFrame.setMinimumSize(new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)) ;

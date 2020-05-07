@@ -11,6 +11,9 @@ import java.util.Observable;
 
 public class Game extends Observable
 {
+    // Game states.
+    public enum State { CHOOSE_TILES, SELECT_ROW, VALIDATE }
+
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
     // Number of tiles of the same color in the bag at the start.
@@ -28,6 +31,8 @@ public class Game extends Observable
     private int mCurrentPlayer ;
     // True if a game is running.
     private boolean mIsGameRunning ;
+    // Current game state.
+    private State mState ;
 
     /**
      * Contains the game objects ; players, tiles factories and tiles bag.
@@ -67,8 +72,12 @@ public class Game extends Observable
         initializeTilesAside() ;
         // This will be the first round.
         prepareForRound() ;
-
+        mCurrentPlayer = 0 ;
         mIsGameRunning = true ;
+        mState = State.CHOOSE_TILES ;
+        // Notify the UI.
+        setChanged() ;
+        notifyObservers() ;
     }
 
     /**
@@ -155,9 +164,18 @@ public class Game extends Observable
     {
         getPlayer().play(move, mTilesAside) ;
         // Notify the UI.
+        setChanged() ;
         notifyObservers() ;
+    }
+
+    public void changePlayer()
+    {
+        mState = State.CHOOSE_TILES ;
         // Go to the next player.
-        mCurrentPlayer ++ ;
+        mCurrentPlayer = (mCurrentPlayer == getNbPlayers() - 1) ? 0 : mCurrentPlayer + 1 ;
+        // Notify the UI.
+        setChanged() ;
+        notifyObservers() ;
     }
 
     public void goToPreviousMove()
@@ -212,6 +230,11 @@ public class Game extends Observable
         return mPlayers.get(index) ;
     }
 
+    public int getPlayerIndex()
+    {
+        return mCurrentPlayer ;
+    }
+
     public int getNbPlayers()
     {
         return mPlayers.size() ;
@@ -230,6 +253,11 @@ public class Game extends Observable
     public ArrayList<TilesFactory> getTilesFactories()
     {
         return mTilesFactories ;
+    }
+
+    public State getState()
+    {
+        return mState ;
     }
 
     private static class GameException extends Exception

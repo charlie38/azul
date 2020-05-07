@@ -7,9 +7,14 @@ import azul.view.resource.ResourcesLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.Observer;
 
-public abstract class Drawable extends JComponent
+public abstract class Drawable extends JComponent implements Observer
 {
+    // Big value to avoid updating often the not-animated drawables.
+    protected static final int DEFAULT_ANIMATION_DELAY = 10000 ;
+
     // Root ref.
     private Display mDisplay ;
     // Original coordinates (center of screen is (0, 0)).
@@ -20,6 +25,8 @@ public abstract class Drawable extends JComponent
     protected int mOriginalHeight ;
     // Coefficient to compute coordinate on window resize.
     protected float mCoef ;
+    // True if animated.
+    protected boolean mIsAnimated ;
 
     /**
      * Used to draw game objects on canvas.
@@ -27,13 +34,19 @@ public abstract class Drawable extends JComponent
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
      */
-    public Drawable(Display display, int originalX, int originalY, int originalWidth, int originalHeight)
+    public Drawable(Display display, int originalX, int originalY, int originalWidth, int originalHeight,
+                    int animationDelay)
     {
         mDisplay = display ;
         mOriginalX = originalX ;
         mOriginalY = originalY ;
         mOriginalWidth = originalWidth ;
         mOriginalHeight = originalHeight ;
+        mIsAnimated = false ;
+        // Observe the game.
+        display.getGame().addObserver(this) ;
+        // Animation.
+        new Timer(animationDelay, onAnimationChanged()).start() ;
     }
 
     /**
@@ -63,6 +76,43 @@ public abstract class Drawable extends JComponent
                 && y >= point.y && y <= point.y + mOriginalHeight * mCoef ;
 
     }
+
+    /** Observer. **/
+
+    @Override
+    public void update(java.util.Observable observable, Object o)
+    {
+        // Do nothing for most of drawables.
+    }
+
+    /** Animation. **/
+
+    public void setIsAnimated(boolean isAnimated)
+    {
+        if (isAnimated == mIsAnimated)
+        {
+            return ;
+        }
+
+        mIsAnimated = isAnimated ;
+
+        if (isAnimated)
+        {
+            onAnimationStarts() ;
+        }
+        else
+        {
+            onAnimationEnds() ;
+        }
+    }
+
+    protected abstract void onAnimationStarts() ;
+
+    protected abstract ActionListener onAnimationChanged() ;
+
+    protected abstract void onAnimationEnds() ;
+
+    /** Getters. **/
 
     protected Display getDisplay()
     {

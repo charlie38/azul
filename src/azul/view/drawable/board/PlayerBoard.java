@@ -4,10 +4,13 @@ import azul.view.Display;
 import azul.view.drawable.Drawable;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class PlayerBoard extends Drawable
 {
+    // Request a select animation.
+    private static final int ANIMATION_DELAY = 400 ;
     // /!\ Change all board components size.
     public static final float SIZE_COEF = 1.4f ;
     // Board bg.
@@ -43,6 +46,8 @@ public class PlayerBoard extends Drawable
     // Drawables.
     private ArrayList<WallTile> mWallTiles ;
     private ArrayList<PatternLineTile> mPatternLinesTiles ;
+    // True if this board is focused (current player board).
+    private boolean mIsFocused ;
 
     /**
      * A player board graphical representation.
@@ -53,9 +58,11 @@ public class PlayerBoard extends Drawable
      */
     public PlayerBoard(Display display, int originalX, int originalY, int index)
     {
-        super(display, originalX, originalY, WIDTH_BOARD, HEIGHT_BOARD) ;
+        super(display, originalX, originalY, WIDTH_BOARD, HEIGHT_BOARD, ANIMATION_DELAY) ;
 
         mIndex = index ;
+        mIsFocused = false ;
+        
 
         createWallTiles() ;
         createPatternLinesTiles() ;
@@ -121,6 +128,37 @@ public class PlayerBoard extends Drawable
     }
 
     @Override
+    public void update(java.util.Observable observable, Object object)
+    {
+        // If the game model change the current player, and if it's his board, start the focus animation.
+        setIsAnimated(getGame().getPlayerIndex() == mIndex) ;
+    }
+
+    @Override
+    protected void onAnimationStarts()
+    {
+        mIsFocused = true ;
+    }
+
+    @Override
+    protected ActionListener onAnimationChanged()
+    {
+        return actionEvent ->
+        {
+            if (mIsAnimated)
+            {
+                mIsFocused = ! mIsFocused ;
+            }
+        } ;
+    }
+
+    @Override
+    protected void onAnimationEnds()
+    {
+        mIsFocused = false ;
+    }
+
+    @Override
     public void paint(Graphics g)
     {
         super.paint(g) ;
@@ -138,7 +176,7 @@ public class PlayerBoard extends Drawable
 
     private void paintBg(Graphics g, int x, int y)
     {
-        Image img = getResourcesLoader().getBoard() ;
+        Image img = mIsFocused ? getResourcesLoader().getBoardFocused() : getResourcesLoader().getBoard() ;
         int width = (int) (WIDTH_BOARD * mCoef) ;
         int height = (int) (HEIGHT_BOARD * mCoef) ;
 

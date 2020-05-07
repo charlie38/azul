@@ -1,31 +1,24 @@
 package azul.controller;
 
-import azul.view.Display;
+import azul.model.Game;
 import azul.view.drawable.Drawable;
 import azul.view.drawable.board.PatternLineTile;
 import azul.view.drawable.board.WallTile;
 import azul.view.drawable.factory.Tile;
 
-import java.awt.event.MouseEvent;
-
-public class MouseListener implements java.awt.event.MouseListener
+public class Mediator
 {
-    private Display mDisplay ;
+    // Model part.
+    private Game mGame ;
 
-    public MouseListener(Display display)
+    public Mediator(Game game)
     {
-        mDisplay = display ;
+        mGame = game ;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e)
+    public void onClick(Drawable selected)
     {
-        Drawable selected = mDisplay.getUIPanel().getDrawingPanel().onClick(e.getX(), e.getY()) ;
-
-        if (selected == null)
-        {
-            return ;
-        }
+        mGame.changePlayer() ;
 
         if (selected instanceof Tile)
         {
@@ -43,18 +36,4 @@ public class MouseListener implements java.awt.event.MouseListener
             ((PatternLineTile) selected).setIsAnimated(true) ;
         }
     }
-
-    /** Useless. **/
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) { }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) { }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) { }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) { }
 }

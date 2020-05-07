@@ -1,10 +1,9 @@
 package azul.view.drawable;
 
-import azul.controller.MouseListener;
 import azul.view.Display;
 import azul.view.drawable.board.PlayerBoard;
-import azul.view.drawable.table.Table;
 import azul.view.drawable.factory.TilesFactory;
+import azul.view.drawable.table.Table;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel
 {
-    // Animation minimum delay for update.
+    // Animation minimum delay for update <~> game loop.
     private final int ANIMATION_MIN_DELAY = 1000 / 60 ; // 60FPS
 
     // Root ref.
@@ -41,8 +40,6 @@ public class DrawingPanel extends JPanel
         // To update all components animations, by redrawing the canvas once.
         // (avoid calling "DrawingPanel.repaint()" each time a component animation should refresh UI <~> like a game loop)
         new Timer(ANIMATION_MIN_DELAY, actionEvent -> repaint()).start() ;
-        // Add a mouse controller.
-        addMouseListener(new MouseListener(mDisplay)) ;
     }
 
     public void startGame(int nbPlayers)
