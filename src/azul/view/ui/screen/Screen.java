@@ -7,11 +7,11 @@ import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Observer;
 
-public abstract class Screen extends JPanel
+public abstract class Screen extends JPanel implements Observer
 {
     // Layout padding.
     public static final int HGAP = 100 ;
@@ -30,7 +30,15 @@ public abstract class Screen extends JPanel
     {
         mDisplay = display ;
 
+        getGame().addObserver(this) ;
+
         setLayout(new GridLayout(nbRows, nbCols, HGAP, VGAP)) ;
+    }
+
+    @Override
+    public void update(java.util.Observable observable, Object o)
+    {
+        // Do nothing for most of screens.
     }
 
     protected JButton createButton(String message, Color color, Color bgColor, float pt, ActionListener listener)

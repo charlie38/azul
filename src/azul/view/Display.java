@@ -25,6 +25,7 @@ public class Display implements Runnable
 	public static final Color CL_SECONDARY = new Color(0xA0A0A0) ;
 	public static final Color CL_TERTIARY = new Color(0x909090) ;
 	public static final Color CL_QUATERNARY = new Color(0x808080) ;
+	public static final Color CL_QUINARY = new Color(0x707070) ;
 	public static final Color CD_PRIMARY = new Color(0x202020) ;
 	public static final Color CD_SECONDARY = new Color(0x303030) ;
 	public static final Color CD_TERTIARY = new Color(0x404040) ;

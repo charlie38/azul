@@ -37,6 +37,12 @@ public class PatternLineArrow extends Drawable
     }
 
     @Override
+    public boolean isClicked(int x, int y)
+    {
+        return mIsAnimated && getPlayer(mPlayerIndex).isPatternLineAccessible(mIndex + 1) && super.isClicked(x, y) ;
+    }
+
+    @Override
     public void update(java.util.Observable observable, Object object)
     {
         // Arrows are drawn/animated only when this user needs to select a pattern line or the floor one.

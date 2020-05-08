@@ -84,6 +84,11 @@ public class TilesFactory
         return tiles ;
     }
 
+    public void setTiles(ArrayList<Tile> tiles)
+    {
+        mTiles = tiles ;
+    }
+
     public ArrayList<Tile> getTiles()
     {
         return mTiles ;
@@ -105,5 +110,14 @@ public class TilesFactory
         }
 
         return true ;
+    }
+
+    @Override
+    public Object clone()
+    {
+        TilesFactory factory = new TilesFactory() ;
+        factory.setTiles((ArrayList<Tile>) mTiles.clone()) ;
+
+        return factory ;
     }
 }

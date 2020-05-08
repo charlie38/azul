@@ -40,6 +40,11 @@ public enum Tile
         return FIRST_PLAYER_MAKER ;
     }
 
+    public static void setFirstPlayerMarkerTaken()
+    {
+        mIsFirstMakerTaken = true ;
+    }
+
     public static boolean isFirstPlayerMakerTaken()
     {
         return mIsFirstMakerTaken ;

@@ -3,6 +3,7 @@ package azul.controller;
 import azul.model.Game;
 import azul.model.move.PlayerMove;
 import azul.model.move.Type;
+import azul.model.tile.Tile;
 import azul.view.drawable.Drawable;
 import azul.view.drawable.board.FloorLineArrow;
 import azul.view.drawable.board.PatternLineArrow;
@@ -59,25 +60,29 @@ public class Mediator
     {
         int factory = selected.getFactoryIndex() ;
         int tile = selected.getTileIndex() ;
+        // Get the tiles in the factory.
+        ArrayList<Tile> factoryTiles = (ArrayList<Tile>) mGame.getFactory(factory).getTiles().clone() ;
         // Get the tile selected by the user.
         azul.model.tile.Tile tileSelected = mGame.getFactory(factory).getTile(tile) ;
         // And get all the factory tiles of this color.
         ArrayList<azul.model.tile.Tile> tilesSelected = mGame.getFactory(factory).take(tileSelected) ;
         // Play it.
         mGame.playMove(new PlayerMove(Type.PLAYER_TAKE_FACTORY, mGame.getPlayer(), tilesSelected,
-                mGame.getFactory(factory))) ;
+                mGame.getFactory(factory), factoryTiles), false) ;
     }
 
     private void chooseOnTable(TableTile selected)
     {
         int tile = selected.getTileIndex() ;
+        // Get the tiles on the table.
+        ArrayList<Tile> tableTiles = (ArrayList<Tile>) mGame.getTilesTable().clone() ;
         // Get the tile selected by the user.
         azul.model.tile.Tile tileSelected = mGame.getInTilesTable(tile) ;
         // And get all the table tiles of this color.
         ArrayList<azul.model.tile.Tile> tilesSelected = mGame.takeOnTable(tileSelected) ;
         // Play it.
         mGame.playMove(new PlayerMove(Type.PLAYER_TAKE_TABLE, mGame.getPlayer(), tilesSelected,
-                ! azul.model.tile.Tile.isFirstPlayerMakerTaken())) ;
+                ! azul.model.tile.Tile.isFirstPlayerMakerTaken(), tableTiles), false) ;
     }
 
     private void selectPatternLine(PatternLineArrow selected)
@@ -85,14 +90,12 @@ public class Mediator
         // Get the selected row.
         int row = selected.getRowIndex() ;
         // Play it.
-        mGame.playMove(new PlayerMove(Type.PLAYER_PLACE_TILES_IN_PATTERN, mGame.getPlayer(), row)) ;
-        mGame.changePlayer() ;
+        mGame.playMove(new PlayerMove(Type.PLAYER_PLACE_TILES_IN_PATTERN, mGame.getPlayer(), row), false) ;
     }
 
     private void selectFloorLine()
     {
         // Play it.
-        mGame.playMove(new PlayerMove(Type.PLAYER_PLACE_TILES_IN_FLOOR, mGame.getPlayer())) ;
-        mGame.changePlayer() ;
+        mGame.playMove(new PlayerMove(Type.PLAYER_PLACE_TILES_IN_FLOOR, mGame.getPlayer()), false) ;
     }
 }

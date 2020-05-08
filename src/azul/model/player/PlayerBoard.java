@@ -281,8 +281,27 @@ public class PlayerBoard
     public boolean canBePlacedOnPatternLine(Tile tile, int row)
     {
         // Tiles should be of the same color in a row.
-        // This will be the first tile / the tile in the row are of the same color.
-        return mPatternLines.get(row - 1)[0] == Tile.EMPTY || mPatternLines.get(row - 1)[0] == tile ;
+        // <=> The tile is the wall is empty
+        //      && (this will be the first tile or the tile in the row are of the same color).
+        return ! isWallCaseNotEmpty(row, wallColumnFor(tile, row))
+                && (mPatternLines.get(row - 1)[0] == Tile.EMPTY || mPatternLines.get(row - 1)[0] == tile) ;
+    }
+
+    private int wallColumnFor(Tile tile, int row)
+    {
+        for (int i = 1 ; i <= SIZE_WALL ; i ++)
+        {
+            switch (tile)
+            {
+                case EYE : if (isWallCaseEye(row, i)) return i ; break ;
+                case MUSHROOM : if (isWallCaseMushroom(row, i)) return i ; break ;
+                case FLOWER : if (isWallCaseFlower(row, i)) return i ; break ;
+                case CLAW : if (isWallCaseClaw(row, i)) return i ; break ;
+                case CRYSTAL : if (isWallCaseCrystal(row, i)) return i ;
+            }
+        }
+
+        return 1 ;
     }
 
     public static boolean canBePlacedOnWall(Tile tile, int row, int column)
@@ -368,6 +387,15 @@ public class PlayerBoard
         }
     }
 
+    public Tile[] getPatternLine(int row)
+    {
+        return mPatternLines.get(row - 1) ;
+    }
+
+    public ArrayList<Tile> getFloorLine()
+    {
+        return mFloorLine ;
+    }
 
     /**
      * Setters.
@@ -434,5 +462,27 @@ public class PlayerBoard
         {
             super(message) ;
         }
+    }
+
+    @Override
+    public Object clone()
+    {
+        PlayerBoard board = new PlayerBoard() ;
+        board.mScoreTrack = mScoreTrack ;
+        board.mPatternLines = new ArrayList<>() ;
+        board.mWall = new ArrayList<>() ;
+        board.mFloorLine = (ArrayList<Tile>) mFloorLine.clone();
+
+        for (int i = 0 ; i < SIZE_PATTERN_LINES ; i ++)
+        {
+            board.mPatternLines.add(mPatternLines.get(i).clone()) ;
+        }
+
+        for (int i = 0 ; i < SIZE_WALL ; i ++)
+        {
+            board.mWall.add(mWall.get(i).clone()) ;
+        }
+
+        return board ;
     }
 }

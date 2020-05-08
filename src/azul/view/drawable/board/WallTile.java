@@ -3,7 +3,6 @@ package azul.view.drawable.board;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 

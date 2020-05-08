@@ -44,7 +44,7 @@ public abstract class Player
 
     private void takeTilesFromFactory(PlayerMove move, ArrayList<Tile> tableTiles)
     {
-        mTilesSelected = move.getTilesSelected() ;
+        mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
         // Add the remaining tiles in the factory on the table.
         for (int i = 0 ; i < 4 ; i ++)
         {
@@ -52,7 +52,7 @@ public abstract class Player
 
             if (tile != Tile.EMPTY)
             {
-                for (int j = 0 ; j < Game.SIZE_TILES_TABLE ; j ++)
+                for (int j = 1 ; j < Game.SIZE_TILES_TABLE ; j ++)
                 {
                     if (tableTiles.get(j) == Tile.EMPTY)
                     {
@@ -82,7 +82,7 @@ public abstract class Player
             }
         }
 
-        mTilesSelected = move.getTilesSelected() ;
+        mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
     }
 
     private void addTilesInPattern(PlayerMove move)
@@ -144,6 +144,11 @@ public abstract class Player
         mPlayerBoard.decorateWall(asideTiles) ;
     }
 
+    public void clearTilesSelected()
+    {
+        mTilesSelected.clear() ;
+    }
+
     /**
      * Check if the game is over by checking the user's wall.
      * @return true if the game is over
@@ -151,6 +156,41 @@ public abstract class Player
     public boolean checkGameOver()
     {
         return mPlayerBoard.isWallRowFull() ;
+    }
+
+    public void setTilesSelected(ArrayList<Tile> selected)
+    {
+        mTilesSelected = (ArrayList<Tile>) selected.clone() ;
+    }
+
+    public void setPatternLine(int row, Tile[] line)
+    {
+        for (int i = 0 ; i < line.length ; i ++)
+        {
+            try
+            {
+                mPlayerBoard.setInPatterLines(row - 1, i, line[i]) ;
+            }
+            catch (PlayerBoard.PlayerBoardException e)
+            {
+                e.printStackTrace() ;
+            }
+        }
+    }
+
+    public void setFloorLine(ArrayList<Tile> line)
+    {
+        for (int i = 0 ; i < line.size() ; i ++)
+        {
+            try
+            {
+                mPlayerBoard.setInFloorLine(i, line.get(i)) ;
+            }
+            catch (PlayerBoard.PlayerBoardException e)
+            {
+                e.printStackTrace() ;
+            }
+        }
     }
 
     public Tile getInPatternLines(int i, int j)
@@ -211,14 +251,43 @@ public abstract class Player
         return mPlayerBoard.getScoreTrack() ;
     }
 
+    public Tile[] getPatternLine(int row)
+    {
+        return mPlayerBoard.getPatternLine(row) ;
+    }
+
+    public ArrayList<Tile> getFloorLine()
+    {
+        return mPlayerBoard.getFloorLine() ;
+    }
+
+    /**
+     * Check if a tile can be placed in this line.
+     * @param row the line
+     * @return true if can be placed.
+     */
     public boolean isPatternLineAccessible(int row)
     {
         return ! mPlayerBoard.isPatterLineFull(row) && mTilesSelected.size() != 0
                 && mPlayerBoard.canBePlacedOnPatternLine(mTilesSelected.get(0), row) ;
     }
 
+    /**
+     * Check if a tile can be placed on the floor.
+     * @return true if can be placed.
+     */
     public boolean isFloorLineAccessible()
     {
         return ! mPlayerBoard.isFloorLineFull() ;
+    }
+
+    @Override
+    public Object clone()
+    {
+        Player player = new Player(mName) {} ;
+        player.mTilesSelected = (ArrayList<Tile>) mTilesSelected.clone();
+        player.mPlayerBoard = (PlayerBoard) mPlayerBoard.clone() ;
+
+        return player ;
     }
 }

@@ -1,11 +1,13 @@
 package azul.model;
 
+import azul.model.move.GameMove;
+import azul.model.move.Move;
 import azul.model.move.PlayerMove;
+import azul.model.move.Type;
 import azul.model.player.HumanPlayer;
 import azul.model.player.Player;
 import azul.model.tile.Tile;
 import azul.model.tile.TilesFactory;
-import azul.view.drawable.factory.FactoryTile;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -22,6 +24,8 @@ public class Game extends Observable
     // Number of tiles of the same color in the bag at the start.
     public final int NB_TILES_COLOR = 20 ;
 
+    // Game history.
+    private History mHistory ;
     // All the game players.
     private ArrayList<Player> mPlayers ;
     // Tiles factories.
@@ -43,6 +47,7 @@ public class Game extends Observable
      */
     public Game()
     {
+        mHistory = new History() ;
         mPlayers = new ArrayList<>() ;
         mTilesFactories = new ArrayList<>() ;
         mTilesRemaining = new ArrayList<>() ;
@@ -98,6 +103,8 @@ public class Game extends Observable
         setChanged() ;
         notifyObservers() ;
     }
+
+    /** Initialization. **/
 
     private void initializePlayers(int nbPlayers, String[] playersNames)
     {
@@ -175,48 +182,189 @@ public class Game extends Observable
     }
 
     /**
-     * Play the player's intentions and update the UI.
-     * @param move player's intentions.
+     * Moves.
      */
-    public void playMove(PlayerMove move)
+
+    public void playPreviousMove()
     {
-        getPlayer().play(move, mTilesAside, mTilesTable) ;
-        // Change the game state.
-        switch (move.getType())
-        {
-            case PLAYER_PLACE_TILES_IN_FLOOR :
-            case PLAYER_PLACE_TILES_IN_PATTERN :
+        Move move = mHistory.undo() ;
 
-                mState = State.CHOOSE_TILES ;
-                // Check if game over, or round over.
-                if (isGameOver())
-                {
-                    decorateWalls() ;
-                    mState = State.GAME_OVER ;
-                }
-                else if (isRoundOver())
-                {
-                    decorateWalls() ;
-                    prepareForRound() ;
-                }
-
-                break ;
-
-            case PLAYER_TAKE_TABLE :
-
-                if (move.getTilesSelected().get(0) == Tile.FIRST_PLAYER_MAKER)
-                {
-                    // User chosen the token, needs to be automatically placed on the floor line.
-                    changePlayer() ;
-                    break ;
-                }
-
-            case PLAYER_TAKE_FACTORY : mState = State.SELECT_ROW ;
-        }
+        restoreGameStates(move) ;
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
     }
+
+    public void playMove(PlayerMove move, boolean fromHistory)
+    {
+        if (! fromHistory)
+        {
+            // Stack in the history.
+            mHistory.do_(move) ;
+        }
+        // Player execute the move.
+        getPlayer().play(move, mTilesAside, mTilesTable) ;
+        // Change the game state.
+        changeGameState(move) ;
+        // Notify the UI.
+        setChanged() ;
+        notifyObservers() ;
+    }
+
+    public void playNextMove()
+    {
+        Move move = mHistory.redo() ;
+
+        switch (move.getType())
+        {
+            case PLAYER_TAKE_FACTORY : remakeTakeFactory((PlayerMove) move) ; break ;
+            case PLAYER_TAKE_TABLE : remakeTakeTable((PlayerMove) move) ;
+        }
+
+        playMove((PlayerMove) move, true) ;
+    }
+
+    private void restoreGameStates(Move move)
+    {
+        switch (move.getType())
+        {
+            case PLAYER_TAKE_FACTORY : restoreTakeFactory((PlayerMove) move) ; break ;
+            case PLAYER_TAKE_TABLE : restoreTakeTable((PlayerMove) move) ; break ;
+            case PLAYER_PLACE_TILES_IN_PATTERN : restorePlacePatternLine((PlayerMove) move) ; break ;
+            case PLAYER_PLACE_TILES_IN_FLOOR : restorePlaceFloorLine((PlayerMove) move) ; break ;
+            case DECORATE_WALLS : restoreDecorateWall((GameMove) move) ;
+        }
+    }
+
+    private void restoreTakeFactory(PlayerMove move)
+    {
+        // Restore the factory tiles.
+        move.getFactory().setTiles(move.getFactoryTiles()) ;
+        // Restore the tiles in the table.
+        int i = 1 ;
+
+        while (mTilesTable.get(i ++) != Tile.EMPTY) ;
+
+        for (int j = 4 + 1 - move.getTilesSelected().size() ; j >= 0 ; j --)
+        {
+            mTilesTable.set(i- j, Tile.EMPTY) ;
+        }
+        // Clean the player.
+        move.getPlayer().clearTilesSelected() ;
+        // Change the game state.
+        mState = State.CHOOSE_TILES ;
+    }
+
+    private void restoreTakeTable(PlayerMove move)
+    {
+        // Restore the table tiles.
+        mTilesTable = move.getTableTiles() ;
+        // If the first to take from the table/take the token.
+        if (move.isFirstToTakeFromTable())
+        {
+            if (move.getTilesSelected().size() == 0)
+            {
+                // Go to the previous player.
+                mCurrentPlayer = (mCurrentPlayer == 0) ? mPlayers.size() - 1 : mCurrentPlayer - 1 ;
+            }
+            // Restore the floor line.
+            getPlayer().setFloorLine(move.getFloorLine()) ;
+            // Initialize the token.
+            Tile.onRoundStart() ;
+        }
+        // Clean the player.
+        move.getPlayer().clearTilesSelected() ;
+        // Change the game state.
+        mState = State.CHOOSE_TILES ;
+    }
+
+    private void restorePlacePatternLine(PlayerMove move)
+    {
+        // Go to the previous player.
+        mCurrentPlayer = (mCurrentPlayer == 0) ? mPlayers.size() - 1 : mCurrentPlayer - 1 ;
+        // Restore the pattern line.
+        getPlayer().setPatternLine(move.getRow() + 1, move.getPatternLine()) ;
+        // Restore the tiles selected.
+        getPlayer().setTilesSelected(((PlayerMove) mHistory.getPrevious()).getTilesSelected()) ;
+        // Change the game state.
+        mState = State.SELECT_ROW ;
+    }
+
+    private void restorePlaceFloorLine(PlayerMove move)
+    {
+        // Go to the previous player.
+        mCurrentPlayer = (mCurrentPlayer == 0) ? mPlayers.size() - 1 : mCurrentPlayer - 1 ;
+        // Restore the floor line.
+        getPlayer().setFloorLine(move.getFloorLine()) ;
+        // Restore the tiles selected.
+        getPlayer().setTilesSelected(((PlayerMove) mHistory.getPrevious()).getTilesSelected()) ;
+        // Change the game state.
+        mState = State.SELECT_ROW ;
+    }
+
+    private void restoreDecorateWall(GameMove move)
+    {
+        mPlayers = move.getPlayers() ;
+        mTilesFactories = move.getFactories() ;
+        mTilesTable = move.getTable() ;
+        mCurrentPlayer = move.getCurrentPlayer() ;
+
+        mState = State.SELECT_ROW ;
+
+        Tile.setFirstPlayerMarkerTaken() ;
+
+        playPreviousMove() ;
+        mHistory.removeNext(move) ;
+    }
+
+    private void remakeTakeFactory(PlayerMove move)
+    {
+        // Get all the factory tiles of this color.
+        move.getFactory().take(move.getTilesSelected().get(0)) ;
+    }
+
+    private void remakeTakeTable(PlayerMove move)
+    {
+        // Get all the table tiles of this color.
+        takeOnTable(move.getTilesSelected().get(0)) ;
+    }
+
+    private void changeGameState(PlayerMove move)
+    {
+        if (move.getType() == Type.PLAYER_PLACE_TILES_IN_FLOOR || move.getType() == Type.PLAYER_PLACE_TILES_IN_PATTERN)
+        {
+            mState = State.CHOOSE_TILES ;
+            changePlayer() ;
+            // Check if game over, or round over.
+            if (isGameOver())
+            {
+                mHistory.do_(new GameMove(Type.DECORATE_WALLS, mPlayers, mTilesFactories, mTilesTable, mCurrentPlayer)) ;
+                decorateWalls() ;
+                mState = State.GAME_OVER ;
+            }
+            else if (isRoundOver())
+            {
+                mHistory.do_(new GameMove(Type.DECORATE_WALLS, mPlayers, mTilesFactories, mTilesTable, mCurrentPlayer)) ;
+                decorateWalls() ;
+                prepareForRound() ;
+            }
+        }
+        else if (move.getType() == Type.PLAYER_TAKE_FACTORY || move.getType() == Type.PLAYER_TAKE_TABLE)
+        {
+            if (move.getTilesSelected().get(0) == Tile.FIRST_PLAYER_MAKER)
+            {
+                // User chosen the token, needs to be automatically placed on the floor line.
+                changePlayer() ;
+                return ;
+            }
+
+            mState = State.SELECT_ROW ;
+        }
+    }
+
+    /**
+     * Game actions.
+     */
 
     public void changePlayer()
     {
@@ -227,14 +375,6 @@ public class Game extends Observable
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
-    }
-
-    public void goToPreviousMove()
-    {
-    }
-
-    public void goToNextMove()
-    {
     }
 
     /**
@@ -268,6 +408,10 @@ public class Game extends Observable
 
         return tilesSelected ;
     }
+
+    /**
+     * Getters.
+     */
 
     /**
      * Check if the game is over by checking all users' wall.
@@ -363,9 +507,19 @@ public class Game extends Observable
         return mTilesTable.get(i) ;
     }
 
+    public ArrayList<Tile> getTilesTable()
+    {
+        return mTilesTable ;
+    }
+
     public State getState()
     {
         return mState ;
+    }
+
+    public History getHistory()
+    {
+        return mHistory ;
     }
 
     private static class GameException extends Exception

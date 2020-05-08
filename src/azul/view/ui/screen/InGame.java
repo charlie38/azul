@@ -36,15 +36,34 @@ public class InGame extends Screen
         setBorder(new EmptyBorder(25, 25, 25, 25)) ;
         // Create components and add them.
         mPrevious = createButtonIconTop(MESSAGE_PREVIOUS, getResourcesLoader().getPrevious(), Display.CD_SECONDARY,
-                Display.CL_PRIMARY, 20,
-                actionEvent -> getGame().goToPreviousMove()) ;
+                Display.CL_QUINARY, 20,
+                actionEvent -> getGame().playPreviousMove()) ;
+        mPrevious.setEnabled(false) ;
         add(mPrevious) ;
+
         add(createButtonIconTop(MESSAGE_SETTINGS, getResourcesLoader().getSettings(), Display.CD_SECONDARY,
                 Display.CL_PRIMARY, 20,
                 actionEvent -> getDisplay().onGoSettings())) ;
+
         mNext = createButtonIconTop(MESSAGE_NEXT, getResourcesLoader().getNext(), Display.CD_SECONDARY,
-                Display.CL_PRIMARY, 20,
-                actionEvent -> getGame().goToNextMove()) ;
+                Display.CL_QUINARY, 20,
+                actionEvent -> getGame().playNextMove()) ;
+        mNext.setEnabled(false) ;
         add(mNext) ;
+    }
+
+    @Override
+    public void update(java.util.Observable observable, Object o)
+    {
+        refreshHistoryButtons() ;
+    }
+
+    public void refreshHistoryButtons()
+    {
+        mPrevious.setBackground(getGame().getHistory().canUndo() ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
+        mPrevious.setEnabled(getGame().getHistory().canUndo()) ;
+
+        mNext.setBackground(getGame().getHistory().canRedo() ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
+        mNext.setEnabled(getGame().getHistory().canRedo()) ;
     }
 }
