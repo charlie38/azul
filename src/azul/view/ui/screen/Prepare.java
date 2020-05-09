@@ -1,7 +1,7 @@
 package azul.view.ui.screen;
 
 import azul.view.Display;
-import azul.view.JHintTextField;
+import azul.view.component.JHintTextField;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -2,6 +2,7 @@ package azul.view.drawable;
 
 import azul.view.Display;
 import azul.view.drawable.board.PlayerBoard;
+import azul.view.drawable.factory.FactoryTile;
 import azul.view.drawable.factory.TilesFactory;
 import azul.view.drawable.table.Table;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class DrawingPanel extends JPanel
 {
-    // Animation minimum delay for update <~> game loop.
+    // /!\ Animation minimum delay for update <~> game loop.
     private final int ANIMATION_MIN_DELAY = 1000 / 60 ; // 60FPS
 
     // Root ref.
@@ -44,8 +45,6 @@ public class DrawingPanel extends JPanel
 
     public void startGame(int nbPlayers)
     {
-        mBoards.clear() ;
-        mFactories.clear() ;
         // Create new game objects.
         createPlayers(nbPlayers) ;
         createFactories(mDisplay.getGame().getNbTilesFactories(nbPlayers)) ;
@@ -65,6 +64,14 @@ public class DrawingPanel extends JPanel
 
     private void createPlayers(int nbPlayers)
     {
+        for (PlayerBoard board : mBoards)
+        {
+            // /!\ Important ! Remove the observers, because can be notified before the GC take them in charge.
+            mDisplay.getGame().deleteObserver(board) ;
+        }
+
+        mBoards.clear() ;
+
         for (int i = 0 ; i < nbPlayers ; i ++)
         {
             mBoards.add(new PlayerBoard(mDisplay,
@@ -78,6 +85,14 @@ public class DrawingPanel extends JPanel
 
     private void createFactories(int nbFactories)
     {
+        for (TilesFactory factory : mFactories)
+        {
+            // /!\ Important ! Remove the observers, because can be notified before the GC take them in charge.
+            mDisplay.getGame().deleteObserver(factory) ;
+        }
+
+        mFactories.clear() ;
+
         int nbRows = (nbFactories == 5) ? 2 : nbFactories / 3 + nbFactories % 3 ;
         int factory = 0 ;
 

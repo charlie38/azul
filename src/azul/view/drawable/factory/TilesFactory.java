@@ -90,6 +90,7 @@ public class TilesFactory extends Drawable
     {
         // If the game model change the current player, and he needs to choose tiles in factories,
         // start the focus animation (also if the factory is not empty).
+        int i = mIndex ;
         setIsAnimated(getGame().getState() == Game.State.CHOOSE_TILES && ! getGame().getFactory(mIndex).isEmpty()) ;
     }
 

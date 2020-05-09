@@ -1,4 +1,4 @@
-package azul.view;
+package azul.view.component;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -13,7 +13,7 @@ public class JHintTextField extends JTextField
     /**
      * Simple text field with an hint.
      * @param hint text.
-     * @param hintColor color.
+     * @param hintColor color of the hint.
      */
     public JHintTextField(String hint, Color hintColor)
     {

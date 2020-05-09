@@ -11,12 +11,13 @@ public class Main
     public static void main(String[] args)
     {
         // Model.
-        Game game = new Game() ; // No dependencies.
+        Game game = new Game() ;                        // -> No dependencies, but use Observable/Observer pattern.
         // Controller.
-        Mediator mediator = new Mediator(game) ; // The "Model" dependency.
+        Mediator mediator = new Mediator(game) ;        // -> "Model" dependency.
         // View.
-        Display display = new Display(game, mediator) ; // The "Model Controller" dependencies.
+        Display display = new Display(game, mediator) ; // -> "Model" and "Controller" dependencies.
 
+        // Start.
         SwingUtilities.invokeLater(display) ;
     }
 }

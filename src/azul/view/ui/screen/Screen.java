@@ -2,7 +2,7 @@ package azul.view.ui.screen;
 
 import azul.model.Game;
 import azul.view.Display;
-import azul.view.JHintTextField;
+import azul.view.component.JHintTextField;
 import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 

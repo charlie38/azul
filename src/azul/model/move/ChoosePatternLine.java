@@ -63,7 +63,7 @@ public class ChoosePatternLine extends Move
         else if (game.isRoundOver())
         {
             game.setState(Game.State.DECORATE_WALL) ;
-            
+
             if (! game.getHistory().canRedo())
             {
                 game.playMove(new DecorateWall(game.getPlayers(), game.getFactories(), game.getTilesTable(),
