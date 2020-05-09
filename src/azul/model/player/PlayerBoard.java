@@ -441,29 +441,6 @@ public class PlayerBoard
         mFloorLine.set(i, tile) ;
     }
 
-    public static class PlayerBoardException extends Exception
-    {
-        // Messages that can be threw.
-        private static final String FULL_PATTERN_LINES = "This pattern line is full." ;
-        private static final String FULL_WALL = "This wall case is not empty." ;
-        private static final String FULL_FLOOR_LINE = "The floor line full." ;
-        private static final String COLOR_PATTERN_LINES = "This pattern line is not of the tile color." ;
-        private static final String COLOR_WALL = "This wall case is not of the tile color." ;
-        private static final String OUT_SCORE_TRACK = "Score track outbound." ;
-        private static final String OUT_PATTERN_LINES = "Pattern lines outbound." ;
-        private static final String OUT_WALL = "Wall outbound." ;
-        private static final String OUT_FLOOR_LINE = "Floor line outbound." ;
-
-        /**
-         * To throw exception on outbound board values.
-         * @param message message threw.
-         */
-        public PlayerBoardException(String message)
-        {
-            super(message) ;
-        }
-    }
-
     @Override
     public Object clone()
     {
@@ -484,5 +461,27 @@ public class PlayerBoard
         }
 
         return board ;
+    }
+
+    public static class PlayerBoardException extends Exception
+    {
+        // Messages that can be threw.
+        private static final String FULL_PATTERN_LINES = "This pattern line is full." ;
+        private static final String FULL_WALL = "This wall case is not empty." ;
+        private static final String FULL_FLOOR_LINE = "The floor line full." ;
+        private static final String COLOR_PATTERN_LINES = "This pattern line is not of the tile color." ;
+        private static final String OUT_SCORE_TRACK = "Score track outbound." ;
+        private static final String OUT_PATTERN_LINES = "Pattern lines outbound." ;
+        private static final String OUT_WALL = "Wall outbound." ;
+        private static final String OUT_FLOOR_LINE = "Floor line outbound." ;
+
+        /**
+         * To throw exception on outbound board values.
+         * @param message message threw.
+         */
+        public PlayerBoardException(String message)
+        {
+            super(message) ;
+        }
     }
 }

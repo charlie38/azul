@@ -1,4 +1,4 @@
-package azul.model;
+package azul.model.history;
 
 import azul.model.move.Move;
 
@@ -37,9 +37,20 @@ public class History
         return move ;
     }
 
+    public void clean()
+    {
+        mPrevious.clear() ;
+        mNext.clear() ;
+    }
+
     public Move getPrevious()
     {
         return mPrevious.peek() ;
+    }
+
+    public Move getNext()
+    {
+        return mNext.peek() ;
     }
 
     public void removeNext(Move move)

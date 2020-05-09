@@ -52,7 +52,7 @@ public class TilesFactory
             remainingTiles.remove(tile) ;
         }
 
-        for (int i = mTiles.size() - 1 ; i < SIZE_FACTORY ; i ++)
+        for (int i = mTiles.size() ; i < SIZE_FACTORY ; i ++)
         {
             mTiles.add(Tile.EMPTY) ;
         }
@@ -67,18 +67,13 @@ public class TilesFactory
     {
         ArrayList<Tile> tiles = new ArrayList<>() ;
         // Get the tiles in the factory.
-        for (Tile tile_ : mTiles)
+        for (int i = 0 ; i < SIZE_FACTORY ; i ++)
         {
-            if (tile_.equals(tile))
+            if (mTiles.get(i).equals(tile))
             {
-                tiles.add(tile_) ;
+                tiles.add(mTiles.get(i)) ;
+                mTiles.set(i, Tile.EMPTY) ;
             }
-        }
-        // Remove them from the factory.
-        for (Tile tile_ : tiles)
-        {
-            mTiles.add(mTiles.indexOf(tile_), Tile.EMPTY) ;
-            mTiles.remove(tile_) ;
         }
 
         return tiles ;

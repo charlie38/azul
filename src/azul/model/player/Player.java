@@ -1,8 +1,9 @@
 package azul.model.player;
 
 import azul.model.Game;
-import azul.model.move.PlayerMove;
+import azul.model.move.*;
 import azul.model.tile.Tile;
+import azul.model.tile.TilesFactory;
 
 import java.util.ArrayList;
 
@@ -25,28 +26,11 @@ public abstract class Player
         mTilesSelected = new ArrayList<>() ;
     }
 
-    /**
-     * Play the player's intentions.
-     * @param move contains the player's intentions.
-     * @param asideTiles contains the tiles in the box cover.
-     * @param tableTiles contains the tiles on the table.
-     */
-    public void play(PlayerMove move, ArrayList<Tile> asideTiles, ArrayList<Tile> tableTiles)
-    {
-        switch (move.getType())
-        {
-            case PLAYER_TAKE_FACTORY : takeTilesFromFactory(move, tableTiles) ; break ;
-            case PLAYER_TAKE_TABLE : takeTilesFromTable(move, tableTiles) ; break ;
-            case PLAYER_PLACE_TILES_IN_PATTERN : addTilesInPattern(move) ; break ;
-            case PLAYER_PLACE_TILES_IN_FLOOR : addTilesInFloor(move, asideTiles) ;
-        }
-    }
-
-    private void takeTilesFromFactory(PlayerMove move, ArrayList<Tile> tableTiles)
+    public void takeTilesFromFactory(TakeInFactory move, ArrayList<Tile> tableTiles)
     {
         mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
         // Add the remaining tiles in the factory on the table.
-        for (int i = 0 ; i < 4 ; i ++)
+        for (int i = 0; i < TilesFactory.SIZE_FACTORY ; i ++)
         {
             Tile tile = move.getFactory().getTile(i) ;
 
@@ -66,7 +50,7 @@ public abstract class Player
         }
     }
 
-    private void takeTilesFromTable(PlayerMove move, ArrayList<Tile> tableTiles)
+    public void takeTilesFromTable(TakeOnTable move, ArrayList<Tile> tableTiles)
     {
         // Check if the player have to take the 'first player marker'.
         if (move.isFirstToTakeFromTable())
@@ -85,7 +69,7 @@ public abstract class Player
         mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
     }
 
-    private void addTilesInPattern(PlayerMove move)
+    public void addTilesInPattern(ChoosePatternLine move)
     {
         try
         {
@@ -111,12 +95,14 @@ public abstract class Player
         }
     }
 
-    private void addTilesInFloor(PlayerMove move, ArrayList<Tile> asideTiles)
+    public void addTilesInFloor(ChooseFloorLine move, ArrayList<Tile> asideTiles)
     {
         if (mPlayerBoard.isFloorLineFull())
         {
             // If full, according to the rules the tile should go to the box cover.
-            asideTiles.addAll(move.getTilesSelected()) ;
+            asideTiles.addAll(mTilesSelected) ;
+
+            mTilesSelected.clear() ;
         }
         else
         {
@@ -126,6 +112,8 @@ public abstract class Player
                 {
                     mPlayerBoard.addToFloorLine(tile) ;
                 }
+
+                mTilesSelected.clear() ;
             }
             catch (PlayerBoard.PlayerBoardException e)
             {
@@ -191,6 +179,11 @@ public abstract class Player
                 e.printStackTrace() ;
             }
         }
+    }
+
+    public void setBoard(PlayerBoard board)
+    {
+        mPlayerBoard = board ;
     }
 
     public Tile getInPatternLines(int i, int j)
@@ -259,6 +252,11 @@ public abstract class Player
     public ArrayList<Tile> getFloorLine()
     {
         return mPlayerBoard.getFloorLine() ;
+    }
+
+    public PlayerBoard getBoard()
+    {
+        return mPlayerBoard ;
     }
 
     /**

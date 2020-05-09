@@ -1,5 +1,6 @@
 package azul.view.drawable.board;
 
+import azul.model.Game;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -207,8 +208,9 @@ public class PlayerBoard extends Drawable
     @Override
     public void update(java.util.Observable observable, Object object)
     {
-        // If the game model change the current player, and if it's his board, start the focus animation.
-        setIsAnimated(getGame().getPlayerIndex() == mIndex) ;
+        // If the game model change the current player, and if it's his board, (or if it's the decorate wall animation)
+        // start the focus animation.
+        setIsAnimated(getGame().getPlayerIndex() == mIndex || getGame().getState() == Game.State.DECORATE_WALL) ;
     }
 
     @Override

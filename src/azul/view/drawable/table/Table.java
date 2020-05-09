@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Table extends Drawable
 {
-    private static final int ANIMATION_DELAY = 400 ;
     // /!\ Change all table components size.
     public static final float SIZE_COEF = 0.9f ;
     // Size of bg tiles.
