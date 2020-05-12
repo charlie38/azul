@@ -58,7 +58,7 @@ public class Game extends Observable
      * Initialize a new game, depending on the number of players.
      * @param nbPlayers the number of players.
      */
-    public void startGame(int nbPlayers, String[] playerNames)
+    public void startGame(int nbPlayers, String[] playerNames, boolean[] isIA)
     {
         try
         {
@@ -73,7 +73,7 @@ public class Game extends Observable
         
         mHistory.clean() ;
         // Initialize game objects.
-        initializePlayers(nbPlayers, playerNames) ;
+        initializePlayers(nbPlayers, playerNames, isIA) ;
         initializeTilesRemaining() ;
         initializeTilesAside() ;
         initializeTilesTable() ;
@@ -107,7 +107,7 @@ public class Game extends Observable
 
     /** Initialization. **/
 
-    private void initializePlayers(int nbPlayers, String[] playersNames)
+    private void initializePlayers(int nbPlayers, String[] playersNames, boolean[] isIA)
     {
         mPlayers.clear() ;
 

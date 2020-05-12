@@ -16,10 +16,12 @@ public class Display implements Runnable
 
 	// Background colors.
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
+	public static final Color BG_TUTORIAL = new Color(0x4A4E49);
 	public static final Color BG_PREPARE = new Color(0x4A4E49) ;
 	public static final Color BG_CREDITS = new Color(0x4A4E49) ;
 	public static final Color BG_IN_GAME = new Color(0X4A4E49) ;
 	public static final Color BG_SETTINGS = new Color(0X4A4E49) ;
+	public static final Color BG_TUTORIAL_LABEL = new Color(0X808080);
 	// Text/component bg colors.
 	public static final Color CL_PRIMARY = new Color(0xB0B0B0) ;
 	public static final Color CL_SECONDARY = new Color(0xA0A0A0) ;

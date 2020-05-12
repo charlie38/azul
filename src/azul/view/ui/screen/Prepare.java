@@ -30,6 +30,7 @@ public class Prepare extends Screen
 
     // Track the number of player added.
     private int mNbPlayers ;
+    private boolean[] mIsIA;
     // Contains the screen information/instructions.
     private JPanel mHeader ;
     // Contains the player slots.
@@ -112,7 +113,7 @@ public class Prepare extends Screen
                 actionEvent ->
                 {
                     getDisplay().getUIPanel().getDrawingPanel().startGame(mNbPlayers) ;
-                    getGame().startGame(mNbPlayers, getPlayersNames()) ;
+                    getGame().startGame(mNbPlayers, getPlayersNames(),mIsIA) ;
                     getDisplay().onGoInGame() ;
                 }
         )) ;
