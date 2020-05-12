@@ -12,7 +12,7 @@ import java.awt.*;
 public class Display implements Runnable
 {
 	// Menu/game states.
-	public enum State { MAIN_MENU, PREPARE, CREDITS, IN_GAME, SETTINGS }
+	public enum State { MAIN_MENU, TUTORIAL, PREPARE, CREDITS, IN_GAME, SETTINGS }
 
 	// Background colors.
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
@@ -92,6 +92,15 @@ public class Display implements Runnable
 	{
 		mState = State.MAIN_MENU ;
 	    mUIPanel.onGoMainMenu() ;
+	}
+	
+	/**
+	 * Called when user goes to the tutorial.
+	 */
+	public void onGoTutorial()
+	{
+		mState = State.MAIN_MENU ;
+	    mUIPanel.onGoTutorial() ;
 	}
 
 	/**

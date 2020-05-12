@@ -23,7 +23,6 @@ public class ResourcesLoader
     private ImageAzul mTable ;
     // Tiles.
     private ImageAzul mToken, mTokenF ;
-	private ImageAzul mEmpty ;
 	private ImageAzul mFlower, mFlowerS, mFlowerB ;
 	private ImageAzul mClaw, mClawS, mClawB ;
 	private ImageAzul mMushroom, mMushroomS, mMushroomB ;
@@ -71,7 +70,6 @@ public class ResourcesLoader
         mTable = new ImageAzul("res/img/table.png") ;
         mToken = new ImageAzul("res/img/token.png") ;
         mTokenF = new ImageAzul("res/img/token_focused.png") ;
-        mEmpty = new ImageAzul("res/img/empty.png") ;
         mFlower = new ImageAzul("res/img/flower.png") ;
         mFlowerS = new ImageAzul("res/img/flower_selected.png") ;
         mFlowerB = new ImageAzul("res/img/flower_blur.png") ;
@@ -138,7 +136,6 @@ public class ResourcesLoader
             case FLOWER : return mFlowerS.get() ;
             case MUSHROOM : return mMushroomS.get() ;
             case FIRST_PLAYER_MAKER : return mTokenF.get() ;
-            case EMPTY : return mEmpty.get() ;
             default : return null ;
         }
     }
@@ -153,7 +150,6 @@ public class ResourcesLoader
             case FLOWER : return mFlowerB.get() ;
             case MUSHROOM : return mMushroomB.get() ;
             case FIRST_PLAYER_MAKER : return mToken.get() ;
-            case EMPTY : return mEmpty.get() ;
             default : return null ;
         }
     }

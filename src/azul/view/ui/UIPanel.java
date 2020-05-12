@@ -13,6 +13,7 @@ public class UIPanel extends JPanel
     private Display mDisplay ;
     // Screens.
     private MainMenu mMainMenu ;
+    private Tutorial mTutorial ;
     private Prepare mPrepare ;
     private Credits mCredits ;
     private InGame mInGame ;
@@ -38,6 +39,7 @@ public class UIPanel extends JPanel
         // Create the components.
         mLayout = new CardLayout(0, 0) ;
         mMainMenu = new MainMenu(mDisplay) ;
+        mTutorial = new Tutorial(mDisplay) ;
         mPrepare = new Prepare(mDisplay) ;
         mCredits = new Credits(mDisplay) ;
         mInGame = new InGame(mDisplay) ;
@@ -50,6 +52,7 @@ public class UIPanel extends JPanel
         // Add the components.
         setLayout(mLayout) ;
         add(mMainMenu, Display.State.MAIN_MENU.toString()) ;
+        add(mTutorial, Display.State.TUTORIAL.toString()) ;
         add(mPrepare, Display.State.PREPARE.toString()) ;
         add(mCredits, Display.State.CREDITS.toString()) ;
         add(inGamePanel, Display.State.IN_GAME.toString()) ;
@@ -62,6 +65,14 @@ public class UIPanel extends JPanel
     public void onGoMainMenu()
     {
         mLayout.show(this, Display.State.MAIN_MENU.toString()) ;
+    }
+    
+    /**
+     * Called when user goes to the tutorial.
+     */
+    public void onGoTutorial()
+    {
+        mLayout.show(this, Display.State.TUTORIAL.toString()) ;
     }
 
     /**
