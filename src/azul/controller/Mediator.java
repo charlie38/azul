@@ -4,16 +4,21 @@ import azul.controller.human.Human;
 import azul.controller.ia.minimax.IAMinimax;
 import azul.controller.ia.random.IARandom;
 import azul.model.Game;
+import azul.model.move.Move;
 import azul.model.player.HumanPlayer;
 import azul.model.player.IAPlayer;
 import azul.model.player.Player;
 import azul.view.drawable.Drawable;
 
+import javax.swing.*;
 import java.util.Observable;
 import java.util.Observer;
 
 public class Mediator implements Observer
 {
+    // Delay btw two IA moves.
+    private final int ANIMATION_IA_DELAY = 1000 ;
+
     // Model part.
     private Game mGame ;
     // Human controller.
@@ -70,10 +75,23 @@ public class Mediator implements Observer
             // It's a IA turn.
             switch (((IAPlayer) player).getType())
             {
-                case IA_RANDOM : mGame.playMove(mIARandom.play()) ; IAPlay() ; break ;
-                case IA_MINIMAX : mGame.playMove(mIAMinimax.play()) ; IAPlay() ;
+                case IA_RANDOM : playIAMove(mIARandom.play()) ; break ;
+                case IA_MINIMAX : playIAMove(mIAMinimax.play()) ;
             }
         }
+    }
+
+    private void playIAMove(Move move)
+    {
+        Timer timer = new Timer(ANIMATION_IA_DELAY,
+                actionEvent ->
+                {
+                    mGame.playMove(move) ;
+                    IAPlay() ;
+                }
+        ) ;
+        timer.setRepeats(false) ;
+        timer.start() ;
     }
 
     @Override
