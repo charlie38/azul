@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import azul.view.Display;
+import azul.view.drawable.DrawingPanel;
+import azul.view.drawable.DrawingPanelTuto;
 
 public class Tutorial extends Screen {
 	
@@ -21,10 +23,11 @@ public class Tutorial extends Screen {
 	
 	//Message queue
 	public static String[] MESSAGE_QUEUE = new String[] {MESSAGE_START,MESSAGE_0_1,MESSAGE_0_2};
-	public int numMess;
+	public int numStep;
 	
 	//JPanel
 	private JPanel mExplanation;
+	private DrawingPanelTuto mDrawTuto;
 	
 	//JButton
 	private JButton mNext;
@@ -41,8 +44,13 @@ public class Tutorial extends Screen {
 		
 		// Create TextArea
 		initExplanation();
+		mDrawTuto = new DrawingPanelTuto(display);
 		
 		add(mExplanation);
+		add(mDrawTuto);
+		add(createButtonIconTop("SETTINGS", getResourcesLoader().getSettings(), Display.CD_SECONDARY,
+                Display.CL_PRIMARY, 20,
+                actionEvent -> getDisplay().onGoSettings())) ;
 	}
 	
 	private void initExplanation()
@@ -51,31 +59,37 @@ public class Tutorial extends Screen {
 		mExplanation.setBorder(new EmptyBorder(25, 100, 25, 100));
 		mExplanation.setBackground(Display.BG_TUTORIAL_LABEL);
 		
-		numMess = 0;
+		numStep = 0;
 		mMessage = new JLabel();
-		changeMessage();
+		goToNextStep();
 		mMessage.setFont(new Font("Sherif",Font.PLAIN, 25));
 		mMessage.setForeground(Display.CL_PRIMARY);
 		
-		mNext = createButton(MESSAGE_NEXT, Display.CD_SECONDARY, Display.CL_PRIMARY, 20, actionEvent -> changeMessage());
+		mNext = createButton(MESSAGE_NEXT, Display.CD_SECONDARY, Display.CL_PRIMARY, 20, actionEvent -> goToNextStep());
 		mNext.setPreferredSize(new Dimension(650, 50)) ;
 	
 		mExplanation.add(mMessage);
 		mExplanation.add(mNext);
 	}
 	
-	private void changeMessage()
+	private void goToNextStep()
 	{
-		if(numMess < MESSAGE_QUEUE.length)
+		if(numStep < MESSAGE_QUEUE.length)
 		{
-			mMessage.setText(MESSAGE_QUEUE[numMess]);
+			switch(numStep)
+			{
+			case 2:
+				mNext.setVisible(false);
+
+			}
+			mMessage.setText(MESSAGE_QUEUE[numStep]);
 		}
 		else
 		{
-			numMess = 0;
-			mMessage.setText(MESSAGE_QUEUE[numMess]);
+			numStep = 0;
+			mMessage.setText(MESSAGE_QUEUE[numStep]);
 		}
-		numMess++;
+		numStep++;
 	}
 
 }
