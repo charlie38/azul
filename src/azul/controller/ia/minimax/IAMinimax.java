@@ -9,9 +9,6 @@ import java.util.Collection;
 
 public class IAMinimax extends IA
 {
-    // Logs.
-    private final String START_MESSAGE = "IA minimax starts" ;
-    private final String END_MESSAGE = "IA minimax ends" ;
     // The algorithm starting depth.
     private final int EASY_STARTING_DEPTH = 3 ; // TODO Determinate (for efficiency, and IA difficulty)
     private final int MIDDLE_STARTING_DEPTH = 4 ; // TODO Determinate (for efficiency, and IA difficulty)
@@ -44,13 +41,6 @@ public class IAMinimax extends IA
     @Override
     public void initialize()
     {
-        System.out.println(START_MESSAGE) ;
-    }
-
-    @Override
-    public void finish()
-    {
-        System.out.println(END_MESSAGE) ;
     }
 
     /**

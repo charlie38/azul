@@ -14,6 +14,8 @@ public class IARandom extends IA
 {
     // To make choices.
     private Random mRandom ;
+    // Avoid take first maker token on the table for its first turn.
+    private boolean mIsFirstTurn ;
 
     /**
      * IA choosing random plays.
@@ -28,11 +30,7 @@ public class IARandom extends IA
     @Override
     public void initialize()
     {
-    }
-
-    @Override
-    public void finish()
-    {
+        mIsFirstTurn = true ;
     }
 
     @Override
@@ -48,7 +46,7 @@ public class IARandom extends IA
 
     private Move chooseTiles()
     {
-        if (mGame.isTableEmpty())
+        if (mGame.isTableEmpty() || mIsFirstTurn)
         {
             return chooseInFactory() ;
         }
@@ -57,7 +55,7 @@ public class IARandom extends IA
         {
             return chooseOnTable() ;
         }
-        // TODO IA should never took the first marker token on its first turn.
+
         return mRandom.nextBoolean() ? chooseInFactory() : chooseOnTable() ;
     }
 
@@ -73,6 +71,8 @@ public class IARandom extends IA
 
     private Move chooseInFactory()
     {
+        mIsFirstTurn = false ;
+
         ArrayList<Integer> selectableFactories = new ArrayList<>() ;
 
         for (int i = 0 ; i < mGame.getFactories().size() ; i ++)
@@ -96,6 +96,8 @@ public class IARandom extends IA
 
     private Move chooseOnTable()
     {
+        mIsFirstTurn = false ;
+
         ArrayList<Integer> selectableTiles = new ArrayList<>() ;
 
         for (int i = 0 ; i < Game.SIZE_TILES_TABLE ; i ++)
@@ -118,6 +120,8 @@ public class IARandom extends IA
 
     private Move selectPatternLine()
     {
+        mIsFirstTurn = false ;
+
         ArrayList<Integer> selectableRows = new ArrayList<>() ;
 
         for (int i = 1 ; i <= PlayerBoard.SIZE_PATTERN_LINES ; i ++)
@@ -135,6 +139,7 @@ public class IARandom extends IA
 
     private Move selectFloorLine()
     {
+        mIsFirstTurn = false ;
         // Play it.
         return new ChooseFloorLine(mGame.getPlayer()) ;
     }

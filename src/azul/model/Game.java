@@ -15,7 +15,7 @@ import java.util.Observable;
 public class Game extends Observable
 {
     // Game states.
-    public enum State { CHOOSE_TILES, SELECT_ROW, DECORATE_WALL, GAME_OVER }
+    public enum State { START, CHOOSE_TILES, SELECT_ROW, DECORATE_WALL, GAME_OVER }
 
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
@@ -101,6 +101,8 @@ public class Game extends Observable
         mTilesTable.set(0, Tile.FIRST_PLAYER_MAKER) ;
         // Initialize the 'first player marker'.
         Tile.onRoundStart() ;
+        // Notify the mediator via the observer pattern (the only interaction between model and mediator to init the IAs).
+        notifyMediator() ;
 
         mCurrentPlayer = 0 ;
         mState = State.CHOOSE_TILES ;
@@ -158,6 +160,14 @@ public class Game extends Observable
         {
             mTilesTable.add(Tile.EMPTY) ;
         }
+    }
+
+    private void notifyMediator()
+    {
+        mState = State.START ;
+        // Notify the mediator.
+        setChanged() ;
+        notifyObservers() ;
     }
 
     /**

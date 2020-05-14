@@ -19,11 +19,6 @@ public abstract class IA
     public abstract void initialize() ;
 
     /**
-     * Called at the end of the game.
-     */
-    public abstract void finish() ;
-
-    /**
      * Find a move playable.
      * @return a playable move.
      */

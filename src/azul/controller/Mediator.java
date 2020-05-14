@@ -1,24 +1,18 @@
 package azul.controller;
 
 import azul.controller.human.Human;
-import azul.controller.ia.IA;
 import azul.controller.ia.minimax.IAMinimax;
 import azul.controller.ia.random.IARandom;
 import azul.model.Game;
-import azul.model.move.*;
 import azul.model.player.HumanPlayer;
 import azul.model.player.IAPlayer;
 import azul.model.player.Player;
-import azul.model.tile.Tile;
 import azul.view.drawable.Drawable;
-import azul.view.drawable.board.FloorLineArrow;
-import azul.view.drawable.board.PatternLineArrow;
-import azul.view.drawable.table.TableTile;
-import azul.view.drawable.factory.FactoryTile;
 
-import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Mediator
+public class Mediator implements Observer
 {
     // Model part.
     private Game mGame ;
@@ -38,6 +32,8 @@ public class Mediator
         mHuman = new Human(game) ;
         mIAMinimax = new IAMinimax(game, IAMinimax.Difficulty.EASY) ;
         mIARandom = new IARandom(game) ;
+        // Observe the game.
+        mGame.addObserver(this) ;
     }
 
     public void onClick(Drawable selected)
@@ -67,6 +63,16 @@ public class Mediator
                 case IA_RANDOM : mGame.playMove(mIARandom.play()) ; IAPlay() ; break ;
                 case IA_MINIMAX : mGame.playMove(mIAMinimax.play()) ; IAPlay() ;
             }
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object o)
+    {
+        if (mGame.getState() == Game.State.START)
+        {
+            mIARandom.initialize() ;
+            mIAMinimax.initialize() ;
         }
     }
 }
