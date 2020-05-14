@@ -8,14 +8,15 @@ import java.awt.event.ActionListener;
 
 public class FactoryTile extends Drawable
 {
-    // Request a select animation.
+    // Request a focus animation.
     private static final int ANIMATION_DELAY = 400 ;
+    private final boolean[] ANIMATION_PATTERN = { true, false, true, false, false, false, false, false } ;
 
     // Tile index in model representations.
     private int mFactoryIndex ;
     private int mIndex ;
-    // True if the current tile image is selected.
-    private boolean mIsSelected ;
+    // Current part of the animation.
+    private int mAnimationIndex ;
 
     /**
      * A player wall tile graphical representation.
@@ -31,13 +32,14 @@ public class FactoryTile extends Drawable
 
         mFactoryIndex = factoryIndex ;
         mIndex = index ;
-        mIsSelected = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
 
     @Override
     protected void onAnimationStarts()
     {
-        mIsSelected = true ;
+        super.onAnimationStarts() ;
+        mAnimationIndex = 0 ;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class FactoryTile extends Drawable
         {
             if (mIsAnimated)
             {
-                mIsSelected = ! mIsSelected ;
+                mAnimationIndex = mAnimationIndex == ANIMATION_PATTERN.length - 1 ? 0 : mAnimationIndex + 1 ;
             }
         } ;
     }
@@ -55,7 +57,7 @@ public class FactoryTile extends Drawable
     @Override
     protected void onAnimationEnds()
     {
-        mIsSelected = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class FactoryTile extends Drawable
 
         Point point = computeCoef() ;
 
-        paintTile(g, point.x, point.y);
+        paintTile(g, point.x, point.y) ;
     }
 
     private void paintTile(Graphics g, int x, int y)
@@ -73,9 +75,11 @@ public class FactoryTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsSelected ? getResourcesLoader().getFactoryCaseSelected() : getResourcesLoader().getFactoryCase() ;
-        Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredientBlurred(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
+        Image bg = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getFactoryCaseSelected()
+                : getResourcesLoader().getFactoryCase() ;
+        Image ingredient = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getIngredientSelected(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
                 getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
 
         g.drawImage(bg, x, y, width, height, null) ;

@@ -1,7 +1,14 @@
 package azul.controller;
 
+import azul.controller.human.Human;
+import azul.controller.ia.IA;
+import azul.controller.ia.minimax.IAMinimax;
+import azul.controller.ia.random.IARandom;
 import azul.model.Game;
 import azul.model.move.*;
+import azul.model.player.HumanPlayer;
+import azul.model.player.IAPlayer;
+import azul.model.player.Player;
 import azul.model.tile.Tile;
 import azul.view.drawable.Drawable;
 import azul.view.drawable.board.FloorLineArrow;
@@ -15,6 +22,11 @@ public class Mediator
 {
     // Model part.
     private Game mGame ;
+    // Human controller.
+    private Human mHuman ;
+    // IA controllers.
+    private IARandom mIARandom ;
+    private IAMinimax mIAMinimax ;
 
     /**
      * Play moves on user interactions.
@@ -23,84 +35,38 @@ public class Mediator
     public Mediator(Game game)
     {
         mGame = game ;
+        mHuman = new Human(game) ;
+        mIAMinimax = new IAMinimax(game, IAMinimax.Difficulty.EASY) ;
+        mIARandom = new IARandom(game) ;
     }
 
     public void onClick(Drawable selected)
     {
-        switch (mGame.getState())
+        // Current player for this turn.
+        Player player = mGame.getPlayer() ;
+
+        if (player instanceof HumanPlayer)
         {
-            case CHOOSE_TILES :
-
-                // Check if user choose tiles in a factory/table.
-                if (selected instanceof FactoryTile
-                        && ! mGame.getFactory(((FactoryTile) selected).getFactoryIndex()).isEmpty())
-                {
-                    chooseInFactory((FactoryTile) selected) ;
-                }
-                else if (selected instanceof TableTile
-                        && ! mGame.isTableEmpty())
-                {
-                    chooseOnTable((TableTile) selected) ;
-                }
-
-                break ;
-
-            case SELECT_ROW :
-
-                // Check if user select a pattern/floor line to put his selected tiles.
-                if (selected instanceof PatternLineArrow
-                        && ((PatternLineArrow) selected).getPlayerIndex() == mGame.getPlayerIndex())
-                {
-                    selectPatternLine((PatternLineArrow) selected) ;
-                }
-                else if (selected instanceof FloorLineArrow
-                        && ((FloorLineArrow) selected).getPlayerIndex() == mGame.getPlayerIndex())
-                {
-                    selectFloorLine() ;
-                }
+            // It's an human turn.
+            mHuman.onClick(selected) ;
+            // Check if it's a IA turn.
+            IAPlay() ;
         }
     }
 
-    private void chooseInFactory(FactoryTile selected)
+    private void IAPlay()
     {
-        int factory = selected.getFactoryIndex() ;
-        int tile = selected.getTileIndex() ;
-        // Get the tiles in the factory.
-        ArrayList<Tile> factoryTiles = (ArrayList<Tile>) mGame.getFactory(factory).getTiles().clone() ;
-        // Get the tile selected by the user.
-        azul.model.tile.Tile tileSelected = mGame.getFactory(factory).getTile(tile) ;
-        // And get all the factory tiles of this color.
-        ArrayList<azul.model.tile.Tile> tilesSelected = mGame.getFactory(factory).take(tileSelected) ;
-        // Play it.
-        mGame.playMove(new TakeInFactory(mGame.getPlayer(), tilesSelected,
-                mGame.getFactory(factory), factoryTiles)) ;
-    }
+        // Current player for this turn.
+        Player player = mGame.getPlayer() ;
 
-    private void chooseOnTable(TableTile selected)
-    {
-        int tile = selected.getTileIndex() ;
-        // Get the tiles on the table.
-        ArrayList<Tile> tableTiles = (ArrayList<Tile>) mGame.getTilesTable().clone() ;
-        // Get the tile selected by the user.
-        azul.model.tile.Tile tileSelected = mGame.getInTilesTable(tile) ;
-        // And get all the table tiles of this color.
-        ArrayList<azul.model.tile.Tile> tilesSelected = mGame.takeOnTable(tileSelected) ;
-        // Play it.
-        mGame.playMove(new TakeOnTable(mGame.getPlayer(), tilesSelected,
-                ! azul.model.tile.Tile.isFirstPlayerMakerTaken(), tableTiles)) ;
-    }
-
-    private void selectPatternLine(PatternLineArrow selected)
-    {
-        // Get the selected row.
-        int row = selected.getRowIndex() ;
-        // Play it.
-        mGame.playMove(new ChoosePatternLine(mGame.getPlayer(), row)) ;
-    }
-
-    private void selectFloorLine()
-    {
-        // Play it.
-        mGame.playMove(new ChooseFloorLine(mGame.getPlayer())) ;
+        if (player instanceof IAPlayer)
+        {
+            // It's a IA turn.
+            switch (((IAPlayer) player).getType())
+            {
+                case IA_RANDOM : mGame.playMove(mIARandom.play()) ; IAPlay() ; break ;
+                case IA_MINIMAX : mGame.playMove(mIAMinimax.play()) ; IAPlay() ;
+            }
+        }
     }
 }

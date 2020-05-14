@@ -1,5 +1,6 @@
 package azul.view.ui.screen;
 
+import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.component.JHintTextField;
 
@@ -18,7 +19,8 @@ public class Prepare extends Screen
     public final String MESSAGE_TITLE = "NEW GAME" ;
     public final String MESSAGE_SUBTITLE = "Players choice:" ;
     public final String MESSAGE_PLAYER = "Player " ;
-    public final String MESSAGE_TYPE_IA = "IA" ;
+    public final String MESSAGE_TYPE_IA_RANDOM = "RANDOM IA" ;
+    public final String MESSAGE_TYPE_IA_MINIMAX = "MINIMAX IA" ;
     public final String MESSAGE_TYPE_HUMAN = "HUMAN" ;
     public final String MESSAGE_NAME_CHOICE = "insert a name" ;
     public final String MESSAGE_DELETE = "remove" ;
@@ -30,7 +32,6 @@ public class Prepare extends Screen
 
     // Track the number of player added.
     private int mNbPlayers ;
-    private boolean[] mIsIA;
     // Contains the screen information/instructions.
     private JPanel mHeader ;
     // Contains the player slots.
@@ -113,7 +114,7 @@ public class Prepare extends Screen
                 actionEvent ->
                 {
                     getDisplay().getUIPanel().getDrawingPanel().startGame(mNbPlayers) ;
-                    getGame().startGame(mNbPlayers, getPlayersNames(),mIsIA) ;
+                    getGame().startGame(getPlayersIA(), getPlayersNames()) ;
                     getDisplay().onGoInGame() ;
                 }
         )) ;
@@ -131,7 +132,7 @@ public class Prepare extends Screen
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         name.setPreferredSize(new Dimension(150, 50)) ;
 
-        Choice type = createSpinner(new String[] { MESSAGE_TYPE_IA, MESSAGE_TYPE_HUMAN },
+        Choice type = createSpinner(new String[] { MESSAGE_TYPE_IA_MINIMAX, MESSAGE_TYPE_HUMAN, MESSAGE_TYPE_IA_RANDOM },
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         type.setPreferredSize(new Dimension(150, 50)) ;
 
@@ -220,6 +221,32 @@ public class Prepare extends Screen
             mAdd.setVisible(true) ;
             mNbPlayers -- ;
         }
+    }
+
+    private Player.Type getPlayerIA(JPanel slot)
+    {
+        switch (((Choice) slot.getComponent(2)).getSelectedItem())
+        {
+            case MESSAGE_TYPE_IA_RANDOM : return Player.Type.IA_RANDOM ;
+            case MESSAGE_TYPE_IA_MINIMAX : return Player.Type.IA_MINIMAX ;
+            case MESSAGE_TYPE_HUMAN : default : return Player.Type.HUMAN ;
+        }
+    }
+
+    private Player.Type[] getPlayersIA()
+    {
+        Player.Type p1 = getPlayerIA(mSlot1) ;
+        Player.Type p2 = getPlayerIA(mSlot2) ;
+        Player.Type p3 = getPlayerIA(mSlot3) ;
+        Player.Type p4 = getPlayerIA(mSlot4) ;
+
+        switch (mNbPlayers)
+        {
+            case 2 : return new Player.Type[] { p1, p2 } ;
+            case 3 : return new Player.Type[] { p1, p2, p3 } ;
+            default : return new Player.Type[] { p1, p2, p3, p4 } ;
+        }
+
     }
 
     private String[] getPlayersNames()

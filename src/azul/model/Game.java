@@ -3,6 +3,7 @@ package azul.model;
 import azul.model.history.History;
 import azul.model.move.*;
 import azul.model.player.HumanPlayer;
+import azul.model.player.IAPlayer;
 import azul.model.player.Player;
 import azul.model.player.PlayerBoard;
 import azul.model.tile.Tile;
@@ -56,10 +57,13 @@ public class Game extends Observable
 
     /**
      * Initialize a new game, depending on the number of players.
-     * @param nbPlayers the number of players.
+     * @param playersTypes the players' type.
+     * @param playerNames the players' name.
      */
-    public void startGame(int nbPlayers, String[] playerNames, boolean[] isIA)
+    public void startGame(Player.Type[] playersTypes, String[] playerNames)
     {
+        int nbPlayers = playersTypes.length ;
+
         try
         {
             checkNbPlayers(nbPlayers) ;
@@ -73,11 +77,11 @@ public class Game extends Observable
         
         mHistory.clean() ;
         // Initialize game objects.
-        initializePlayers(nbPlayers, playerNames, isIA) ;
+        initializePlayers(playersTypes, playerNames) ;
         initializeTilesRemaining() ;
         initializeTilesAside() ;
         initializeTilesTable() ;
-        initializeTilesFactories(getNbTilesFactories(mPlayers.size())) ;
+        initializeTilesFactories(getNbTilesFactories(nbPlayers)) ;
         // This will be the first round.
         prepareForRound() ;
     }
@@ -107,13 +111,15 @@ public class Game extends Observable
 
     /** Initialization. **/
 
-    private void initializePlayers(int nbPlayers, String[] playersNames, boolean[] isIA)
+    private void initializePlayers(Player.Type[] playersTypes, String[] playersNames)
     {
         mPlayers.clear() ;
 
-        for (int i = 1 ; i <= nbPlayers ; i ++)
+        for (int i = 0 ; i < playersTypes.length ; i ++)
         {
-            mPlayers.add(new HumanPlayer(playersNames[i - 1])) ;
+            mPlayers.add(playersTypes[i] != Player.Type.HUMAN ?
+                    new IAPlayer(playersTypes[i], playersNames[i]) :
+                    new HumanPlayer(playersNames[i])) ;
         }
     }
 

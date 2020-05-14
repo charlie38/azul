@@ -110,8 +110,6 @@ public class ResourcesLoader
     
     public Image getIngredient(Tile t)
     {
-        return getIngredientSelected(t) ;
-        /*
     	switch(t)
     	{
     		case CRYSTAL : return mCrystal.get() ;
@@ -120,10 +118,8 @@ public class ResourcesLoader
     		case FLOWER : return mFlower.get() ;
     		case MUSHROOM : return mMushroom.get() ;
             case FIRST_PLAYER_MAKER : return mToken.get() ;
-    		case EMPTY : return mEmpty.get() ;
     		default : return null ;
     	}
-         */
     }
 
     public Image getIngredientSelected(Tile t)

@@ -2,7 +2,6 @@ package azul.view.drawable;
 
 import azul.view.Display;
 import azul.view.drawable.board.PlayerBoard;
-import azul.view.drawable.factory.FactoryTile;
 import azul.view.drawable.factory.TilesFactory;
 import azul.view.drawable.table.Table;
 

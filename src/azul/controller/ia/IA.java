@@ -1,11 +1,17 @@
-package azul.controller;
+package azul.controller.ia;
 
 import azul.model.Game;
 import azul.model.move.Move;
 
 public abstract class IA
 {
+    // Model part.
     protected Game mGame ;
+
+    public IA(Game game)
+    {
+        mGame = game ;
+    }
 
     /**
      * Initialize the IA before starting the game.
@@ -19,7 +25,7 @@ public abstract class IA
 
     /**
      * Find a move playable.
-     * @return a move.
+     * @return a playable move.
      */
     public abstract Move play() ;
 }

@@ -27,6 +27,8 @@ public abstract class Drawable extends JComponent implements Observer
     protected float mCoef ;
     // True if animated.
     protected boolean mIsAnimated ;
+    // Animation.
+    protected Timer mTimer ;
 
     /**
      * Used to draw game objects on canvas.
@@ -46,7 +48,8 @@ public abstract class Drawable extends JComponent implements Observer
         // Observe the game.
         display.getGame().addObserver(this) ;
         // Animation.
-        new Timer(animationDelay, onAnimationChanged()).start() ;
+        mTimer = new Timer(animationDelay, onAnimationChanged()) ;
+        mTimer.start() ;
     }
 
     /**
@@ -106,7 +109,10 @@ public abstract class Drawable extends JComponent implements Observer
         }
     }
 
-    protected abstract void onAnimationStarts() ;
+    protected void onAnimationStarts()
+    {
+        mTimer.start() ;
+    }
 
     protected abstract ActionListener onAnimationChanged() ;
 

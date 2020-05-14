@@ -24,7 +24,10 @@ public class Background extends Drawable
     }
 
     @Override
-    protected void onAnimationStarts() { }
+    protected void onAnimationStarts()
+    {
+        super.onAnimationStarts() ;
+    }
 
     @Override
     protected ActionListener onAnimationChanged() { return null ; }

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 public abstract class Player
 {
+    // Player types.
+    public enum Type { HUMAN, IA_RANDOM, IA_MINIMAX }
+
     // The player name.
     private String mName ;
     // His board.
@@ -17,7 +20,8 @@ public abstract class Player
     private ArrayList<Tile> mTilesSelected ;
 
     /**
-     * Extended by the IA or human player.
+     * Extended by the IA and human players.
+     * @param playerName name printed during the game.
      */
     public Player(String playerName)
     {
@@ -97,28 +101,25 @@ public abstract class Player
 
     public void addTilesInFloor(ChooseFloorLine move, ArrayList<Tile> asideTiles)
     {
-        if (mPlayerBoard.isFloorLineFull())
+        try
         {
-            // If full, according to the rules the tile should go to the box cover.
-            asideTiles.addAll(mTilesSelected) ;
+            for (Tile tile : mTilesSelected)
+            {
+                if (mPlayerBoard.isFloorLineFull())
+                {
+                    // If full, according to the rules the tile should go to the box cover.
+                    asideTiles.addAll(mTilesSelected) ;
+                    break ;
+                }
+
+                mPlayerBoard.addToFloorLine(tile) ;
+            }
 
             mTilesSelected.clear() ;
         }
-        else
+        catch (PlayerBoard.PlayerBoardException e)
         {
-            try
-            {
-                for (Tile tile : mTilesSelected)
-                {
-                    mPlayerBoard.addToFloorLine(tile) ;
-                }
-
-                mTilesSelected.clear() ;
-            }
-            catch (PlayerBoard.PlayerBoardException e)
-            {
-                e.printStackTrace() ;
-            }
+            e.printStackTrace() ;
         }
     }
 
@@ -268,6 +269,25 @@ public abstract class Player
     {
         return ! mPlayerBoard.isPatterLineFull(row) && mTilesSelected.size() != 0
                 && mPlayerBoard.canBePlacedOnPatternLine(mTilesSelected.get(0), row) ;
+    }
+
+    /**
+     * Check if a tile can be placed in one of the pattern lines.
+     * @return true if can be placed.
+     */
+    public boolean isPatternLinesAccessible()
+    {
+        int j = 0 ;
+
+        for (int i = 1 ; i <= PlayerBoard.SIZE_PATTERN_LINES ; i ++)
+        {
+            if (isPatternLineAccessible(i))
+            {
+                return true ;
+            }
+        }
+
+        return false ;
     }
 
     /**

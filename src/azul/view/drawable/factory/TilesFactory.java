@@ -12,6 +12,7 @@ public class TilesFactory extends Drawable
 {
     // Request a focus animation.
     private static final int ANIMATION_DELAY = 400 ;
+    private final boolean[] ANIMATION_PATTERN = { true, false, true, false, false, false, false, false } ;
     // /!\ Change all factory components size.
     public static final float SIZE_COEF = 1.2f ;
     // Factory bg.
@@ -29,8 +30,8 @@ public class TilesFactory extends Drawable
     private int mIndex ;
     // Drawables.
     private ArrayList<FactoryTile> mTiles;
-    // True if this factory is focused (the player needs to choose a tile).
-    private boolean mIsFocused ;
+    // Current part of the animation.
+    private int mAnimationIndex ;
 
     /**
      * A tiles factory graphical representation.
@@ -44,7 +45,7 @@ public class TilesFactory extends Drawable
         super(display, originalX, originalY, WIDTH_FACTORY, HEIGHT_FACTORY, ANIMATION_DELAY) ;
 
         mIndex = index ;
-        mIsFocused = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
 
         createFactoryTileList() ;
 	}
@@ -90,14 +91,15 @@ public class TilesFactory extends Drawable
     {
         // If the game model change the current player, and he needs to choose tiles in factories,
         // start the focus animation (also if the factory is not empty).
-        int i = mIndex ;
         setIsAnimated(getGame().getState() == Game.State.CHOOSE_TILES && ! getGame().getFactory(mIndex).isEmpty()) ;
     }
 
     @Override
     protected void onAnimationStarts()
     {
-        mIsFocused = true ;
+        super.onAnimationStarts() ;
+
+        mAnimationIndex = 0 ;
 
         for (FactoryTile tile : mTiles)
         {
@@ -112,7 +114,7 @@ public class TilesFactory extends Drawable
         {
             if (mIsAnimated)
             {
-                mIsFocused = ! mIsFocused ;
+                mAnimationIndex = mAnimationIndex == ANIMATION_PATTERN.length - 1 ? 0 : mAnimationIndex + 1 ;
             }
         } ;
     }
@@ -120,7 +122,7 @@ public class TilesFactory extends Drawable
     @Override
     protected void onAnimationEnds()
     {
-        mIsFocused = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
 
         for (FactoryTile tile : mTiles)
         {
@@ -142,7 +144,7 @@ public class TilesFactory extends Drawable
 
     private void paintBg(Graphics g, int x, int y)
     {
-        Image img = mIsFocused ? getResourcesLoader().getFactoryFocused() : getResourcesLoader().getFactory() ;
+        Image img = ANIMATION_PATTERN[mAnimationIndex] ? getResourcesLoader().getFactoryFocused() : getResourcesLoader().getFactory() ;
         int width = (int) (WIDTH_FACTORY * mCoef) ;
         int height = (int) (HEIGHT_FACTORY * mCoef) ;
 

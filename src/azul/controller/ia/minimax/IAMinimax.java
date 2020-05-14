@@ -1,6 +1,7 @@
-package azul.controller.minimax;
+package azul.controller.ia.minimax;
 
-import azul.controller.IA;
+import azul.controller.ia.IA;
+import azul.model.Game;
 import azul.model.move.Move;
 import azul.model.player.Player;
 
@@ -16,7 +17,7 @@ public class IAMinimax extends IA
     private final int MIDDLE_STARTING_DEPTH = 4 ; // TODO Determinate (for efficiency, and IA difficulty)
     private final int HARD_STARTING_DEPTH = 5 ; // TODO Determinate (for efficiency, and IA difficulty)
     // Difficulty of the IA.
-    private enum Difficulty { EASY, MIDDLE, HARD }
+    public enum Difficulty { EASY, MIDDLE, HARD }
 
     // Difficulty of the IA.
     private Difficulty mDifficulty ;
@@ -26,8 +27,10 @@ public class IAMinimax extends IA
     /**
      * IA using the 'minimax' algorithm.
      */
-    public IAMinimax(Difficulty difficulty)
+    public IAMinimax(Game game, Difficulty difficulty)
     {
+        super(game) ;
+
         mDifficulty = difficulty ;
 
         switch (mDifficulty)

@@ -41,6 +41,7 @@ public class PatternLineTile extends Drawable
     @Override
     public void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
         mIsSelected = true ;
     }
 
@@ -79,8 +80,8 @@ public class PatternLineTile extends Drawable
 
         Image bg = mIsSelected ? getResourcesLoader().getPatternLinesCaseSelected() : getResourcesLoader().getPatternLinesCase() ;
         Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredientBlurred(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) :
-                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) ;
+                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) :
+                getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) ;
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;

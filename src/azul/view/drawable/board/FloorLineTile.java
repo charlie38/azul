@@ -38,6 +38,7 @@ public class FloorLineTile extends Drawable
     @Override
     public void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
         mIsSelected = true ;
     }
 
@@ -75,8 +76,8 @@ public class FloorLineTile extends Drawable
         int height = (int) (mOriginalHeight * mCoef) ;
 
         Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredientBlurred(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) :
-                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) ;
+                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) :
+                getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) ;
 
         g.drawImage(ingredient, x, y, width, height, null) ;
     }

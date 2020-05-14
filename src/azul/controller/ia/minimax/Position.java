@@ -1,4 +1,4 @@
-package azul.controller.minimax;
+package azul.controller.ia.minimax;
 
 import azul.model.Game;
 

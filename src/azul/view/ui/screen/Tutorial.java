@@ -16,13 +16,13 @@ import azul.view.drawable.DrawingPanelTuto;
 public class Tutorial extends Screen {
 	
 	//Label messages
-	public static String MESSAGE_START = "Welcome to the Azul tutorial !";
-	public static String MESSAGE_0_1 = "This game seems complicate ? Don't worry, I'm here to help you !";
-	public static String MESSAGE_0_2 = "At the start of your turn, you need to pick one type of ingredient in the bowl. Do it !";
-	public static String MESSAGE_NEXT = "Next";
+	private final String MESSAGE_START = "Welcome to the Azul tutorial !";
+	private final String MESSAGE_0_1 = "This game seems complicate ? Don't worry, I'm here to help you !";
+	private final String MESSAGE_0_2 = "At the start of your turn, you need to pick one type of ingredient in the bowl. Do it !";
+	private final String MESSAGE_NEXT = "Next";
 	
 	//Message queue
-	public static String[] MESSAGE_QUEUE = new String[] {MESSAGE_START,MESSAGE_0_1,MESSAGE_0_2};
+	private final String[] MESSAGE_QUEUE = new String[] {MESSAGE_START,MESSAGE_0_1,MESSAGE_0_2};
 	public int numStep;
 	
 	//JPanel

@@ -87,6 +87,8 @@ public class Table extends Drawable
     @Override
     protected void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
+
         for (TableTile tile : mTiles)
         {
             tile.setIsAnimated(true) ;

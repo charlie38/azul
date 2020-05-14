@@ -8,13 +8,14 @@ import java.awt.event.ActionListener;
 
 public class TableTile extends Drawable
 {
-    // Request a select animation.
+    // Request a focus animation.
     private static final int ANIMATION_DELAY = 400 ;
+    private final boolean[] ANIMATION_PATTERN = { true, false, true, false, false, false, false, false } ;
 
     // Tile index in the table model representations.
     private int mIndex ;
-    // True if the current tile image is selected.
-    private boolean mIsSelected ;
+    // Current part of the animation.
+    private int mAnimationIndex ;
 
     /**
      * A table tile representation.
@@ -28,13 +29,15 @@ public class TableTile extends Drawable
         super(display, originalX, originalY, Table.WIDTH_TILE, Table.HEIGHT_TILE, ANIMATION_DELAY) ;
 
         mIndex = index ;
-        mIsSelected = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
 
     @Override
     public void onAnimationStarts()
     {
-        mIsSelected = true ;
+        super.onAnimationStarts() ;
+
+        mAnimationIndex = 0 ;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class TableTile extends Drawable
         {
             if (mIsAnimated)
             {
-                mIsSelected = ! mIsSelected ;
+                mAnimationIndex = mAnimationIndex == ANIMATION_PATTERN.length - 1 ? 0 : mAnimationIndex + 1 ;
             }
         } ;
     }
@@ -52,7 +55,7 @@ public class TableTile extends Drawable
     @Override
     public void onAnimationEnds()
     {
-        mIsSelected = false ;
+        mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
 
     @Override
@@ -70,8 +73,8 @@ public class TableTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredientBlurred(getGame().getInTilesTable(mIndex)) :
+        Image ingredient = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getIngredientSelected(getGame().getInTilesTable(mIndex)) :
                 getResourcesLoader().getIngredient(getGame().getInTilesTable(mIndex)) ;
 
         g.drawImage(ingredient, x, y, width, height, null) ;

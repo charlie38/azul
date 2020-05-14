@@ -52,6 +52,7 @@ public class PatternLineArrow extends Drawable
     @Override
     public void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
         mIsFocused = true ;
     }
 

@@ -1,5 +1,6 @@
 package azul.view.drawable.board;
 
+import azul.model.Game;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -9,7 +10,7 @@ import java.awt.event.ActionListener;
 public class WallTile extends Drawable
 {
     // Request a select animation.
-    private static final int ANIMATION_DELAY = 200 ;
+    private static final int ANIMATION_DELAY = 800 ;
 
     // Player index in the model representation.
     private int mPlayerIndex ;
@@ -39,8 +40,16 @@ public class WallTile extends Drawable
     }
 
     @Override
+    public void update(java.util.Observable observable, Object object)
+    {
+        // Show the animated tiles when the user wants to see the decoration walls move.
+        setIsAnimated(getGame().getState() == Game.State.DECORATE_WALL) ;
+    }
+
+    @Override
     protected void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
         mIsSelected = true ;
     }
 
@@ -77,10 +86,14 @@ public class WallTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsSelected ? getResourcesLoader().getWallCaseSelected() : getResourcesLoader().getWallCase() ;
+        Image bg = mIsSelected ?
+                getResourcesLoader().getWallCaseSelected() :
+                getResourcesLoader().getWallCase() ;
+        Image ingredient = mIsSelected ?
+                getResourcesLoader().getIngredient(getPlayer(mPlayerIndex).getInWall(mIndexI, mIndexJ)) :
+                getResourcesLoader().getIngredientSelected(getPlayer(mPlayerIndex).getInWall(mIndexI, mIndexJ)) ;
         Image ingredientBlurred = getResourcesLoader().getIngredientBlurred(
                 azul.model.player.PlayerBoard.getWallTile(mIndexI + 1, mIndexJ + 1)) ;
-        Image ingredient = getResourcesLoader().getIngredient(getPlayer(mPlayerIndex).getInWall(mIndexI, mIndexJ)) ;
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredientBlurred, x, y, width, height, null) ;

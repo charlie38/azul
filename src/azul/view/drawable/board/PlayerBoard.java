@@ -216,6 +216,7 @@ public class PlayerBoard extends Drawable
     @Override
     protected void onAnimationStarts()
     {
+        super.onAnimationStarts() ;
         mIsFocused = true ;
     }
 
