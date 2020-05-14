@@ -386,6 +386,19 @@ public class Game extends Observable
         return true ;
     }
 
+    public boolean isOnlyIAs()
+    {
+        for (Player player : mPlayers)
+        {
+            if (player instanceof HumanPlayer)
+            {
+                return false ;
+            }
+        }
+
+        return true ;
+    }
+
     public Player getPlayer()
     {
         return mPlayers.get(mCurrentPlayer) ;

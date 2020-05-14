@@ -21,6 +21,8 @@ public class Mediator implements Observer
     // IA controllers.
     private IARandom mIARandom ;
     private IAMinimax mIAMinimax ;
+    // If only IAs playing.
+    private boolean mIAStarted ;
 
     /**
      * Play moves on user interactions.
@@ -38,15 +40,23 @@ public class Mediator implements Observer
 
     public void onClick(Drawable selected)
     {
-        // Current player for this turn.
-        Player player = mGame.getPlayer() ;
-
-        if (player instanceof HumanPlayer)
+        if (mGame.isOnlyIAs() && ! mIAStarted)
         {
-            // It's an human turn.
-            mHuman.onClick(selected) ;
-            // Check if it's a IA turn.
             IAPlay() ;
+            mIAStarted = true ;
+        }
+        else
+        {
+            // Current player for this turn.
+            Player player = mGame.getPlayer() ;
+
+            if (player instanceof HumanPlayer)
+            {
+                // It's an human turn.
+                mHuman.onClick(selected) ;
+                // Check if it's a IA turn.
+                IAPlay() ;
+            }
         }
     }
 
@@ -73,6 +83,8 @@ public class Mediator implements Observer
         {
             mIARandom.initialize() ;
             mIAMinimax.initialize() ;
+
+            mIAStarted = false ;
         }
     }
 }
