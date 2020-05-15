@@ -1,4 +1,4 @@
-package azul.view.drawable.factory;
+package azul.view.drawable.game.factory;
 
 import azul.model.Game;
 import azul.view.Display;
@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class TilesFactory extends Drawable
 {
     // Request a focus animation.
-    private static final int ANIMATION_DELAY = 400 ;
-    private final boolean[] ANIMATION_PATTERN = { true, false, true, false, false, false, false, false } ;
+    private static final int ANIMATION_DELAY = 100 ;
+    private final boolean[] ANIMATION_PATTERN = { true, false, true,
+            false, false, false, false, false, false, false, false, false, false, false } ;
     // /!\ Change all factory components size.
     public static final float SIZE_COEF = 1.2f ;
     // Factory bg.

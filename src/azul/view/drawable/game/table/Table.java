@@ -1,4 +1,4 @@
-package azul.view.drawable.table;
+package azul.view.drawable.game.table;
 
 import azul.model.Game;
 import azul.view.Display;

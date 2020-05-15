@@ -24,7 +24,7 @@ public class Settings extends Screen
         setBackground(Display.BG_SETTINGS) ;
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
-        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40)) ;
+        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 50)) ;
         add(Box.createVerticalGlue()) ;
         add(Box.createVerticalGlue()) ;
         add(createButton(MESSAGE_MAIN_MENU, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,

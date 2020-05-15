@@ -1,4 +1,4 @@
-package azul.view.drawable.table;
+package azul.view.drawable.game.factory;
 
 import azul.view.Display;
 import azul.view.drawable.Drawable;
@@ -6,42 +6,45 @@ import azul.view.drawable.Drawable;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class TableTile extends Drawable
+public class FactoryTile extends Drawable
 {
     // Request a focus animation.
-    private static final int ANIMATION_DELAY = 400 ;
-    private final boolean[] ANIMATION_PATTERN = { true, false, true, false, false, false, false, false } ;
+    private static final int ANIMATION_DELAY = 100 ;
+    private final boolean[] ANIMATION_PATTERN = { true, false, true,
+            false, false, false, false, false, false, false, false, false, false, false } ;
 
-    // Tile index in the table model representations.
+    // Tile index in model representations.
+    private int mFactoryIndex ;
     private int mIndex ;
     // Current part of the animation.
     private int mAnimationIndex ;
 
     /**
-     * A table tile representation.
+     * A player wall tile graphical representation.
      * @param display root.
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
+     * @param factoryIndex index of its container in the model representation.
      * @param index index in the model representation.
      */
-    public TableTile(Display display, int originalX, int originalY, int index)
+    public FactoryTile(Display display, int originalX, int originalY, int factoryIndex, int index)
     {
-        super(display, originalX, originalY, Table.WIDTH_TILE, Table.HEIGHT_TILE, ANIMATION_DELAY) ;
+        super(display, originalX, originalY, TilesFactory.WIDTH_TILE, TilesFactory.HEIGHT_TILE, ANIMATION_DELAY) ;
 
+        mFactoryIndex = factoryIndex ;
         mIndex = index ;
         mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
 
     @Override
-    public void onAnimationStarts()
+    protected void onAnimationStarts()
     {
         super.onAnimationStarts() ;
-
         mAnimationIndex = 0 ;
     }
 
     @Override
-    public ActionListener onAnimationChanged()
+    protected ActionListener onAnimationChanged()
     {
         return actionEvent ->
         {
@@ -53,7 +56,7 @@ public class TableTile extends Drawable
     }
 
     @Override
-    public void onAnimationEnds()
+    protected void onAnimationEnds()
     {
         mAnimationIndex = ANIMATION_PATTERN.length - 1 ;
     }
@@ -73,11 +76,20 @@ public class TableTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
+        Image bg = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getFactoryCaseSelected()
+                : getResourcesLoader().getFactoryCase() ;
         Image ingredient = ANIMATION_PATTERN[mAnimationIndex] ?
-                getResourcesLoader().getIngredientSelected(getGame().getInTilesTable(mIndex)) :
-                getResourcesLoader().getIngredient(getGame().getInTilesTable(mIndex)) ;
+                getResourcesLoader().getIngredientSelected(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
+                getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
 
+        g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
+    }
+
+    public int getFactoryIndex()
+    {
+        return mFactoryIndex ;
     }
 
     public int getTileIndex()

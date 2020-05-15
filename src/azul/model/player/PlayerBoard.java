@@ -213,7 +213,7 @@ public class PlayerBoard
 
     public void addToFloorLine(Tile tile) throws PlayerBoardException
     {
-        for (int i = 0; i < SIZE_FLOOR_LINE; i ++)
+        for (int i = 0 ; i < SIZE_FLOOR_LINE ; i ++)
         {
             if (mFloorLine.get(i) == Tile.EMPTY)
             {

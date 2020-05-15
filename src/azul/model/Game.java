@@ -1,8 +1,7 @@
 package azul.model;
 
-import azul.controller.Mediator;
 import azul.model.history.History;
-import azul.model.move.*;
+import azul.model.move.Move;
 import azul.model.player.HumanPlayer;
 import azul.model.player.IAPlayer;
 import azul.model.player.Player;

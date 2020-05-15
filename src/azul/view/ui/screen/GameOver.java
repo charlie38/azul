@@ -13,7 +13,7 @@ public class GameOver extends Screen
     // Buttons message.
     public final String MESSAGE_GAME_OVER = "GAME OVER" ;
     public final String MESSAGE_POINTS = " points" ;
-    public final String MESSAGE_BACK = "BACK" ;
+    public final String MESSAGE_BACK = "BACK IN GAME" ;
     public final String MESSAGE_MAIN_MENU = "GO TO THE MAIN MENU" ;
 
     // Components.
@@ -37,10 +37,10 @@ public class GameOver extends Screen
 
     private void createComponents()
     {
-        mTitle = createLabel(MESSAGE_GAME_OVER, Display.CL_PRIMARY, 40) ;
+        mTitle = createLabel(MESSAGE_GAME_OVER, Display.CL_PRIMARY, 50) ;
         mBack = createButton(MESSAGE_BACK, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent -> getDisplay().onGoInGame()) ;
-        mMainMenu = createButton(MESSAGE_MAIN_MENU, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+        mMainMenu = createButton(MESSAGE_MAIN_MENU, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent -> getDisplay().onGoMainMenu()) ;
     }
 

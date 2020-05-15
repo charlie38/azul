@@ -22,7 +22,7 @@ public class MouseAdapter extends java.awt.event.MouseAdapter
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        Drawable selected = mDisplay.getUIPanel().getDrawingPanel().onClick(e.getX(), e.getY()) ;
+        Drawable selected = mDisplay.getUIPanel().getGameCanvas().onClick(e.getX(), e.getY()) ;
 
         if (selected != null)
         {

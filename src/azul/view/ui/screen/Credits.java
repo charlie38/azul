@@ -21,14 +21,14 @@ public class Credits extends Screen
      */
     public Credits(Display display)
     {
-        super(display, 6, 1) ;
+        super(display, 8, 1) ;
 
         setBackground(Display.BG_CREDITS) ;
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
         JPanel content = new JPanel(new GridLayout(2, MESSAGE_DEVELOPERS.length / 2)) ;
         content.setBackground(Display.BG_CREDITS) ;
-        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40)) ;
+        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 50)) ;
         add(Box.createVerticalGlue()) ;
         add(Box.createVerticalGlue()) ;
         add(createLabel(MESSAGE_SUBTITLE, Display.CL_TERTIARY, 30)) ;
@@ -39,6 +39,8 @@ public class Credits extends Screen
             content.add(createLabel(messageDeveloper, Display.CL_PRIMARY, 20)) ;
         }
 
+        add(Box.createVerticalGlue()) ;
+        add(Box.createVerticalGlue()) ;
         add(createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
                 actionEvent -> getDisplay().onGoMainMenu())) ;
     }

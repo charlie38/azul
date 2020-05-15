@@ -1,4 +1,4 @@
-package azul.view.drawable.board;
+package azul.view.drawable.game.board;
 
 import azul.view.Display;
 import azul.view.drawable.Drawable;
@@ -6,35 +6,32 @@ import azul.view.drawable.Drawable;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class PatternLineTile extends Drawable
+public class FloorLineTile extends Drawable
 {
     // Request a select animation.
     private static final int ANIMATION_DELAY = 200 ;
 
     // Player index in the model representation.
     private int mPlayerIndex ;
-    // Tile indexes in the pattern lines graphical and model representations.
-    private int mIndexI ;
-    private int mIndexJ ;
+    // Tile index in the floor lines graphical and model representations.
+    private int mIndex ;
     // True if the current tile image is selected.
     private boolean mIsSelected ;
 
     /**
-     * A player pattern tile graphical representation.
+     * A player floor tile graphical representation.
      * @param display root.
      * @param originalX coordinate relative to : center of screen = (0, 0)
      * @param originalY coordinate relative to : center of screen = (0, 0)
      * @param playerIndex index in the model representation of the player.
-     * @param indexI index in the model representation, and Y delta in the view representation.
-     * @param indexJ index in the model representation, and X delta in the view representation.
+     * @param index index in the model representation, and X delta in the view representation.
      */
-    public PatternLineTile(Display display, int originalX, int originalY, int playerIndex, int indexI, int indexJ)
+    public FloorLineTile(Display display, int originalX, int originalY, int playerIndex, int index)
     {
-        super(display, originalX, originalY, PlayerBoard.WIDTH_PL_TILE, PlayerBoard.HEIGHT_PL_TILE, ANIMATION_DELAY) ;
+        super(display, originalX, originalY, PlayerBoard.WIDTH_FL_TILE, PlayerBoard.HEIGHT_FL_TILE, ANIMATION_DELAY) ;
 
         mPlayerIndex = playerIndex ;
-        mIndexI = indexI ;
-        mIndexJ = indexJ ;
+        mIndex = index ;
         mIsSelected = false ;
     }
 
@@ -78,22 +75,15 @@ public class PatternLineTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = mIsSelected ? getResourcesLoader().getPatternLinesCaseSelected() : getResourcesLoader().getPatternLinesCase() ;
         Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) :
-                getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInPatternLines(mIndexI, mIndexJ)) ;
+                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) :
+                getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) ;
 
-        g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
-    }
-
-    public int getRowIndex()
-    {
-        return mIndexI ;
     }
 
     public int getColumnIndex()
     {
-        return mIndexJ ;
+        return mIndex ;
     }
 }

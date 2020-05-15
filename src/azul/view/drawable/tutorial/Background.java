@@ -1,6 +1,7 @@
-package azul.view.drawable;
+package azul.view.drawable.tutorial;
 
 import azul.view.Display;
+import azul.view.drawable.Drawable;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

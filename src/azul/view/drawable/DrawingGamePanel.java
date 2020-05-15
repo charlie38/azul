@@ -1,15 +1,15 @@
 package azul.view.drawable;
 
 import azul.view.Display;
-import azul.view.drawable.board.PlayerBoard;
-import azul.view.drawable.factory.TilesFactory;
-import azul.view.drawable.table.Table;
+import azul.view.drawable.game.board.PlayerBoard;
+import azul.view.drawable.game.factory.TilesFactory;
+import azul.view.drawable.game.table.Table;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class DrawingPanel extends JPanel
+public class DrawingGamePanel extends JPanel
 {
     // /!\ Animation minimum delay for update <~> game loop.
     private final int ANIMATION_MIN_DELAY = 1000 / 60 ; // 60FPS
@@ -27,7 +27,7 @@ public class DrawingPanel extends JPanel
      * Used to draw the game objects.
      * @param display the current window.
      */
-    public DrawingPanel(Display display)
+    public DrawingGamePanel(Display display)
     {
         mDisplay = display ;
         mBoards = new ArrayList<>() ;

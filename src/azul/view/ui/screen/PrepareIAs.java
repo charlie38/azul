@@ -23,7 +23,7 @@ public class PrepareIAs extends Screen
         setBackground(Display.BG_PREPARE_IAS) ;
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
-        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40)) ;
+        add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 50)) ;
         add(Box.createVerticalGlue()) ;
         add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent ->
@@ -32,7 +32,7 @@ public class PrepareIAs extends Screen
                     getDisplay().onGoInGame() ;
                 }
         )) ;
-        add(createButton(MESSAGE_BACK, Display.CD_SECONDARY, Display.CL_PRIMARY, 20,
+        add(createButton(MESSAGE_BACK, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent -> getDisplay().onGoPrepare())) ;
     }
 }

@@ -7,10 +7,10 @@ import azul.model.move.TakeInFactory;
 import azul.model.move.TakeOnTable;
 import azul.model.tile.Tile;
 import azul.view.drawable.Drawable;
-import azul.view.drawable.board.FloorLineArrow;
-import azul.view.drawable.board.PatternLineArrow;
-import azul.view.drawable.factory.FactoryTile;
-import azul.view.drawable.table.TableTile;
+import azul.view.drawable.game.board.FloorLineArrow;
+import azul.view.drawable.game.board.PatternLineArrow;
+import azul.view.drawable.game.factory.FactoryTile;
+import azul.view.drawable.game.table.TableTile;
 
 import java.util.ArrayList;
 

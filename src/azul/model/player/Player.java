@@ -34,7 +34,7 @@ public abstract class Player
     {
         mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
         // Add the remaining tiles in the factory on the table.
-        for (int i = 0; i < TilesFactory.SIZE_FACTORY ; i ++)
+        for (int i = 0 ; i < TilesFactory.SIZE_FACTORY ; i ++)
         {
             Tile tile = move.getFactory().getTile(i) ;
 
@@ -73,7 +73,7 @@ public abstract class Player
         mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
     }
 
-    public void addTilesInPattern(ChoosePatternLine move)
+    public void addTilesInPattern(ChoosePatternLine move, ArrayList<Tile> asideTiles)
     {
         try
         {
@@ -84,10 +84,15 @@ public abstract class Player
                     // Add to pattern line.
                     mPlayerBoard.addToPatternLine(tile, move.getRow() + 1) ;
                 }
-                else
+                else if (! mPlayerBoard.isFloorLineFull())
                 {
                     // If full, finish to add in the floor line.
                     mPlayerBoard.addToFloorLine(tile) ;
+                }
+                else
+                {
+                    // If full, according to the rules the tile should go to the box cover.
+                    asideTiles.add(tile) ;
                 }
             }
 
@@ -105,14 +110,15 @@ public abstract class Player
         {
             for (Tile tile : mTilesSelected)
             {
-                if (mPlayerBoard.isFloorLineFull())
+                if (! mPlayerBoard.isFloorLineFull())
+                {
+                    mPlayerBoard.addToFloorLine(tile) ;
+                }
+                else
                 {
                     // If full, according to the rules the tile should go to the box cover.
-                    asideTiles.addAll(mTilesSelected) ;
-                    break ;
+                    asideTiles.add(tile) ;
                 }
-
-                mPlayerBoard.addToFloorLine(tile) ;
             }
 
             mTilesSelected.clear() ;

@@ -1,6 +1,5 @@
 package azul.view.ui.screen;
 
-import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.component.JHintTextField;
@@ -71,7 +70,7 @@ public class Prepare extends Screen
         mHeader = new JPanel(new GridLayout(2, 1)) ;
         mHeader.setBorder(new EmptyBorder(25, 100, 25, 100)) ;
         mHeader.setBackground(Display.BG_PREPARE) ;
-        mHeader.add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40), BorderLayout.NORTH) ;
+        mHeader.add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 50), BorderLayout.NORTH) ;
         mHeader.add(createLabel(MESSAGE_SUBTITLE, Display.CL_TERTIARY, 30)) ;
     }
 
@@ -108,13 +107,13 @@ public class Prepare extends Screen
         mNavFooter = new JPanel(new GridLayout(1, 3)) ;
         mNavFooter.setBackground(Display.BG_PREPARE) ;
         mNavFooter.setBorder(new EmptyBorder(25, 100, 0, 100)) ;
-        mNavFooter.add(createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 25,
+        mNavFooter.add(createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent -> getDisplay().onGoMainMenu())) ;
         mNavFooter.add(Box.createHorizontalGlue()) ;
-        mNavFooter.add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 33,
+        mNavFooter.add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent ->
                 {
-                    getDisplay().getUIPanel().getDrawingPanel().startGame(mNbPlayers) ;
+                    getDisplay().getUIPanel().getGameCanvas().startGame(mNbPlayers) ;
                     getGame().startGame(getPlayersIA(), getPlayersNames()) ;
 
                     if (getGame().isOnlyIAs())

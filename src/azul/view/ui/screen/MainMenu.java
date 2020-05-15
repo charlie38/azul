@@ -12,9 +12,9 @@ public class MainMenu extends Screen
     public static final int GAME_TITLE_WIDTH = 100 ;
     public static final int GAME_TITLE_HEIGHT = 100 ;
     // Buttons message.
-    public final String MESSAGE_START = "START" ;
-    public final String MESSAGE_TUTO = "TUTORIEL" ;
-    public final String MESSAGE_CREDITS = "CREDITS" ;
+    private final String MESSAGE_TUTORIAL = "TUTORIAL" ;
+    private final String MESSAGE_START = "START" ;
+    private final String MESSAGE_CREDITS = "CREDITS" ;
 
     /**
      * Contains the main menu components <-> is the starting screen.
@@ -28,7 +28,7 @@ public class MainMenu extends Screen
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
         add(new JLabel(new ImageIcon(getResourcesLoader().getGameTitle()))) ;
-        add(createButton(MESSAGE_TUTO, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
+        add(createButton(MESSAGE_TUTORIAL, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
                 actionEvent -> getDisplay().onGoTutorial())) ;
         add(createButton(MESSAGE_START, Display.CD_SECONDARY, Display.CL_PRIMARY, 40,
                 actionEvent -> getDisplay().onGoPrepare())) ;

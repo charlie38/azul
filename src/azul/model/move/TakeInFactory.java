@@ -38,7 +38,10 @@ public class TakeInFactory extends Move
 
         for (int j = 4 - mTilesSelected.size() + 1 ; j >= 0 ; j --)
         {
-            game.getTilesTable().set(i- j, Tile.EMPTY) ;
+            if (i - j >= 0)
+            {
+                game.getTilesTable().set(i- j, Tile.EMPTY) ;
+            }
         }
         // Clean the player.
         mPlayer.clearTilesSelected() ;

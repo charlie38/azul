@@ -1,95 +1,123 @@
 package azul.view.ui.screen;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import azul.view.Display;
-import azul.view.drawable.DrawingPanel;
-import azul.view.drawable.DrawingPanelTuto;
+import azul.view.drawable.DrawingTutoPanel;
 
 public class Tutorial extends Screen {
 	
-	//Label messages
-	private final String MESSAGE_START = "Welcome to the Azul tutorial !";
-	private final String MESSAGE_0_1 = "This game seems complicate ? Don't worry, I'm here to help you !";
-	private final String MESSAGE_0_2 = "At the start of your turn, you need to pick one type of ingredient in the bowl. Do it !";
-	private final String MESSAGE_NEXT = "Next";
-	
-	//Message queue
-	private final String[] MESSAGE_QUEUE = new String[] {MESSAGE_START,MESSAGE_0_1,MESSAGE_0_2};
-	public int numStep;
-	
-	//JPanel
-	private JPanel mExplanation;
-	private DrawingPanelTuto mDrawTuto;
-	
-	//JButton
-	private JButton mNext;
-	
-	//JLabel
-	private JLabel mMessage;
+	// Label messages.
+	private final String MESSAGE_START = "Welcome to the Azul tutorial!" ;
+	private final String MESSAGE_0_1 = "This game seems too complicated? Don't worry, I'm here to help you!" ;
+	private final String MESSAGE_0_2 = "At the start of your turn, you need to pick one type of ingredient in the bowl. Do it!" ;
+	private final String MESSAGE_PREVIOUS = "PREVIOUS" ;
+	private final String MESSAGE_EXIT = "EXIT" ;
+	private final String MESSAGE_NEXT = "NEXT" ;
+	// Tutorial messages.
+	private final String[] MESSAGE_QUEUE = new String[] { MESSAGE_START, MESSAGE_0_1, MESSAGE_0_2 } ;
 
+	// Tutorial.
+	private JLabel mMessage ;
+	// Navigation.
+	private JButton mPrevious ;
+	private JButton mNext ;
+	private JButton mExit ;
 
-	public Tutorial(Display display) {
-		super(display,3, 1);
-		
-		setBackground(Display.BG_TUTORIAL) ;
-		setBorder(new EmptyBorder(25, 25, 25, 25)) ;
-		
-		// Create TextArea
-		initExplanation();
-		mDrawTuto = new DrawingPanelTuto(display);
-		
-		add(mExplanation);
-		add(mDrawTuto);
-		add(createButtonIconTop("SETTINGS", getResourcesLoader().getSettings(), Display.CD_SECONDARY,
-                Display.CL_PRIMARY, 20,
-                actionEvent -> getDisplay().onGoSettings())) ;
-	}
-	
-	private void initExplanation()
+	// Track the tutorial step.
+	public int mStep ;
+
+	public Tutorial(Display display, DrawingTutoPanel canvas)
 	{
-		mExplanation = new JPanel(new GridLayout(2,1));
-		mExplanation.setBorder(new EmptyBorder(25, 100, 25, 100));
-		mExplanation.setBackground(Display.BG_TUTORIAL_LABEL);
-		
-		numStep = 0;
-		mMessage = new JLabel();
-		goToNextStep();
-		mMessage.setFont(new Font("Sherif",Font.PLAIN, 25));
-		mMessage.setForeground(Display.CL_PRIMARY);
-		
-		mNext = createButton(MESSAGE_NEXT, Display.CD_SECONDARY, Display.CL_PRIMARY, 20, actionEvent -> goToNextStep());
-		mNext.setPreferredSize(new Dimension(650, 50)) ;
-	
-		mExplanation.add(mMessage);
-		mExplanation.add(mNext);
+		super(display,1, 1) ;
+
+		setLayout(new BorderLayout(HGAP, VGAP)) ;
+		setBorder(new EmptyBorder(25, 25, 25, 25)) ;
+		setBackground(Display.BG_TUTORIAL) ;
+		// Create components and add them.
+		createExplanation() ;
+		add(canvas, BorderLayout.CENTER) ;
+		createNavigationFooter() ;
 	}
-	
+
+	private void createExplanation()
+	{
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING, HGAP, VGAP)) ;
+		panel.setBackground(Display.CL_TERTIARY) ;
+
+		mMessage = createLabel("", Display.CD_SECONDARY, 25) ;
+		mNext = createButton(MESSAGE_NEXT, Display.CD_SECONDARY, Display.CL_QUINARY, 20,
+				actionEvent -> goToNextStep()) ;
+		mNext.setPreferredSize(new Dimension(100, 50)) ;
+
+		panel.add(mMessage) ;
+		panel.add(mNext) ;
+
+		add(panel, BorderLayout.NORTH) ;
+	}
+
+	private void createNavigationFooter()
+	{
+	    JPanel panel = new JPanel(new GridLayout(1, 6)) ;
+	    panel.setBackground(Display.BG_TUTORIAL) ;
+
+		mPrevious = createButton(MESSAGE_PREVIOUS, Display.CD_SECONDARY, Display.CL_QUINARY, 20,
+				actionEvent -> goToPreviousStep()) ;
+		mExit = createButton(MESSAGE_EXIT, Display.CD_SECONDARY, Display.CL_PRIMARY, 20,
+				actionEvent -> getDisplay().onGoMainMenu()) ;
+
+		panel.add(mPrevious) ;
+		panel.add(Box.createHorizontalGlue()) ;
+		panel.add(Box.createHorizontalGlue()) ;
+		panel.add(Box.createHorizontalGlue()) ;
+		panel.add(Box.createHorizontalGlue()) ;
+		panel.add(mExit) ;
+
+		add(panel, BorderLayout.SOUTH) ;
+	}
+
+	public void goToFirstStep()
+	{
+		mStep = 0 ;
+		update() ;
+	}
+
+	private void goToPreviousStep()
+	{
+	    mStep -- ;
+		update() ;
+	}
+
 	private void goToNextStep()
 	{
-		if(numStep < MESSAGE_QUEUE.length)
-		{
-			switch(numStep)
-			{
-			case 2:
-				mNext.setVisible(false);
-
-			}
-			mMessage.setText(MESSAGE_QUEUE[numStep]);
-		}
-		else
-		{
-			numStep = 0;
-			mMessage.setText(MESSAGE_QUEUE[numStep]);
-		}
-		numStep++;
+		mStep ++ ;
+		update() ;
 	}
 
+	private void update()
+	{
+		updatePrevious() ;
+		updateNext() ;
+		updateMessage() ;
+	}
+
+	private void updatePrevious()
+	{
+		mPrevious.setBackground(mStep > 0 ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
+		mPrevious.setEnabled(mStep > 0) ;
+	}
+
+	private void updateNext()
+	{
+		mNext.setVisible(mStep < MESSAGE_QUEUE.length - 1) ;
+		mNext.setEnabled(mStep < MESSAGE_QUEUE.length - 1) ;
+	}
+
+	private void updateMessage()
+	{
+		mMessage.setText(MESSAGE_QUEUE[mStep]) ;
+	}
 }

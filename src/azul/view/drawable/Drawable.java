@@ -135,9 +135,9 @@ public abstract class Drawable extends JComponent implements Observer
         return mDisplay.getGame() ;
     }
 
-    protected DrawingPanel getDrawingPanel()
+    protected DrawingGamePanel getDrawingPanel()
     {
-        return mDisplay.getUIPanel().getDrawingPanel() ;
+        return mDisplay.getUIPanel().getGameCanvas() ;
     }
 
     protected Player getPlayer()

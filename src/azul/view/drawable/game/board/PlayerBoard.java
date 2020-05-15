@@ -1,4 +1,4 @@
-package azul.view.drawable.board;
+package azul.view.drawable.game.board;
 
 import azul.model.Game;
 import azul.view.Display;
@@ -51,12 +51,10 @@ public class PlayerBoard extends Drawable
     // Player name.
     public final int DISTANCE_LEFT_TO_NAME = WIDTH_BOARD - WIDTH_BOARD / 3 ;
     public final int DISTANCE_TOP_TO_NAME = HEIGHT_BOARD - HEIGHT_BOARD / 9 ;
-    public final Color COLOR_PLAYER_NAME = new Color(0x4A4E49) ;
-    public final int MAX_LENGTH_PLAYER_NAME = 12 ;
+    public final int MAX_LENGTH_PLAYER_NAME = 10 ;
     // Player points.
     public final int DISTANCE_LEFT_TO_POINTS = DISTANCE_LEFT_TO_NAME ;
     public final int DISTANCE_TOP_TO_POINTS = DISTANCE_TOP_TO_NAME + (int) (17 * SIZE_COEF) ;
-    public final Color COLOR_PLAYER_POINTS = new Color(0x696969) ;
     public final String MESSAGE_POINTS = " points" ;
 
     // Player index in the game 'model' list.
@@ -301,8 +299,8 @@ public class PlayerBoard extends Drawable
     {
         String name = getPlayer(mIndex).getName() ;
 
-        g.setFont(getResourcesLoader().getFont(20 * mCoef)) ;
-        g.setColor(COLOR_PLAYER_NAME) ;
+        g.setFont(getResourcesLoader().getFont(22 * mCoef)) ;
+        g.setColor(mIndex == getGame().getPlayerIndex() ? Display.CD_PRIMARY : Display.CL_PRIMARY) ;
         g.drawString((name.length() > MAX_LENGTH_PLAYER_NAME) ?
                         name.substring(0, MAX_LENGTH_PLAYER_NAME).concat("..") : name,
                 x + (int) (DISTANCE_LEFT_TO_NAME * mCoef),
@@ -311,8 +309,8 @@ public class PlayerBoard extends Drawable
 
     private void paintPlayerPoints(Graphics g, int x, int y)
     {
-        g.setFont(getResourcesLoader().getFont(18 * mCoef)) ;
-        g.setColor(COLOR_PLAYER_POINTS) ;
+        g.setFont(getResourcesLoader().getFont(20 * mCoef)) ;
+        g.setColor(mIndex == getGame().getPlayerIndex() ? Display.CD_TERTIARY : Display.CL_PRIMARY) ;
         g.drawString(String.valueOf(getPlayer(mIndex).getScore()).concat(MESSAGE_POINTS),
                 x + (int) (DISTANCE_LEFT_TO_POINTS * mCoef),
                 y + (int) (DISTANCE_TOP_TO_POINTS * mCoef)) ;

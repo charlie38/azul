@@ -5,15 +5,15 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import azul.view.Display;
-import azul.view.drawable.factory.TilesFactory;
+import azul.view.drawable.tutorial.Background;
 
-public class DrawingPanelTuto extends JPanel
+public class DrawingTutoPanel extends JPanel
 {
     private Display mDisplay;
 
     private Background mBackground;
 
-    public DrawingPanelTuto(Display display)
+    public DrawingTutoPanel(Display display)
     {
         mDisplay = display;
         mBackground = new Background(mDisplay);

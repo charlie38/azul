@@ -51,7 +51,7 @@ public class ChoosePatternLine extends Move
     @Override
     public void do_(Game game)
     {
-        mPlayer.addTilesInPattern(this) ;
+        mPlayer.addTilesInPattern(this, game.getTilesAside()) ;
 
         if (game.isRoundOver())
         {

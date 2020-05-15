@@ -2,6 +2,7 @@ package azul.view.ui.screen;
 
 import azul.model.Game;
 import azul.view.Display;
+import azul.view.drawable.DrawingGamePanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -45,23 +46,29 @@ public class InGame extends Screen
     private JButton mSettingsHuman ;
     private JButton mNext ;
     // To switch.
+    private JPanel mCardPanel ;
     private CardLayout mCardLayout ;
 
     /**
      * Contains the "in game" components <-> is the in game screen.
      * @param display is the root.
      */
-    public InGame(Display display)
+    public InGame(Display display, DrawingGamePanel canvas)
     {
         super(display, 1, 1) ;
 
-        setBackground(Display.BG_IN_GAME) ;
+        setLayout(new BorderLayout(HGAP, VGAP)) ;
         setBorder(new EmptyBorder(25, 25, 25, 25)) ;
+        setBackground(Display.BG_IN_GAME) ;
         // Create components and add them.
         mCardLayout = new CardLayout() ;
-        setLayout(mCardLayout) ;
+        mCardPanel = new JPanel(mCardLayout) ;
+
         createIAs() ;
         createHuman() ;
+
+        add(mCardPanel, BorderLayout.SOUTH) ;
+        add(canvas, BorderLayout.CENTER) ;
     }
 
     private void createIAs()
@@ -98,7 +105,7 @@ public class InGame extends Screen
         mEnd.setEnabled(false) ;
         mIAs.add(mEnd) ;
 
-        add(mIAs, IA_PANEL) ;
+        mCardPanel.add(mIAs, IA_PANEL) ;
     }
 
     private void createHuman()
@@ -123,13 +130,13 @@ public class InGame extends Screen
         mNext.setEnabled(false) ;
         mHuman.add(mNext) ;
 
-        add(mHuman, HUMAN_PANEL) ;
+        mCardPanel.add(mHuman, HUMAN_PANEL) ;
     }
 
     @Override
     public void update(java.util.Observable observable, Object o)
     {
-        mCardLayout.show(this, getGame().isOnlyIAs() ? IA_PANEL : HUMAN_PANEL) ;
+        mCardLayout.show(mCardPanel, getGame().isOnlyIAs() ? IA_PANEL : HUMAN_PANEL) ;
 
         if (getGame().getState() == Game.State.START)
         {

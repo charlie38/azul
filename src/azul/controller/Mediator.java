@@ -67,6 +67,11 @@ public class Mediator implements Observer
         // Current player for this turn.
         Player player = mGame.getPlayer() ;
 
+        if (mGame.getState() == Game.State.INTERRUPT_IAS)
+        {
+            return ;
+        }
+
         if (player instanceof IAPlayer)
         {
             // It's a IA turn.

@@ -1,7 +1,8 @@
 package azul.view.ui;
 
 import azul.view.Display;
-import azul.view.drawable.DrawingPanel;
+import azul.view.drawable.DrawingGamePanel;
+import azul.view.drawable.DrawingTutoPanel;
 import azul.view.ui.screen.*;
 
 import javax.swing.*;
@@ -20,8 +21,9 @@ public class UIPanel extends JPanel
     private InGame mInGame ;
     private Settings mSettings ;
     private GameOver mGameOver ;
-    // Drawing panel (canvas used to draw the game).
-    private DrawingPanel mCanvas ;
+    // Drawing panels (canvases used to draw the game and tutorial).
+    private DrawingGamePanel mGameCanvas ;
+    private DrawingTutoPanel mTutoCanvas ;
     // To switch between screens.
     private CardLayout mLayout ;
 
@@ -38,21 +40,19 @@ public class UIPanel extends JPanel
 
     private void initialize()
     {
-        // Create the components.
         mLayout = new CardLayout(0, 0) ;
+        // Canvases.
+        mGameCanvas = new DrawingGamePanel(mDisplay) ;
+        mTutoCanvas = new DrawingTutoPanel(mDisplay) ;
+        // Create the components.
         mMainMenu = new MainMenu(mDisplay) ;
-        mTutorial = new Tutorial(mDisplay) ;
+        mTutorial = new Tutorial(mDisplay, mTutoCanvas) ;
         mPrepare = new Prepare(mDisplay) ;
         mPrepareIAs = new PrepareIAs(mDisplay) ;
         mCredits = new Credits(mDisplay) ;
-        mInGame = new InGame(mDisplay) ;
+        mInGame = new InGame(mDisplay, mGameCanvas) ;
         mSettings = new Settings(mDisplay) ;
         mGameOver = new GameOver(mDisplay) ;
-        mCanvas = new DrawingPanel(mDisplay) ;
-        // In game screen is different. It needs a UI part and a drawing part.
-        JPanel inGamePanel = new JPanel(new BorderLayout(0, 0)) ;
-        inGamePanel.add(mInGame, BorderLayout.SOUTH) ;
-        inGamePanel.add(mCanvas, BorderLayout.CENTER) ;
         // Add the components.
         setLayout(mLayout) ;
         add(mMainMenu, Display.State.MAIN_MENU.toString()) ;
@@ -60,7 +60,7 @@ public class UIPanel extends JPanel
         add(mPrepare, Display.State.PREPARE.toString()) ;
         add(mPrepareIAs, Display.State.PREPARE_IAS.toString()) ;
         add(mCredits, Display.State.CREDITS.toString()) ;
-        add(inGamePanel, Display.State.IN_GAME.toString()) ;
+        add(mInGame, Display.State.IN_GAME.toString()) ;
         add(mSettings, Display.State.SETTINGS.toString()) ;
         add(mGameOver, Display.State.GAME_OVER.toString()) ;
     }
@@ -78,6 +78,8 @@ public class UIPanel extends JPanel
      */
     public void onGoTutorial()
     {
+        mTutorial.goToFirstStep() ;
+
         mLayout.show(this, Display.State.TUTORIAL.toString()) ;
     }
 
@@ -133,8 +135,13 @@ public class UIPanel extends JPanel
         mLayout.show(this, Display.State.GAME_OVER.toString()) ;
     }
 
-    public DrawingPanel getDrawingPanel()
+    public DrawingGamePanel getGameCanvas()
     {
-        return mCanvas ;
+        return mGameCanvas ;
+    }
+
+    public DrawingTutoPanel getTutoCanvas()
+    {
+        return mTutoCanvas ;
     }
 }
