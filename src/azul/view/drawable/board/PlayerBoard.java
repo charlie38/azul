@@ -18,18 +18,18 @@ public class PlayerBoard extends Drawable
     public static final int WIDTH_BOARD = (int) (349 * SIZE_COEF) ;
     public static final int HEIGHT_BOARD = (int) (234 * SIZE_COEF) ;
     // Wall cases and tiles (bg).
-    public static final int WIDTH_WALL_TILE = (int) (22 * SIZE_COEF) ;
-    public static final int HEIGHT_WALL_TILE = (int) (22 * SIZE_COEF) ;
-    public final int SPACE_H_WALL_TILE = (int) (8 * SIZE_COEF) ;
-    public final int SPACE_V_WALL_TILE = (int) (8 * SIZE_COEF) ;
+    public static final int WIDTH_WALL_TILE = (int) (27 * SIZE_COEF) ;
+    public static final int HEIGHT_WALL_TILE = (int) (27 * SIZE_COEF) ;
+    public final int SPACE_H_WALL_TILE = (int) (2. * SIZE_COEF) ;
+    public final int SPACE_V_WALL_TILE = (int) (2. * SIZE_COEF) ;
     public final int DISTANCE_LEFT_TO_WALL = (int) (155 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_WALL = (int) (38 * SIZE_COEF) ;
     // Pattern lines cases and tiles (bg).
-    public static final int WIDTH_PL_TILE = (int) (22 * SIZE_COEF) ;
-    public static final int HEIGHT_PL_TILE = (int) (22 * SIZE_COEF) ;
+    public static final int WIDTH_PL_TILE = (int) (26 * SIZE_COEF) ;
+    public static final int HEIGHT_PL_TILE = (int) (26 * SIZE_COEF) ;
     public final int SPACE_H_PL_TILE = (int) (0 * SIZE_COEF) ;
-    public final int SPACE_V_PL_TILE = (int) (8 * SIZE_COEF) ;
-    public final int DISTANCE_LEFT_TO_PL = (int) (43 * SIZE_COEF) ;
+    public final int SPACE_V_PL_TILE = (int) (2.2 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_PL = (int) (20 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_PL = (int) (38 * SIZE_COEF) ;
     // Pattern lines arrows.
     public static final int WIDTH_PL_ARROW = (int) (25 * SIZE_COEF) ;

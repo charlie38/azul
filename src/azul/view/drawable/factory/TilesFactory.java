@@ -16,13 +16,13 @@ public class TilesFactory extends Drawable
     // /!\ Change all factory components size.
     public static final float SIZE_COEF = 1.2f ;
     // Factory bg.
-    public static final int WIDTH_FACTORY = (int) (70 * SIZE_COEF) ;
+    public static final int WIDTH_FACTORY = (int) (82 * SIZE_COEF) ;
     public static final int HEIGHT_FACTORY = (int) (100 * SIZE_COEF) ;
     // Cases and tiles.
-    public final int DISTANCE_LEFT_TO_TILE = (int) (10 * SIZE_COEF) ;
-    public final int DISTANCE_TOP_TO_TILE = (int) (20 * SIZE_COEF) ;
-    public static final int WIDTH_TILE = (int) (22 * SIZE_COEF) ;
-    public static final int HEIGHT_TILE = (int) (22 * SIZE_COEF) ;
+    public final int DISTANCE_LEFT_TO_TILE = (int) (7.5 * SIZE_COEF) ;
+    public final int DISTANCE_TOP_TO_TILE = (int) (15 * SIZE_COEF) ;
+    public static final int WIDTH_TILE = (int) (30 * SIZE_COEF) ;
+    public static final int HEIGHT_TILE = (int) (30 * SIZE_COEF) ;
     public final int SPACE_H_TILE = (WIDTH_FACTORY - (2 * WIDTH_TILE) - (2 * DISTANCE_LEFT_TO_TILE)) ;
     public final int SPACE_V_TILE = (HEIGHT_FACTORY - (2 * HEIGHT_TILE) - (2 * DISTANCE_TOP_TO_TILE)) ;
 

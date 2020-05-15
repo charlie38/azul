@@ -15,9 +15,11 @@ public class UIPanel extends JPanel
     private MainMenu mMainMenu ;
     private Tutorial mTutorial ;
     private Prepare mPrepare ;
+    private PrepareIAs mPrepareIAs ;
     private Credits mCredits ;
     private InGame mInGame ;
     private Settings mSettings ;
+    private GameOver mGameOver ;
     // Drawing panel (canvas used to draw the game).
     private DrawingPanel mCanvas ;
     // To switch between screens.
@@ -41,9 +43,11 @@ public class UIPanel extends JPanel
         mMainMenu = new MainMenu(mDisplay) ;
         mTutorial = new Tutorial(mDisplay) ;
         mPrepare = new Prepare(mDisplay) ;
+        mPrepareIAs = new PrepareIAs(mDisplay) ;
         mCredits = new Credits(mDisplay) ;
         mInGame = new InGame(mDisplay) ;
         mSettings = new Settings(mDisplay) ;
+        mGameOver = new GameOver(mDisplay) ;
         mCanvas = new DrawingPanel(mDisplay) ;
         // In game screen is different. It needs a UI part and a drawing part.
         JPanel inGamePanel = new JPanel(new BorderLayout(0, 0)) ;
@@ -54,9 +58,11 @@ public class UIPanel extends JPanel
         add(mMainMenu, Display.State.MAIN_MENU.toString()) ;
         add(mTutorial, Display.State.TUTORIAL.toString()) ;
         add(mPrepare, Display.State.PREPARE.toString()) ;
+        add(mPrepareIAs, Display.State.PREPARE_IAS.toString()) ;
         add(mCredits, Display.State.CREDITS.toString()) ;
         add(inGamePanel, Display.State.IN_GAME.toString()) ;
         add(mSettings, Display.State.SETTINGS.toString()) ;
+        add(mGameOver, Display.State.GAME_OVER.toString()) ;
     }
 
     /**
@@ -86,6 +92,14 @@ public class UIPanel extends JPanel
     }
 
     /**
+     * Called when user selects the "START" option.
+     */
+    public void onGoPrepareIAs()
+    {
+        mLayout.show(this, Display.State.PREPARE_IAS.toString()) ;
+    }
+
+    /**
      * Called when user selects the "CREDITS" option.
      */
     public void onGoCredits()
@@ -107,6 +121,16 @@ public class UIPanel extends JPanel
     public void onGoSettings()
     {
         mLayout.show(this, Display.State.SETTINGS.toString()) ;
+    }
+
+    /**
+     * Called when the game is over.
+     */
+    public void onGoGameOver()
+    {
+        mGameOver.refresh() ;
+
+        mLayout.show(this, Display.State.GAME_OVER.toString()) ;
     }
 
     public DrawingPanel getDrawingPanel()

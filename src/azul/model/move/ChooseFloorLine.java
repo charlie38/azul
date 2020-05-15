@@ -47,14 +47,7 @@ public class ChooseFloorLine extends Move
     {
         mPlayer.addTilesInFloor(this, game.getTilesAside()) ;
 
-        // Check if game over, or round over.
-        if (game.isGameOver())
-        {
-            game.playMove(new DecorateWall(game.getPlayers(), game.getFactories(), game.getTilesTable(),
-                    game.getPlayerIndex())) ;
-            game.setState(Game.State.GAME_OVER) ;
-        }
-        else if (game.isRoundOver())
+        if (game.isRoundOver())
         {
             game.setState(Game.State.DECORATE_WALL) ;
 
@@ -62,8 +55,6 @@ public class ChooseFloorLine extends Move
             {
                 game.playMove(new DecorateWall(game.getPlayers(), game.getFactories(), game.getTilesTable(),
                         game.getPlayerIndex())) ;
-
-                game.prepareForRound() ;
             }
         }
         else

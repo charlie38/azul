@@ -61,7 +61,7 @@ public abstract class Player
         {
             try
             {
-                mPlayerBoard.addToFloorLine(Tile.takeFirstPlayerMaker()) ;
+                mPlayerBoard.setInFloorLine(0, Tile.takeFirstPlayerMaker()) ;
                 tableTiles.set(0, Tile.EMPTY) ;
             }
             catch (Tile.FirstPlayerMarkerException | PlayerBoard.PlayerBoardException e)

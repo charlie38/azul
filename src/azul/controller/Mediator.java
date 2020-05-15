@@ -17,7 +17,9 @@ import java.util.Observer;
 public class Mediator implements Observer
 {
     // Delay btw two IA moves.
-    private final int ANIMATION_IA_DELAY = 1000 ;
+    public static final int ANIMATION_IA_DEFAULT_DELAY = 1000 ;
+    public static final int ANIMATION_IA_NO_DELAY = 0 ;
+    private int ANIMATION_IA_DELAY = 1000 ;
 
     // Model part.
     private Game mGame ;
@@ -28,6 +30,8 @@ public class Mediator implements Observer
     private IAMinimax mIAMinimax ;
     // If only IAs playing.
     private boolean mIAStarted ;
+    // For delaying IAs plays.
+    private Timer mIATimer ;
 
     /**
      * Play moves on user interactions.
@@ -45,28 +49,21 @@ public class Mediator implements Observer
 
     public void onClick(Drawable selected)
     {
-        if (mGame.isOnlyIAs() && ! mIAStarted)
-        {
-            IAPlay() ;
-            mIAStarted = true ;
-        }
-        else
-        {
-            // Current player for this turn.
-            Player player = mGame.getPlayer() ;
+        // Current player for this turn.
+        Player player = mGame.getPlayer() ;
 
-            if (player instanceof HumanPlayer)
-            {
-                // It's an human turn.
-                mHuman.onClick(selected) ;
-                // Check if it's a IA turn.
-                IAPlay() ;
-            }
+        if (player instanceof HumanPlayer)
+        {
+            // It's an human turn.
+            mHuman.onClick(selected) ;
+            // Check if it's a IA turn.
+            IAPlay() ;
         }
     }
 
-    private void IAPlay()
+    public void IAPlay()
     {
+        mIAStarted = true ;
         // Current player for this turn.
         Player player = mGame.getPlayer() ;
 
@@ -83,26 +80,78 @@ public class Mediator implements Observer
 
     private void playIAMove(Move move)
     {
-        Timer timer = new Timer(ANIMATION_IA_DELAY,
-                actionEvent ->
-                {
-                    mGame.playMove(move) ;
-                    IAPlay() ;
-                }
-        ) ;
-        timer.setRepeats(false) ;
-        timer.start() ;
+        if (mGame.getState() == Game.State.GAME_OVER)
+        {
+            return ;
+        }
+
+        if (ANIMATION_IA_DELAY == ANIMATION_IA_NO_DELAY)
+        {
+            mGame.playMove(move) ;
+            IAPlay() ;
+        }
+        else
+        {
+            mIATimer = new Timer(ANIMATION_IA_DELAY,
+                    actionEvent ->
+                    {
+                        mGame.playMove(move) ;
+                        IAPlay() ;
+                    }
+            ) ;
+            mIATimer.setRepeats(false) ;
+            mIATimer.start() ;
+        }
     }
 
     @Override
     public void update(Observable observable, Object o)
     {
-        if (mGame.getState() == Game.State.START)
+        switch (mGame.getState())
         {
-            mIARandom.initialize() ;
-            mIAMinimax.initialize() ;
-
-            mIAStarted = false ;
+            case START : onStart() ; break ;
+            case INTERRUPT_IAS : onInterruptIAs() ; break ;
+            case CONTINUE_IAS_DELAY : onContinueIAsWithDelay() ; break ;
+            case CONTINUE_IAS_NO_DELAY : onContinueIAsWithNoDelay() ; break ;
         }
+    }
+
+    private void onStart()
+    {
+        mIARandom.initialize() ;
+        mIAMinimax.initialize() ;
+
+        mIAStarted = false ;
+        ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;
+    }
+
+    private void onInterruptIAs()
+    {
+        if (mIATimer != null)
+        {
+            mIATimer.stop() ;
+        }
+    }
+
+    private void onContinueIAsWithDelay()
+    {
+        onInterruptIAs() ;
+
+        ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;
+
+        mGame.setState(mGame.getPreviousState()) ;
+
+        IAPlay() ;
+    }
+
+private void onContinueIAsWithNoDelay()
+    {
+        onInterruptIAs() ;
+
+        ANIMATION_IA_DELAY = ANIMATION_IA_NO_DELAY ;
+
+        mGame.setState(mGame.getPreviousState()) ;
+
+        IAPlay() ;
     }
 }

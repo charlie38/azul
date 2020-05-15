@@ -1,5 +1,6 @@
 package azul.model;
 
+import azul.controller.Mediator;
 import azul.model.history.History;
 import azul.model.move.*;
 import azul.model.player.HumanPlayer;
@@ -15,7 +16,8 @@ import java.util.Observable;
 public class Game extends Observable
 {
     // Game states.
-    public enum State { START, CHOOSE_TILES, SELECT_ROW, DECORATE_WALL, GAME_OVER }
+    public enum State { START, CHOOSE_TILES, SELECT_ROW, DECORATE_WALL, INTERRUPT_IAS, CONTINUE_IAS_DELAY,
+        CONTINUE_IAS_NO_DELAY, BEGINNING, GAME_OVER }
 
     // Size of the tiles bag.
     public static final int SIZE_TILES_REMAINING = 100 ;
@@ -39,7 +41,9 @@ public class Game extends Observable
     // The player who must play during this game turn.
     private int mCurrentPlayer ;
     // Current game state.
-    private State mState ;
+    private State mState, mPreviousState ;
+    // True if game finished (in the history).
+    private boolean mIsGameFinished ;
 
     /**
      * Contains the game objects ; players, tiles factories and tiles bag.
@@ -74,8 +78,10 @@ public class Game extends Observable
             e.printStackTrace() ;
             return ;
         }
-        
+
+        mIsGameFinished = false ;
         mHistory.clean() ;
+        notifyGameStart() ;
         // Initialize game objects.
         initializePlayers(playersTypes, playerNames) ;
         initializeTilesRemaining() ;
@@ -101,11 +107,9 @@ public class Game extends Observable
         mTilesTable.set(0, Tile.FIRST_PLAYER_MAKER) ;
         // Initialize the 'first player marker'.
         Tile.onRoundStart() ;
-        // Notify the mediator via the observer pattern (the only interaction between model and mediator to init the IAs).
-        notifyMediator() ;
 
         mCurrentPlayer = 0 ;
-        mState = State.CHOOSE_TILES ;
+        setState(State.CHOOSE_TILES) ;
         // Notify the UI.
         setChanged() ;
         notifyObservers() ;
@@ -162,10 +166,26 @@ public class Game extends Observable
         }
     }
 
-    private void notifyMediator()
+    private void notifyGameStart()
     {
-        mState = State.START ;
+        setState(State.START) ;
         // Notify the mediator.
+        setChanged() ;
+        notifyObservers() ;
+    }
+
+    public void notifyGameOver()
+    {
+        setState(Game.State.GAME_OVER) ;
+        // Notify the mediator.
+        setChanged() ;
+        notifyObservers() ;
+    }
+
+    public void notifyBeginning()
+    {
+        setState(State.BEGINNING) ;
+        // Notify the UI.
         setChanged() ;
         notifyObservers() ;
     }
@@ -236,6 +256,62 @@ public class Game extends Observable
     }
 
     /**
+     * When only IAs playing.
+     */
+
+    public void goToFirstMove()
+    {
+        // Read all the moves.
+        Move move ;
+
+        while (mHistory.canUndo() && (move = mHistory.undo()) != null)
+        {
+            // Undo the move.
+            move.undo(this) ;
+        }
+
+        notifyBeginning() ;
+    }
+
+    public void goToLastMove()
+    {
+        if (! mIsGameFinished)
+        {
+            continueIAs(State.CONTINUE_IAS_NO_DELAY) ;
+        }
+        else
+        {
+            // Read all the moves.
+            Move move ;
+
+            while (mHistory.canRedo() && (move = mHistory.redo()) != null)
+            {
+                // Undo the move.
+                move.redo(this) ;
+            }
+            // Notify the UI.
+            setChanged() ;
+            notifyObservers() ;
+        }
+    }
+
+    public void interruptIAs()
+    {
+        setState(State.INTERRUPT_IAS) ;
+        // Notify the Mediator.
+        setChanged() ;
+        notifyObservers() ;
+    }
+
+    public void continueIAs(State state)
+    {
+        setState(state) ;
+        // Notify the Mediator.
+        setChanged() ;
+        notifyObservers() ;
+    }
+
+    /**
      * Game actions.
      */
 
@@ -287,6 +363,12 @@ public class Game extends Observable
 
     public void setState(State newState)
     {
+        if (newState != State.CONTINUE_IAS_DELAY && newState != State.CONTINUE_IAS_NO_DELAY)
+        {
+            // Needs to keep in memory this state to continue the game when IAs playing.
+            mPreviousState = mState ;
+        }
+
         mState = newState ;
     }
 
@@ -335,6 +417,7 @@ public class Game extends Observable
         {
             if (player.checkGameOver())
             {
+                mIsGameFinished = true ;
                 return true ;
             }
         }
@@ -397,6 +480,11 @@ public class Game extends Observable
         }
 
         return true ;
+    }
+
+    public boolean isGameFinished()
+    {
+        return mIsGameFinished ;
     }
 
     public Player getPlayer()
@@ -462,6 +550,11 @@ public class Game extends Observable
     public State getState()
     {
         return mState ;
+    }
+
+    public State getPreviousState()
+    {
+        return mPreviousState ;
     }
 
     public History getHistory()

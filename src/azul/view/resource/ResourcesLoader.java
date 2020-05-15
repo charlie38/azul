@@ -37,6 +37,8 @@ public class ResourcesLoader
     private ImageAzul mFactory, mFactoryF ;
     private ImageAzul mFactoryCase, mFactoryCaseS ;
     // In game navigation.
+    private ImageAzul mPause ;
+    private ImageAzul mPlay ;
     private ImageAzul mPrevious ;
     private ImageAzul mNext ;
     private ImageAzul mSettings ;
@@ -55,6 +57,7 @@ public class ResourcesLoader
         try
         {
             mFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/liquidism_part_2.ttf")) ;
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mFont) ;
         }
         catch (FontFormatException | IOException e)
         {
@@ -97,6 +100,8 @@ public class ResourcesLoader
         mFactoryF = new ImageAzul("res/img/bowl_focused.png") ;
         mFactoryCase = new ImageAzul("res/img/bowlcase.png") ;
         mFactoryCaseS = new ImageAzul("res/img/bowlcase_blur.png") ;
+        mPause = new ImageAzul("res/img/pause.png") ;
+        mPlay = new ImageAzul("res/img/play.png") ;
         mPrevious = new ImageAzul("res/img/rewind.png") ;
         mNext = new ImageAzul("res/img/forward.png") ;
         mSettings = new ImageAzul("res/img/settings.png") ;
@@ -231,6 +236,22 @@ public class ResourcesLoader
     public Image getFactoryCaseSelected()
     {
         return mFactoryCaseS.get() ;
+    }
+
+    public Image getPause()
+    {
+        return mPause.get().getScaledInstance(
+                InGame.PAUSE_WIDTH,
+                InGame.PAUSE_HEIGHT,
+                Image.SCALE_SMOOTH) ;
+    }
+
+    public Image getPlay()
+    {
+        return mPlay.get().getScaledInstance(
+                InGame.PLAY_WIDTH,
+                InGame.PLAY_HEIGHT,
+                Image.SCALE_SMOOTH) ;
     }
 
     public Image getPrevious()

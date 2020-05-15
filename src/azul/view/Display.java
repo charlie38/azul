@@ -8,19 +8,23 @@ import azul.view.ui.UIPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Display implements Runnable
+public class Display implements Runnable, Observer
 {
 	// Menu/game states.
-	public enum State { MAIN_MENU, TUTORIAL, PREPARE, CREDITS, IN_GAME, SETTINGS }
+	public enum State { MAIN_MENU, TUTORIAL, PREPARE, PREPARE_IAS, CREDITS, IN_GAME, SETTINGS, GAME_OVER }
 
 	// Background colors.
 	public static final Color BG_MAIN_MENU = new Color(0x4A4E49) ;
 	public static final Color BG_TUTORIAL = new Color(0x4A4E49);
 	public static final Color BG_PREPARE = new Color(0x4A4E49) ;
+	public static final Color BG_PREPARE_IAS = new Color(0x4A4E49) ;
 	public static final Color BG_CREDITS = new Color(0x4A4E49) ;
 	public static final Color BG_IN_GAME = new Color(0X4A4E49) ;
 	public static final Color BG_SETTINGS = new Color(0X4A4E49) ;
+	public static final Color BG_GAME_OVER = new Color(0X4A4E49) ;
 	public static final Color BG_TUTORIAL_LABEL = new Color(0X808080);
 	// Text/component bg colors.
 	public static final Color CL_PRIMARY = new Color(0xB0B0B0) ;
@@ -57,6 +61,8 @@ public class Display implements Runnable
 	    mGame = game ;
 	    mMediator = mediator ;
 		mResourcesLoader = new ResourcesLoader() ;
+		// Observe the game.
+		game.addObserver(this) ;
 
 		initializeUI() ;
 	}
@@ -85,6 +91,20 @@ public class Display implements Runnable
 		mFrame.setVisible(true) ;
 		// Start in the main menu.
 		onGoMainMenu() ;
+	}
+	@Override
+	public void update(Observable observable, Object o)
+	{
+		if (mGame.getState() == Game.State.GAME_OVER)
+		{
+			if (mGame.isOnlyIAs())
+			{
+				// TODO
+				return ;
+			}
+
+			onGoGameOver() ;
+		}
 	}
 
 	/**
@@ -115,6 +135,15 @@ public class Display implements Runnable
 	}
 
 	/**
+	 * Called when user wants to play only with IAs.
+	 */
+	public void onGoPrepareIAs()
+	{
+		mState = State.PREPARE_IAS ;
+		mUIPanel.onGoPrepareIAs() ;
+	}
+
+	/**
 	 * Called when user selects the "CREDITS" option.
 	 */
 	public void onGoCredits()
@@ -139,6 +168,15 @@ public class Display implements Runnable
 	{
 		mState = State.SETTINGS ;
 		mUIPanel.onGoSettings() ;
+	}
+
+	/**
+	 * Called when the game is over.
+	 */
+	public void onGoGameOver()
+	{
+		mState = State.GAME_OVER ;
+		mUIPanel.onGoGameOver() ;
 	}
 
 	/**
@@ -186,5 +224,10 @@ public class Display implements Runnable
 	public Frame getFrame()
 	{
 		return mFrame ;
+	}
+
+	public Mediator getMediator()
+	{
+		return mMediator ;
 	}
 }

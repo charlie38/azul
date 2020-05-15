@@ -75,6 +75,15 @@ public class DecorateWall extends Move
     public void do_(Game game)
     {
         game.decorateWalls() ;
+
+        if (game.isGameOver() && game.getState() != Game.State.GAME_OVER)
+        {
+            game.notifyGameOver() ;
+        }
+        else
+        {
+            game.prepareForRound() ;
+        }
     }
 
     @Override

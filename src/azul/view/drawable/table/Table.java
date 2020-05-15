@@ -18,8 +18,8 @@ public class Table extends Drawable
     // Tiles on the table.
     public final int TABLE_ROWS = 9 ;
     public final int TABLE_COLUMNS = 4 ;
-    public static final int WIDTH_TILE = (int) (30 * SIZE_COEF) ;
-    public static final int HEIGHT_TILE = (int) (30 * SIZE_COEF) ;
+    public static final int WIDTH_TILE = (int) (37.5 * SIZE_COEF) ;
+    public static final int HEIGHT_TILE = (int) (37.5 * SIZE_COEF) ;
     public final int DISTANCE_LEFT_TO_TILE = (int) (25 * SIZE_COEF) ;
     public final int DISTANCE_TOP_TO_TILE = (int) (25 * SIZE_COEF) ;
     public final int SPACE_H_TILE = (WIDTH_TABLE - 2 * DISTANCE_LEFT_TO_TILE - TABLE_COLUMNS * WIDTH_TILE) / (TABLE_COLUMNS - 1) ;

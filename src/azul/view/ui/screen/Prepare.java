@@ -115,7 +115,15 @@ public class Prepare extends Screen
                 {
                     getDisplay().getUIPanel().getDrawingPanel().startGame(mNbPlayers) ;
                     getGame().startGame(getPlayersIA(), getPlayersNames()) ;
-                    getDisplay().onGoInGame() ;
+
+                    if (getGame().isOnlyIAs())
+                    {
+                        getDisplay().onGoPrepareIAs() ;
+                    }
+                    else
+                    {
+                        getDisplay().onGoInGame() ;
+                    }
                 }
         )) ;
     }

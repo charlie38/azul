@@ -16,8 +16,6 @@ public class DrawingPanel extends JPanel
 
     // Root ref.
     private Display mDisplay ;
-    // Game background.
-    private Background mBackground ;
     // Bowls table
     private Table mTable ;
     // Players board.
@@ -35,7 +33,6 @@ public class DrawingPanel extends JPanel
         mBoards = new ArrayList<>() ;
         mFactories = new ArrayList<>() ;
 
-        createBackground() ;
         createTable() ;
         // To update all components animations, by redrawing the canvas once.
         // (avoid calling "DrawingPanel.repaint()" each time a component animation should refresh UI <~> like a game loop)
@@ -47,11 +44,6 @@ public class DrawingPanel extends JPanel
         // Create new game objects.
         createPlayers(nbPlayers) ;
         createFactories(mDisplay.getGame().getNbTilesFactories(nbPlayers)) ;
-    }
-
-    private void createBackground()
-    {
-        mBackground = new Background(mDisplay) ;
     }
 
     private void createTable()
@@ -103,9 +95,9 @@ public class DrawingPanel extends JPanel
 
                 switch (j)
                 {
-                    case 0 : deltaX = -1.75f ; break ;
+                    case 0 : deltaX = -1.5f ; break ;
                     case 1 : deltaX = -.5f ; break ;
-                    case 2 : deltaX = .75f ; break ;
+                    case 2 : deltaX = .5f ; break ;
                 }
 
                 mFactories.add(new TilesFactory(mDisplay,
@@ -168,7 +160,8 @@ public class DrawingPanel extends JPanel
 
     private void paintBackground(Graphics g)
     {
-        mBackground.paint(g) ;
+        g.setColor(Display.BG_IN_GAME) ;
+        g.fillRect(0, 0, getWidth(), getHeight()) ;
     }
 
     private void paintTable(Graphics g)
