@@ -289,9 +289,8 @@ public class Game extends Observable
                 // Undo the move.
                 move.redo(this) ;
             }
-            // Notify the UI.
-            setChanged() ;
-            notifyObservers() ;
+
+            notifyGameOver() ;
         }
     }
 
