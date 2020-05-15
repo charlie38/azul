@@ -2,6 +2,7 @@ package azul.view.ui.screen;
 
 import azul.view.Display;
 
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class PrepareIAs extends Screen
@@ -17,12 +18,13 @@ public class PrepareIAs extends Screen
      */
     public PrepareIAs(Display display)
     {
-        super(display, 3, 1) ;
+        super(display, 4, 1) ;
 
         setBackground(Display.BG_PREPARE_IAS) ;
         setBorder(new EmptyBorder(100, 100, 100, 100)) ;
         // Create components and add them.
         add(createLabel(MESSAGE_TITLE, Display.CL_PRIMARY, 40)) ;
+        add(Box.createVerticalGlue()) ;
         add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent ->
                 {

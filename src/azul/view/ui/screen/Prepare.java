@@ -1,5 +1,6 @@
 package azul.view.ui.screen;
 
+import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.component.JHintTextField;

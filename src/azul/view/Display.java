@@ -97,12 +97,6 @@ public class Display implements Runnable, Observer
 	{
 		if (mGame.getState() == Game.State.GAME_OVER)
 		{
-			if (mGame.isOnlyIAs())
-			{
-				// TODO
-				return ;
-			}
-
 			onGoGameOver() ;
 		}
 	}
