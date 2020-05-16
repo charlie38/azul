@@ -85,4 +85,9 @@ public class TakeOnTable extends Move
     {
         return mTilesSelected ;
     }
+
+    public ArrayList<Tile> getTilesTable()
+    {
+        return mTableTiles ;
+    }
 }

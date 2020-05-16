@@ -63,7 +63,6 @@ public class Mediator implements Observer
 
     public void IAPlay()
     {
-        mIAStarted = true ;
         // Current player for this turn.
         Player player = mGame.getPlayer() ;
 
@@ -74,6 +73,7 @@ public class Mediator implements Observer
 
         if (player instanceof IAPlayer)
         {
+            mIAStarted = true ;
             // It's a IA turn.
             switch (((IAPlayer) player).getType())
             {

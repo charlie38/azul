@@ -22,7 +22,7 @@ public class ResourcesLoader
     // Tiles table.
     private ImageAzul mTable ;
     // Tiles.
-    private ImageAzul mToken, mTokenF ;
+    private ImageAzul mToken, mTokenS, mTokenB ;
 	private ImageAzul mFlower, mFlowerS, mFlowerB ;
 	private ImageAzul mClaw, mClawS, mClawB ;
 	private ImageAzul mMushroom, mMushroomS, mMushroomB ;
@@ -72,7 +72,8 @@ public class ResourcesLoader
         mBgTile = new ImageAzul("res/img/bg.png") ;
         mTable = new ImageAzul("res/img/table.png") ;
         mToken = new ImageAzul("res/img/token.png") ;
-        mTokenF = new ImageAzul("res/img/token_focused.png") ;
+        mTokenS = new ImageAzul("res/img/token_selected.png") ;
+        mTokenB = new ImageAzul("res/img/token_blur.png") ;
         mFlower = new ImageAzul("res/img/flower.png") ;
         mFlowerS = new ImageAzul("res/img/flower_selected.png") ;
         mFlowerB = new ImageAzul("res/img/flower_blur.png") ;
@@ -115,7 +116,7 @@ public class ResourcesLoader
     
     public Image getIngredient(Tile t)
     {
-    	switch(t)
+    	switch (t)
     	{
     		case CRYSTAL : return mCrystal.get() ;
     		case EYE : return mEye.get() ;
@@ -129,28 +130,28 @@ public class ResourcesLoader
 
     public Image getIngredientSelected(Tile t)
     {
-        switch(t)
+        switch (t)
         {
             case CRYSTAL : return mCrystalS.get() ;
             case EYE : return mEyeS.get() ;
             case CLAW : return mClawS.get() ;
             case FLOWER : return mFlowerS.get() ;
             case MUSHROOM : return mMushroomS.get() ;
-            case FIRST_PLAYER_MAKER : return mTokenF.get() ;
+            case FIRST_PLAYER_MAKER : return mTokenS.get() ;
             default : return null ;
         }
     }
 
     public Image getIngredientBlurred(Tile t)
     {
-        switch(t)
+        switch (t)
         {
             case CRYSTAL : return mCrystalB.get() ;
             case EYE : return mEyeB.get() ;
             case CLAW : return mClawB.get() ;
             case FLOWER : return mFlowerB.get() ;
             case MUSHROOM : return mMushroomB.get() ;
-            case FIRST_PLAYER_MAKER : return mToken.get() ;
+            case FIRST_PLAYER_MAKER : return mTokenB.get() ;
             default : return null ;
         }
     }

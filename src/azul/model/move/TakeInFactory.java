@@ -72,6 +72,11 @@ public class TakeInFactory extends Move
         do_(game) ;
     }
 
+    public ArrayList<Tile> getFactoryTiles()
+    {
+        return mFactoryTiles ;
+    }
+
     public ArrayList<Tile> getTilesSelected()
     {
         return mTilesSelected ;

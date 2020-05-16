@@ -1,5 +1,9 @@
 package azul.view.drawable.game.table;
 
+import azul.model.move.Move;
+import azul.model.move.TakeInFactory;
+import azul.model.move.TakeOnTable;
+import azul.model.tile.Tile;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -79,6 +83,40 @@ public class TableTile extends Drawable
                 getResourcesLoader().getIngredient(getGame().getInTilesTable(mIndex)) ;
 
         g.drawImage(ingredient, x, y, width, height, null) ;
+
+        paintOnTakeMove(g, x, y, width, height) ;
+    }
+
+    /**
+     * Add an animation when user took a tile from the table.
+     */
+    private void paintOnTakeMove(Graphics g, int x, int y, int width, int height)
+    {
+        Move move = null ;
+
+        if (getGame().getHistory().canUndo())
+        {
+            move = getGame().getHistory().getPrevious() ;
+        }
+        // If a move was played.
+        if (move instanceof TakeOnTable)
+        {
+            // If wants to take this tile, select it.
+            if (((TakeOnTable) move).isFirstToTakeFromTable()
+                    && ((TakeOnTable) move).getTilesTable().get(mIndex) == Tile.FIRST_PLAYER_MAKER)
+            {
+                if (((TakeOnTable) move).getTilesSelected().size() != 1)
+                {
+                    Image ingredient = getResourcesLoader().getIngredientSelected(Tile.FIRST_PLAYER_MAKER) ;
+                    g.drawImage(ingredient, x, y, width, height, null) ;
+                }
+            }
+            else if (((TakeOnTable) move).getTilesSelected().contains(((TakeOnTable) move).getTilesTable().get(mIndex)))
+            {
+                Image ingredient = getResourcesLoader().getIngredientSelected(((TakeOnTable) move).getTilesTable().get(mIndex)) ;
+                g.drawImage(ingredient, x, y, width, height, null) ;
+            }
+        }
     }
 
     public int getTileIndex()

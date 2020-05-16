@@ -4,6 +4,7 @@ import azul.model.Game;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.resource.ResourcesLoader;
+import azul.view.ui.screen.InGame;
 
 import javax.swing.*;
 import java.awt.*;

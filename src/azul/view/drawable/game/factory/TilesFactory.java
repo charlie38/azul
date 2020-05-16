@@ -1,6 +1,8 @@
 package azul.view.drawable.game.factory;
 
 import azul.model.Game;
+import azul.model.move.Move;
+import azul.model.move.TakeInFactory;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -139,6 +141,8 @@ public class TilesFactory extends Drawable
         Point point = computeCoef() ;
         // Bowl (bg).
         paintBg(g, point.x, point.y) ;
+        // If a 'TakeInFactory' move was played.
+        paintOnTakeMove(g, point.x, point.y) ;
         // Tiles.
         paintTiles(g) ;
     }
@@ -157,6 +161,33 @@ public class TilesFactory extends Drawable
         for (FactoryTile tile : mTiles)
         {
             tile.paint(g) ;
+        }
+    }
+
+    /**
+     * Add an animation when user took a tile from the factory.
+     */
+    private void paintOnTakeMove(Graphics g, int x, int y)
+    {
+        Move move = null ;
+
+        if (getGame().getHistory().canUndo())
+        {
+            move = getGame().getHistory().getPrevious() ;
+        }
+        // If a move was played.
+        if (move instanceof TakeInFactory)
+        {
+            // If it was this factory, highlight it.
+            if (((TakeInFactory) move).getFactory() == getGame().getFactory(mIndex))
+            {
+                Image img = getResourcesLoader().getFactoryFocused() ;
+
+                int width = (int) (WIDTH_FACTORY * mCoef) ;
+                int height = (int) (HEIGHT_FACTORY * mCoef) ;
+
+                g.drawImage(img, x, y, width, height, null) ;
+            }
         }
     }
 }

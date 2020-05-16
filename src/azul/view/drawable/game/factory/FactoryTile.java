@@ -1,5 +1,7 @@
 package azul.view.drawable.game.factory;
 
+import azul.model.move.Move;
+import azul.model.move.TakeInFactory;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -85,6 +87,35 @@ public class FactoryTile extends Drawable
 
         g.drawImage(bg, x, y, width, height, null) ;
         g.drawImage(ingredient, x, y, width, height, null) ;
+
+        paintOnTakeMove(g, x, y, width, height) ;
+    }
+
+    /**
+     * Add an animation when user took a tile from the factory.
+     */
+    private void paintOnTakeMove(Graphics g, int x, int y, int width, int height)
+    {
+        Move move = null ;
+
+        if (getGame().getHistory().canUndo())
+        {
+            move = getGame().getHistory().getPrevious() ;
+        }
+        // If a move was played.
+        if (move instanceof TakeInFactory)
+        {
+            // If the factory of the move is this one and if this tile was selected, draw it with a border.
+            if (((TakeInFactory) move).getFactory() == getGame().getFactory(mFactoryIndex)
+                    && ((TakeInFactory) move).getTilesSelected().get(0) == ((TakeInFactory) move)
+                    .getFactoryTiles().get(mIndex))
+            {
+                Image ingredient = getResourcesLoader().getIngredientSelected(((TakeInFactory) move).getFactoryTiles()
+                        .get(mIndex)) ;
+
+                g.drawImage(ingredient, x, y, width, height, null) ;
+            }
+        }
     }
 
     public int getFactoryIndex()

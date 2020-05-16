@@ -10,6 +10,8 @@ import java.awt.*;
 
 public class InGame extends Screen
 {
+    // Layout.
+    public static final int SIZE_BORDER = 25 ;
     // Buttons size.
     public static final int PREVIOUS_WIDTH = 30 ;
     public static final int PREVIOUS_HEIGHT = 30 ;
@@ -58,7 +60,7 @@ public class InGame extends Screen
         super(display, 1, 1) ;
 
         setLayout(new BorderLayout(HGAP, VGAP)) ;
-        setBorder(new EmptyBorder(25, 25, 25, 25)) ;
+        setBorder(new EmptyBorder(SIZE_BORDER, SIZE_BORDER, SIZE_BORDER, SIZE_BORDER)) ;
         setBackground(Display.BG_IN_GAME) ;
         // Create components and add them.
         mCardLayout = new CardLayout() ;

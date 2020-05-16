@@ -32,7 +32,7 @@ public abstract class Player
 
     public void takeTilesFromFactory(TakeInFactory move, ArrayList<Tile> tableTiles)
     {
-        mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone();
+        mTilesSelected = (ArrayList<Tile>) move.getTilesSelected().clone() ;
         // Add the remaining tiles in the factory on the table.
         for (int i = 0 ; i < TilesFactory.SIZE_FACTORY ; i ++)
         {
