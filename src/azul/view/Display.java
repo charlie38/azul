@@ -3,6 +3,7 @@ package azul.view;
 import azul.controller.Mediator;
 import azul.model.Game;
 import azul.view.adapter.MouseAdapter;
+import azul.view.adapter.MouseTutoAdapter;
 import azul.view.resource.ResourcesLoader;
 import azul.view.ui.UIPanel;
 
@@ -72,6 +73,7 @@ public class Display implements Runnable, Observer
 		mUIPanel = new UIPanel(this) ;
 		// Adapters.
 		mUIPanel.addMouseListener(new MouseAdapter(this, mMediator)) ;
+		mUIPanel.addMouseListener(new MouseTutoAdapter(this, mMediator)) ;
 	}
 
 	@Override

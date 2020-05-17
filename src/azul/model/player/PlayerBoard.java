@@ -3,7 +3,7 @@ package azul.model.player;
 import azul.model.tile.Tile;
 
 import java.util.ArrayList;
-
+import azul.model.Couple;
 public class PlayerBoard
 {
     // Size of the board components.
@@ -26,6 +26,13 @@ public class PlayerBoard
      * Class used to keep in memory the player board during all the game.
      * Instantiated for each player before a game start.
      */
+    
+    int nbmushrooms=0;
+    int nbclaws=0;
+    int nbeyes=0;
+    int nbcrystal=0;
+    int nbflower=0;
+    
     public PlayerBoard()
     {
         mScoreTrack = 0 ;
@@ -40,8 +47,86 @@ public class PlayerBoard
      * Called by the player at the end of the round.
      * @param asideTiles the tiles in the box cover.
      */
+    
+    protected int adjacentsHorizontales(Couple c){
+    	int result=0;
+    	int counter=0;
+    	
+    	//Compter les adjacentes a gauche de la case c
+    	while(c.x+counter>=1 && isWallCaseNotEmpty(c.y,c.x+counter)) {
+    		result++;
+    		counter--;
+    	}
+    	counter=1;
+    	//Compter les adjacentes a droite de la case c
+    	while(c.x+counter<=5 && isWallCaseNotEmpty(c.y,c.x+counter)) {
+    		result++;
+    		counter++;
+    	}
+    	//Bonus de ligne
+    	if(result==5) {
+    		return result+2;
+    	}
+    	return result;
+    }
+    
+    protected int adjacentsVerticales(Couple c) {
+    	int result=0;
+    	int counter=0;
+    	
+    	//Compter les adjacentes en haut de la case c
+    	while(c.y+counter>=1 && isWallCaseNotEmpty(c.y+counter,c.x)) {
+    		result++;
+    		counter--;
+    	}
+    	counter=1;
+    	//Compter les adjacentes en bas de la case c
+    	while(c.y+counter<=5 && isWallCaseNotEmpty(c.y+counter,c.x)) {
+    		result++;
+    		counter++;
+    	}
+    	//Si result est 1 ca veut dire qu'il n'y a pas de tuiles adjacentes verticalement (donc on renvoit 0)
+    	if(result==1) return 0;
+    	
+    	//Bonus colonne
+    	if(result==5) {
+    		return result+7;
+    	}
+    	return result;
+    }
+    
+    public int adjacents(Couple c) {
+    	return adjacentsHorizontales(c)+adjacentsVerticales(c);
+    }
+    
+    public int bonusIngredient() {
+    	int total=0;
+    	if(nbeyes==5) {
+    		total+=10;
+    		nbeyes=-1;
+    	}
+    	if(nbmushrooms==5) {
+    		total+=10;
+    		nbmushrooms=-1;
+    	}
+    	if(nbflower==5) {
+    		total+=10;
+    		nbflower=-1;
+    	}
+    	if(nbclaws==5) {
+    		total+=10;
+    		nbclaws=-1;
+    	}
+    	if(nbcrystal==5) {
+    		total+=10;
+    		nbcrystal=-1;
+    	}
+    	return total;
+    }
+    
     protected void decorateWall(ArrayList<Tile> asideTiles)
     {
+    	Couple coordonneesTuilePlacee=new Couple(-1,-1);
         // Remove floor line tiles.
         for (int i = 0 ; i < SIZE_FLOOR_LINE ; i ++)
         {
@@ -53,13 +138,13 @@ public class PlayerBoard
 
                 switch (i)
                 {
-                    case 0 :
+                    case 0 : mScoreTrack -- ; break ;
                     case 1 : mScoreTrack -- ; break ;
-                    case 2 :
-                    case 3 :
+                    case 2 : mScoreTrack -= 2 ; break ;
+                    case 3 : mScoreTrack -= 2 ; break ;
                     case 4 : mScoreTrack -= 2 ; break ;
-                    case 5 :
-                    case 6 : mScoreTrack -= 3 ;
+                    case 5 : mScoreTrack -= 3 ; break ;
+                    case 6 : mScoreTrack -= 3 ; break ;
                 }
             }
 
@@ -74,7 +159,7 @@ public class PlayerBoard
                 // If the pattern line is full, add the rightmost (leftmost in the array) tile to the wall.
                 try
                 {
-                    addToWall(mPatternLines.get(i)[0], i + 1) ;
+                    coordonneesTuilePlacee=addToWall(mPatternLines.get(i)[0], i + 1) ;
                 }
                 catch (PlayerBoardException e)
                 {
@@ -82,7 +167,7 @@ public class PlayerBoard
                 }
                 // Track the player's score.
                 // TODO Track the user score
-                mScoreTrack += 10 ;
+                mScoreTrack += adjacents(coordonneesTuilePlacee) +bonusIngredient();
                 // Remove the remaining tiles of this pattern line.
                 for (int j = 0 ; j <= i ; j ++)
                 {
@@ -169,8 +254,15 @@ public class PlayerBoard
         throw new PlayerBoardException(PlayerBoardException.FULL_PATTERN_LINES) ;
     }
 
-    public void addToWall(Tile tile, int row) throws PlayerBoardException
+    public Couple addToWall(Tile tile, int row) throws PlayerBoardException
     {
+    	switch(tile) {
+    		case CRYSTAL: nbcrystal++; break;
+    		case EYE: nbeyes++; break;
+    		case CLAW: nbclaws++; break;
+    		case FLOWER: nbflower++; break;
+    		case MUSHROOM: nbmushrooms++; break;
+    	}
         // Search for the corresponding case in the wall, depending on the tile color.
         for (int i = 1 ; i <= SIZE_WALL ; i ++)
         {
@@ -178,37 +270,38 @@ public class PlayerBoard
             {
                 // Add the tile to the wall.
                 mWall.get(row - 1)[i - 1] = tile ;
-                return ;
+                return new Couple(i,row);
             }
             else if (tile == Tile.EYE && isWallCaseEye(row, i) && ! isWallCaseNotEmpty(row, i))
             {
                 // Add the tile to the wall.
                 mWall.get(row - 1)[i - 1] = tile ;
-                return ;
+                return new Couple(i,row);
             }
             else if (tile == Tile.CLAW && isWallCaseClaw(row, i) && ! isWallCaseNotEmpty(row, i))
             {
                 // Add the tile to the wall.
                 mWall.get(row - 1)[i - 1] = tile ;
-                return ;
+                return new Couple(i,row);
             }
 
             else if (tile == Tile.FLOWER && isWallCaseFlower(row, i) && ! isWallCaseNotEmpty(row, i))
             {
                 // Add the tile to the wall.
                 mWall.get(row - 1)[i - 1] = tile ;
-                return ;
+                return new Couple(i,row);
             }
             else if (tile == Tile.MUSHROOM && isWallCaseMushroom(row, i) && ! isWallCaseNotEmpty(row, i))
             {
                 // Add the tile to the wall.
                 mWall.get(row - 1)[i - 1] = tile ;
-                return ;
+                return new Couple(i,row);
             }
         }
 
         // Tried to add a tile in a not empty case.
         throw new PlayerBoardException(PlayerBoardException.FULL_WALL) ;
+        
     }
 
     public void addToFloorLine(Tile tile) throws PlayerBoardException
