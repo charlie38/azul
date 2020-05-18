@@ -28,8 +28,8 @@ public class PrepareIAs extends Screen
         add(createButton(MESSAGE_CONTINUE, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,
                 actionEvent ->
                 {
-                    getDisplay().getMediator().IAPlay() ;
                     getDisplay().onGoInGame() ;
+                    getDisplay().getMediator().IAPlay() ;
                 }
         )) ;
         add(createButton(MESSAGE_BACK, Display.CD_SECONDARY, Display.CL_PRIMARY, 30,

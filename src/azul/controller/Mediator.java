@@ -98,6 +98,7 @@ public class Mediator implements Observer
         if (ANIMATION_IA_DELAY == ANIMATION_IA_NO_DELAY)
         {
             mGame.playMove(move) ;
+
             IAPlay() ;
         }
         else
@@ -106,6 +107,7 @@ public class Mediator implements Observer
                     actionEvent ->
                     {
                         mGame.playMove(move) ;
+
                         IAPlay() ;
                     }
             ) ;
@@ -150,18 +152,20 @@ public class Mediator implements Observer
 
         ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;
 
-        mGame.setState(mGame.getPreviousState()) ;
+        Game.State state = mGame.getPreviousState() ;
+        mGame.setState(state == Game.State.START ? Game.State.CHOOSE_TILES : state) ;
 
         IAPlay() ;
     }
 
-private void onContinueIAsWithNoDelay()
+    private void onContinueIAsWithNoDelay()
     {
         onInterruptIAs() ;
 
         ANIMATION_IA_DELAY = ANIMATION_IA_NO_DELAY ;
 
-        mGame.setState(mGame.getPreviousState()) ;
+        Game.State state = mGame.getPreviousState() ;
+        mGame.setState(state == Game.State.START ? Game.State.CHOOSE_TILES : state) ;
 
         IAPlay() ;
     }
