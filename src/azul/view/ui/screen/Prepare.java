@@ -141,7 +141,8 @@ public class Prepare extends Screen
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         name.setPreferredSize(new Dimension(150, 50)) ;
 
-        Choice type = createSpinner(new String[] { MESSAGE_TYPE_IA_EASY, MESSAGE_TYPE_IA_MINIMAX, MESSAGE_TYPE_HUMAN, MESSAGE_TYPE_IA_RANDOM },
+        Choice type = createSpinner(new String[] { MESSAGE_TYPE_HUMAN, MESSAGE_TYPE_IA_EASY, MESSAGE_TYPE_IA_MINIMAX,
+                        MESSAGE_TYPE_IA_RANDOM },
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         type.setPreferredSize(new Dimension(150, 50)) ;
 
