@@ -54,13 +54,18 @@ public abstract class Player
         }
     }
 
-    public void takeTilesFromTable(TakeOnTable move, ArrayList<Tile> tableTiles)
+    public void takeTilesFromTable(TakeOnTable move, ArrayList<Tile> tableTiles, ArrayList<Tile> asideTiles)
     {
         // Check if the player have to take the 'first player marker'.
         if (move.isFirstToTakeFromTable())
         {
             try
             {
+                if (mPlayerBoard.getInFloorLine(0) != Tile.EMPTY)
+                {
+                    asideTiles.add(mPlayerBoard.getInFloorLine(0)) ;
+                }
+
                 mPlayerBoard.setInFloorLine(0, Tile.takeFirstPlayerMaker()) ;
                 tableTiles.set(0, Tile.EMPTY) ;
             }

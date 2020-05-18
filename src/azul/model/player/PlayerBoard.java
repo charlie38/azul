@@ -26,13 +26,6 @@ public class PlayerBoard
      * Class used to keep in memory the player board during all the game.
      * Instantiated for each player before a game start.
      */
-    
-    int nbmushrooms=0;
-    int nbclaws=0;
-    int nbeyes=0;
-    int nbcrystal=0;
-    int nbflower=0;
-    
     public PlayerBoard()
     {
         mScoreTrack = 0 ;
@@ -47,128 +40,30 @@ public class PlayerBoard
      * Called by the player at the end of the round.
      * @param asideTiles the tiles in the box cover.
      */
-    
-    protected int adjacentsHorizontales(Couple c){
-    	int result=0;
-    	int counter=0;
-    	
-    	//Compter les adjacentes a gauche de la case c
-    	while(c.x+counter>=1 && isWallCaseNotEmpty(c.y,c.x+counter)) {
-    		result++;
-    		counter--;
-    	}
-    	counter=1;
-    	//Compter les adjacentes a droite de la case c
-    	while(c.x+counter<=5 && isWallCaseNotEmpty(c.y,c.x+counter)) {
-    		result++;
-    		counter++;
-    	}
-    	//Bonus de ligne
-    	if(result==5) {
-    		return result+2;
-    	}
-    	return result;
-    }
-    
-    protected int adjacentsVerticales(Couple c) {
-    	int result=0;
-    	int counter=0;
-    	
-    	//Compter les adjacentes en haut de la case c
-    	while(c.y+counter>=1 && isWallCaseNotEmpty(c.y+counter,c.x)) {
-    		result++;
-    		counter--;
-    	}
-    	counter=1;
-    	//Compter les adjacentes en bas de la case c
-    	while(c.y+counter<=5 && isWallCaseNotEmpty(c.y+counter,c.x)) {
-    		result++;
-    		counter++;
-    	}
-    	//Si result est 1 ca veut dire qu'il n'y a pas de tuiles adjacentes verticalement (donc on renvoit 0)
-    	if(result==1) return 0;
-    	
-    	//Bonus colonne
-    	if(result==5) {
-    		return result+7;
-    	}
-    	return result;
-    }
-    
-    public int adjacents(Couple c) {
-    	return adjacentsHorizontales(c)+adjacentsVerticales(c);
-    }
-    
-    public int bonusIngredient() {
-    	//remettre le nombre d'elements de l'ingredient a -1 permet d'eviter plusieurs fois le bonus 
-    	if(nbeyes==5) {
-    		nbeyes=-1;
-    		return 10;
-    	}
-    	if(nbmushrooms==5) {
-    		nbmushrooms=-1;
-    		return 10;
-    	}
-    	if(nbflower==5) {
-    		nbflower=-1;
-    		return 10;
-    	}
-    	if(nbclaws==5) {
-    		nbclaws=-1;
-    		return 10;
-    	}
-    	if(nbcrystal==5) {
-    		nbcrystal=-1;
-    		return 10;
-    	}
-    	return 0;
-    }
-    
-    //Methode pour retourner 10 si on peut avoir un bonus en remplissant la case de coordonnees c
-    //Utilisee pour l'evaluation des configurations de l'IA minimax et l'IA "facile"
-    public int bonusPotentielIngredient(Couple c) {
-    	
-    	switch(getWallTile(c.y,c.x)) {
-    		case CRYSTAL: if(nbcrystal==4) return 10;
-    		case CLAW: if(nbclaws==4) return 10;
-    		case FLOWER: if(nbflower==4) return 10;
-    		case MUSHROOM: if(nbmushrooms==4) return 10;
-    		case EYE: if(nbeyes==4) return 10;
-    	}
-    	return 0;
-    }
-    
-    public int pointsPotentiels(Couple c) {
-    	return adjacents(c)+bonusPotentielIngredient(c);
-    }
-    
     protected void decorateWall(ArrayList<Tile> asideTiles)
     {
-    	Couple coordonneesTuilePlacee=new Couple(-1,-1);
         // Remove floor line tiles.
         for (int i = 0 ; i < SIZE_FLOOR_LINE ; i ++)
         {
             Tile tile = mFloorLine.get(i) ;
 
-            if (tile != Tile.EMPTY)
+            if (tile != Tile.EMPTY && tile != Tile.FIRST_PLAYER_MAKER)
             {
                 asideTiles.add(tile) ;
 
                 switch (i)
                 {
-                    case 0 : mScoreTrack -- ; break ;
-                    case 1 : mScoreTrack -- ; break ;
-                    case 2 : mScoreTrack -= 2 ; break ;
-                    case 3 : mScoreTrack -= 2 ; break ;
-                    case 4 : mScoreTrack -= 2 ; break ;
-                    case 5 : mScoreTrack -= 3 ; break ;
-                    case 6 : mScoreTrack -= 3 ; break ;
+                    case 0 : case 1 : mScoreTrack -- ; break ;
+                    case 2 : case 3 : case 4 : mScoreTrack -= 2 ; break ;
+                    case 5 : case 6 : mScoreTrack -= 3 ; break ;
                 }
             }
 
             mFloorLine.set(i, Tile.EMPTY) ;
         }
 
+        Couple coordonneesTuilePlacee = new Couple(-1,-1) ;
+        // Browse the pattern lines.
         for (int i = 0 ; i < SIZE_PATTERN_LINES ; i ++)
         {
             if (isPatterLineFull(i + 1))
@@ -177,14 +72,13 @@ public class PlayerBoard
                 // If the pattern line is full, add the rightmost (leftmost in the array) tile to the wall.
                 try
                 {
-                    coordonneesTuilePlacee=addToWall(mPatternLines.get(i)[0], i + 1) ;
+                    coordonneesTuilePlacee = addToWall(mPatternLines.get(i)[0], i + 1) ;
                 }
                 catch (PlayerBoardException e)
                 {
                     e.printStackTrace() ;
                 }
                 // Track the player's score.
-                // TODO Track the user score
                 mScoreTrack += adjacents(coordonneesTuilePlacee) + bonusIngredient();
                 // Remove the remaining tiles of this pattern line.
                 for (int j = 0 ; j <= i ; j ++)
@@ -594,5 +488,109 @@ public class PlayerBoard
         {
             super(message) ;
         }
+    }
+
+    /**
+     * Score track.
+     */
+
+    private int nbmushrooms=0;
+    private int nbclaws=0;
+    private int nbeyes=0;
+    private int nbcrystal=0;
+    private int nbflower=0;
+
+    protected int adjacentsHorizontales(Couple c){
+        int result=0;
+        int counter=0;
+
+        //Compter les adjacentes a gauche de la case c
+        while(c.x+counter>=1 && isWallCaseNotEmpty(c.y,c.x+counter)) {
+            result++;
+            counter--;
+        }
+        counter=1;
+        //Compter les adjacentes a droite de la case c
+        while(c.x+counter<=5 && isWallCaseNotEmpty(c.y,c.x+counter)) {
+            result++;
+            counter++;
+        }
+        //Bonus de ligne
+        if(result==5) {
+            return result+2;
+        }
+        return result;
+    }
+
+    protected int adjacentsVerticales(Couple c) {
+        int result=0;
+        int counter=0;
+
+        //Compter les adjacentes en haut de la case c
+        while(c.y+counter>=1 && isWallCaseNotEmpty(c.y+counter,c.x)) {
+            result++;
+            counter--;
+        }
+        counter=1;
+        //Compter les adjacentes en bas de la case c
+        while(c.y+counter<=5 && isWallCaseNotEmpty(c.y+counter,c.x)) {
+            result++;
+            counter++;
+        }
+        //Si result est 1 ca veut dire qu'il n'y a pas de tuiles adjacentes verticalement (donc on renvoit 0)
+        if(result==1) return 0;
+
+        //Bonus colonne
+        if(result==5) {
+            return result+7;
+        }
+        return result;
+    }
+
+    public int adjacents(Couple c) {
+        return adjacentsHorizontales(c)+adjacentsVerticales(c);
+    }
+
+    public int bonusIngredient() {
+        //remettre le nombre d'elements de l'ingredient a -1 permet d'eviter plusieurs fois le bonus
+        if(nbeyes==5) {
+            nbeyes=-1;
+            return 10;
+        }
+        if(nbmushrooms==5) {
+            nbmushrooms=-1;
+            return 10;
+        }
+        if(nbflower==5) {
+            nbflower=-1;
+            return 10;
+        }
+        if(nbclaws==5) {
+            nbclaws=-1;
+            return 10;
+        }
+        if(nbcrystal==5) {
+            nbcrystal=-1;
+            return 10;
+        }
+        return 0;
+    }
+
+    //Methode pour retourner 10 si on peut avoir un bonus en remplissant la case de coordonnees c
+    //Utilisee pour l'evaluation des configurations de l'IA minimax et l'IA "facile"
+    public int bonusPotentielIngredient(Couple c) {
+
+        switch(getWallTile(c.y,c.x)) {
+            case CRYSTAL: if(nbcrystal==4) return 10;
+            case CLAW: if(nbclaws==4) return 10;
+            case FLOWER: if(nbflower==4) return 10;
+            case MUSHROOM: if(nbmushrooms==4) return 10;
+            case EYE: if(nbeyes==4) return 10;
+        }
+        return 0;
+    }
+
+    public int pointsPotentiels(Couple c) {
+        return adjacents(c)+bonusPotentielIngredient(c);
     }
 }

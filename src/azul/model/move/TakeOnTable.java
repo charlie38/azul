@@ -54,7 +54,7 @@ public class TakeOnTable extends Move
     @Override
     public void do_(Game game)
     {
-        mPlayer.takeTilesFromTable(this, game.getTilesTable()) ;
+        mPlayer.takeTilesFromTable(this, game.getTilesTable(), game.getTilesAside()) ;
         // Change the game state.
         game.setState(Game.State.SELECT_ROW) ;
 
