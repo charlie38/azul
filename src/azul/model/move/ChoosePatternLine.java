@@ -12,21 +12,27 @@ public class ChoosePatternLine extends Move
     private int mRow ;
     private Tile[] mPatternLine ;
     private ArrayList<Tile> mFloorLine ;
+    private ArrayList<Tile> mRemaining ;
+    private ArrayList<Tile> mAside ;
 
     /**
      * When user put his tiles in a pattern line.
      */
-    public ChoosePatternLine(Player player, int rowIndex)
+    public ChoosePatternLine(Player player, ArrayList<Tile> aside, ArrayList<Tile> remaining, int rowIndex)
     {
         mPlayer = player ;
         mRow = rowIndex ;
         mPatternLine = player.getPatternLine(rowIndex + 1).clone() ;
-        mFloorLine = (ArrayList<Tile>) player.getFloorLine().clone();
+        mFloorLine = (ArrayList<Tile>) player.getFloorLine().clone() ;
+        mAside = (ArrayList<Tile>) aside.clone() ;
+        mRemaining = (ArrayList<Tile>) remaining.clone() ;
     }
 
     @Override
     public void undo(Game game)
     {
+        game.setTilesAside((ArrayList<Tile>) mAside.clone()) ;
+        game.setTilesRemaining((ArrayList<Tile>) mRemaining.clone()) ;
         // Go to the previous player.
         game.previousPlayer() ;
         // Restore the pattern line.
@@ -60,7 +66,7 @@ public class ChoosePatternLine extends Move
             if (! game.getHistory().canRedo())
             {
                 game.playMove(new DecorateWall(game.getPlayers(), game.getFactories(), game.getTilesTable(),
-                        game.getPlayerIndex())) ;
+                        game.getTilesAside(), game.getTilesRemaining(), game.getPlayerIndex())) ;
             }
         }
         else

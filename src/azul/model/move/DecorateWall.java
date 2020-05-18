@@ -16,6 +16,10 @@ public class DecorateWall extends Move
     private ArrayList<ArrayList<Tile>> mFactoriesTilesAfter ;
     private ArrayList<Tile> mTable ;
     private ArrayList<Tile> mTableAfter ;
+    private ArrayList<Tile> mRemaining ;
+    private ArrayList<Tile> mRemainingAfter ;
+    private ArrayList<Tile> mAside ;
+    private ArrayList<Tile> mAsideAfter ;
     private int mCurrentPlayer ;
     private int mCurrentPlayerAfter ;
 
@@ -23,7 +27,7 @@ public class DecorateWall extends Move
      * When users decorate their wall.
      */
     public DecorateWall(ArrayList<Player> players, ArrayList<TilesFactory> factories, ArrayList<Tile> table,
-                        int currentPlayer)
+                        ArrayList<Tile> aside, ArrayList<Tile> remaining, int currentPlayer)
     {
         mPlayersBoards = new ArrayList<>() ;
         mFactoriesTiles = new ArrayList<>() ;
@@ -39,6 +43,8 @@ public class DecorateWall extends Move
         }
 
         mTable = (ArrayList<Tile>) table.clone() ;
+        mAside = (ArrayList<Tile>) aside.clone();
+        mRemaining = (ArrayList<Tile>) remaining.clone();
         mCurrentPlayer = currentPlayer ;
     }
 
@@ -59,11 +65,15 @@ public class DecorateWall extends Move
         }
 
         mTableAfter = (ArrayList<Tile>) game.getTilesTable().clone() ;
+        mAsideAfter = (ArrayList<Tile>) game.getTilesAside().clone() ;
+        mRemainingAfter = (ArrayList<Tile>) game.getTilesRemaining().clone() ;
         mCurrentPlayerAfter = game.getPlayerIndex() ;
 
         game.setPlayersBoard(mPlayersBoards) ;
         game.setFactoriesTiles(mFactoriesTiles) ;
         game.setTilesTable(mTable) ;
+        game.setTilesAside(mAside) ;
+        game.setTilesRemaining(mRemaining) ;
         game.setCurrentPlayer(mCurrentPlayer) ;
         game.setState(Game.State.DECORATE_WALL) ;
         game.nextPlayer() ; // A 'previous' one will be called.
@@ -92,6 +102,8 @@ public class DecorateWall extends Move
         game.setPlayersBoard(mPlayersBoardsAfter) ;
         game.setFactoriesTiles(mFactoriesTilesAfter) ;
         game.setTilesTable(mTableAfter) ;
+        game.setTilesAside(mAsideAfter) ;
+        game.setTilesRemaining(mRemainingAfter) ;
         game.setCurrentPlayer(mCurrentPlayerAfter) ;
         game.setState(Game.State.CHOOSE_TILES) ;
 

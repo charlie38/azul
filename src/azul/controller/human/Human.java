@@ -94,12 +94,12 @@ public class Human
         // Get the selected row.
         int row = selected.getRowIndex() ;
         // Play it.
-        mGame.playMove(new ChoosePatternLine(mGame.getPlayer(), row)) ;
+        mGame.playMove(new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), row)) ;
     }
 
     private void selectFloorLine()
     {
         // Play it.
-        mGame.playMove(new ChooseFloorLine(mGame.getPlayer())) ;
+        mGame.playMove(new ChooseFloorLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining())) ;
     }
 }

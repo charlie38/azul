@@ -375,6 +375,16 @@ public class Game extends Observable
         mTilesTable = newTiles ;
     }
 
+    public void setTilesAside(ArrayList<Tile> newTiles)
+    {
+        mTilesAside = newTiles ;
+    }
+
+    public void setTilesRemaining(ArrayList<Tile> newTiles)
+    {
+        mTilesRemaining = newTiles ;
+    }
+
     public void setCurrentPlayer(int newPlayer)
     {
         mCurrentPlayer = newPlayer ;
@@ -546,6 +556,11 @@ public class Game extends Observable
     public ArrayList<TilesFactory> getFactories()
     {
         return mTilesFactories ;
+    }
+
+    public ArrayList<Tile> getTilesRemaining()
+    {
+        return mTilesRemaining ;
     }
 
     public ArrayList<Tile> getTilesAside()

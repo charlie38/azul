@@ -131,12 +131,12 @@ public class IAEasy extends IA
         // Get the selected row.
         int row = selectableRows.get(mRandom.nextInt(selectableRows.size())) ;
         // Play it.
-        return new ChoosePatternLine(mGame.getPlayer(), row - 1) ;
+        return new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), row - 1) ;
     }
 
     private Move selectFloorLine()
     {
         // Play it.
-        return new ChooseFloorLine(mGame.getPlayer()) ;
+        return new ChooseFloorLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining()) ;
     }
 }
