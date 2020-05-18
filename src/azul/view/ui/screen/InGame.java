@@ -238,8 +238,10 @@ public class InGame extends Screen
             mBeginning.setEnabled(false) ;
         }
 
-        mEnd.setBackground(getGame().getHistory().canRedo() || ! getGame().isGameFinished() ?
+        mEnd.setBackground(getGame().getHistory().canRedo() || getGame().getState() == Game.State.GAME_OVER
+                || ! getGame().isGameFinished() ?
                 Display.CL_PRIMARY : Display.CL_QUINARY) ;
-        mEnd.setEnabled(getGame().getHistory().canRedo() || ! getGame().isGameFinished()) ;
+        mEnd.setEnabled(getGame().getHistory().canRedo() || getGame().getState() == Game.State.GAME_OVER
+                || ! getGame().isGameFinished()) ;
     }
 }
