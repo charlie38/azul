@@ -466,6 +466,19 @@ public class Game extends Observable
 
         return true ;
     }
+    
+    public boolean isNotInTable(Tile selected)
+    {
+        for (Tile tile : mTilesTable)
+        {
+            if (tile == selected)
+            {
+                return false ;
+            }
+        }
+
+        return true ;
+    }
 
     public boolean isOnlyIAs()
     {

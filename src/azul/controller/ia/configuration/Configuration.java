@@ -1,32 +1,50 @@
 package azul.controller.ia.configuration;
 import azul.model.Game; 
+import azul.model.player.PlayerBoard;
+import azul.model.tile.Tile;
 import azul.model.move.*;
 import java.util.ArrayList;
 import azul.model.Couple;
 public class Configuration {
 	Game mGame;
 	//Coordonnees de la tuile qu'on vise a remplir
-	int xcible; 
-	int ycible;
-	//A quel joueur correspond l'IA
-	int IAPlayer;
+	private int xcible; 
+	private int ycible;
+
 	
 	
-	public Configuration(Game G, int xc, int yc, int player) {
+	public Configuration(Game G, int xc, int yc) {
 		mGame=G;
 		xcible=xc;
 		ycible=yc;
-		IAPlayer=player;
+
 	}
 	
 	public int Evaluation() {
-		return mGame.getPlayer(mGame.getPlayerIndex()).getBoard().adjacents(new Couple(ycible,xcible));
+		return mGame.getPlayer(mGame.getPlayerIndex()).getBoard().pointsPotentiels(new Couple(ycible,xcible));
 	}
 	
 	public ArrayList<Configuration> ConfigurationsFilles(){
 		//To do
+		PlayerBoard board=mGame.getPlayer(mGame.getPlayerIndex()).getBoard();
+		ArrayList<Configuration> ConfigFilles=new ArrayList<Configuration>();
+		for(int i=1; i<6;i++) {
+			for(int j=1; j<6;j++) {
+				if(!board.isWallCaseNotEmpty(i,j) && (board.getPatternLine(i)[0]==Tile.EMPTY || board.getPatternLine(i)[0]==PlayerBoard.getWallTile(i, j))) {
+					ConfigFilles.add(new Configuration(mGame, i, j));
+				}
+			}
+		}
+		return ConfigFilles;
+	}
+	
+	public Move meilleureAction() {
+		Move meilleurMalus;
+		
+		
 		return null;
 	}
+	
 	
 	public Configuration choixmax() {
 		
@@ -56,4 +74,15 @@ public class Configuration {
 		
 	}
 	
+	public int getXCible()
+	{
+		return xcible;
+	}
+	
+	public int getYCible()
+	{
+		return ycible;
+	}
+	
 }
+

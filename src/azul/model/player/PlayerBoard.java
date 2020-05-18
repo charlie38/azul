@@ -100,28 +100,46 @@ public class PlayerBoard
     }
     
     public int bonusIngredient() {
-    	int total=0;
+    	//remettre le nombre d'elements de l'ingredient a -1 permet d'eviter plusieurs fois le bonus 
     	if(nbeyes==5) {
-    		total+=10;
     		nbeyes=-1;
+    		return 10;
     	}
     	if(nbmushrooms==5) {
-    		total+=10;
     		nbmushrooms=-1;
+    		return 10;
     	}
     	if(nbflower==5) {
-    		total+=10;
     		nbflower=-1;
+    		return 10;
     	}
     	if(nbclaws==5) {
-    		total+=10;
     		nbclaws=-1;
+    		return 10;
     	}
     	if(nbcrystal==5) {
-    		total+=10;
     		nbcrystal=-1;
+    		return 10;
     	}
-    	return total;
+    	return 0;
+    }
+    
+    //Methode pour retourner 10 si on peut avoir un bonus en remplissant la case de coordonnees c
+    //Utilisee pour l'evaluation des configurations de l'IA minimax et l'IA "facile"
+    public int bonusPotentielIngredient(Couple c) {
+    	
+    	switch(getWallTile(c.y,c.x)) {
+    		case CRYSTAL: if(nbcrystal==4) return 10;
+    		case CLAW: if(nbclaws==4) return 10;
+    		case FLOWER: if(nbflower==4) return 10;
+    		case MUSHROOM: if(nbmushrooms==4) return 10;
+    		case EYE: if(nbeyes==4) return 10;
+    	}
+    	return 0;
+    }
+    
+    public int pointsPotentiels(Couple c) {
+    	return adjacents(c)+bonusPotentielIngredient(c);
     }
     
     protected void decorateWall(ArrayList<Tile> asideTiles)
@@ -167,7 +185,7 @@ public class PlayerBoard
                 }
                 // Track the player's score.
                 // TODO Track the user score
-                mScoreTrack += adjacents(coordonneesTuilePlacee) +bonusIngredient();
+                mScoreTrack += adjacents(coordonneesTuilePlacee) + bonusIngredient();
                 // Remove the remaining tiles of this pattern line.
                 for (int j = 0 ; j <= i ; j ++)
                 {

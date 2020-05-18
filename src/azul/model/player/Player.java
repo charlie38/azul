@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class Player
 {
     // Player types.
-    public enum Type { HUMAN, IA_RANDOM, IA_MINIMAX }
+    public enum Type { HUMAN, IA_RANDOM, IA_MINIMAX, IA_EASY }
 
     // The player name.
     private String mName ;

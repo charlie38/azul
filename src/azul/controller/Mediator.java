@@ -1,6 +1,7 @@
 package azul.controller;
 
 import azul.controller.human.Human;
+import azul.controller.ia.easy.IAEasy;
 import azul.controller.ia.minimax.IAMinimax;
 import azul.controller.ia.random.IARandom;
 import azul.model.Game;
@@ -28,6 +29,7 @@ public class Mediator implements Observer
     // IA controllers.
     private IARandom mIARandom ;
     private IAMinimax mIAMinimax ;
+    private IAEasy mIAEasy;
     // If only IAs playing.
     private boolean mIAStarted ;
     // For delaying IAs plays.
@@ -43,6 +45,8 @@ public class Mediator implements Observer
         mHuman = new Human(game) ;
         mIAMinimax = new IAMinimax(game, IAMinimax.Difficulty.EASY) ;
         mIARandom = new IARandom(game) ;
+        mIAEasy = new IAEasy(game) ;
+        
         // Observe the game.
         mGame.addObserver(this) ;
     }
@@ -78,7 +82,8 @@ public class Mediator implements Observer
             switch (((IAPlayer) player).getType())
             {
                 case IA_RANDOM : playIAMove(mIARandom.play()) ; break ;
-                case IA_MINIMAX : playIAMove(mIAMinimax.play()) ;
+                case IA_MINIMAX : playIAMove(mIAMinimax.play()) ; break ;
+                case IA_EASY : playIAMove(mIAEasy.play()) ;
             }
         }
     }
@@ -125,6 +130,7 @@ public class Mediator implements Observer
     {
         mIARandom.initialize() ;
         mIAMinimax.initialize() ;
+        mIAEasy.initialize();
 
         mIAStarted = false ;
         ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;

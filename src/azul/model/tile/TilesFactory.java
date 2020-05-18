@@ -106,6 +106,19 @@ public class TilesFactory
 
         return true ;
     }
+    
+    public boolean isTile(Tile selected)
+    {
+    	for (Tile tile : mTiles)
+    	{
+    		if(tile == selected)
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
 
     @Override
     public Object clone()
