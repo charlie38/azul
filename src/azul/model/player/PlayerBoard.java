@@ -56,6 +56,7 @@ public class PlayerBoard
                     case 0 : case 1 : mScoreTrack -- ; break ;
                     case 2 : case 3 : case 4 : mScoreTrack -= 2 ; break ;
                     case 5 : case 6 : mScoreTrack -= 3 ; break ;
+                    default : break ;
                 }
             }
 

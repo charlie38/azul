@@ -4,10 +4,11 @@ import azul.model.player.PlayerBoard;
 import azul.model.tile.Tile;
 import azul.model.move.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import azul.model.Couple;
-public class Configuration {
+public class Configuration implements Comparable<Object> {
 	Game mGame;
 	//Coordonnees de la tuile qu'on vise a remplir
 	private int xcible; 
@@ -33,18 +34,12 @@ public class Configuration {
 		for(int i=1; i<6;i++) {
 			for(int j=1; j<6;j++) {
 				if(!board.isWallCaseNotEmpty(i,j) && (board.getPatternLine(i)[0]==Tile.EMPTY || board.getPatternLine(i)[0]==PlayerBoard.getWallTile(i, j)) && !(board.isPatterLineFull(i))) {
-					ConfigFilles.add(new Configuration(mGame, j, i));
+					ConfigFilles.add(new Configuration(mGame, i,j));
 				}
 			}
 		}
+		Collections.sort(ConfigFilles);
 		return ConfigFilles;
-	}
-	
-	public Move meilleureAction() {
-		Move meilleurMalus;
-		
-		
-		return null;
 	}
 	
 	
@@ -80,6 +75,13 @@ public class Configuration {
 		}
 		return resultat;
 		
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		Configuration C= (Configuration) o;
+		return Evaluation()-C.Evaluation();
 	}
 	
 	public int getXCible()
