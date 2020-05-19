@@ -93,6 +93,19 @@ public class TilesFactory
     {
         return mTiles.get(i) ;
     }
+    
+    public int numberOfTile(Tile tile)
+    {
+    	int res = 0;
+    	for (Tile t : mTiles)
+        {
+            if (t == tile)
+            {
+                res++;
+            }
+        }
+    	return res;
+    }
 
     public boolean isEmpty()
     {

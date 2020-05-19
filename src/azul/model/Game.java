@@ -164,6 +164,19 @@ public class Game extends Observable
             mTilesTable.add(Tile.EMPTY) ;
         }
     }
+    
+    public int numberOfTileTable(Tile tile)
+    {
+    	int res = 0;
+    	for (Tile t : mTilesTable)
+        {
+            if (t == tile)
+            {
+                res++;
+            }
+        }
+    	return res;
+    }
 
     private void notifyGameStart()
     {
