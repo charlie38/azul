@@ -10,6 +10,7 @@ import azul.model.tile.Tile;
 import azul.model.tile.TilesFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class IAEasy extends IA {
@@ -66,25 +67,51 @@ public class IAEasy extends IA {
 			return chooseTable();
 		}
 		
+		if(!isTargetInTable())
+		{
+			return chooseFactory();
+		}
+		
+		if(!isTargetInFactories())
+		{
+			return chooseTable();
+		}
+		
+		System.out.println("Pas l'ingrédient ciblé dans le jeu !");
 		return chooseFactory();
+	}
+	
+	private boolean isTargetInTable()
+	{
+		return mGame.numberOfTileTable(mTargetTile) != 0;
+	}
+	
+	private boolean isTargetInFactories()
+	{
+		for(TilesFactory factory : mGame.getFactories())
+		{
+			if(factory.isTile(mTargetTile))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void chooseTarget()
 	{
-		mTargetSquare = chooseCase();
+		mTargetSquare = chooseSquare();
 		mTargetLine = mTargetSquare.x;
 		mTargetTile = PlayerBoard.getWallTile(mTargetSquare.x, mTargetSquare.y);
+		System.out.println(mTargetTile);
 	}
 	
-	private boolean isGoodLine()
+	private Couple chooseSquare()
 	{
-		return mGame.getPlayer().getBoard().canBePlacedOnPatternLine(mTargetTile, mTargetLine);
-	}
-	
-	private Couple chooseCase()
-	{
-		Configuration mConfig = new Configuration(mGame,-1,-1);
+		Configuration mConfig = new Configuration(mGame,0,0);
 		mConfig = mConfig.choixmax();
+		//Collections.sort(mConfig.Filles);
+		System.out.print("Case  -->  x : "+mConfig.getXCible()+"    y : "+mConfig.getYCible()+"     ");
 		return new Couple(mConfig.getXCible(),mConfig.getYCible());
 	}
 	
@@ -147,11 +174,6 @@ public class IAEasy extends IA {
 	private Move chooseTable()
 	{
 		int nbTile = mGame.numberOfTileTable(mTargetTile);
-		if((nbTile - mTargetLine) > MAX_NEGATIVE_SCORE)
-		{	
-			//Take another ingredient ( choose tile ? ) 
-			return null;
-		}
 		
 		if(nbTile == 0)
 		{
@@ -203,7 +225,26 @@ public class IAEasy extends IA {
 	
 	private Move selectPatternLine()
 	{
-		return new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), mTargetLine - 1) ;
+		if(mGame.getPlayer().isPatternLineAccessible(mTargetLine))
+		{
+			return new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), mTargetLine - 1) ;
+		}
+		else
+		{
+			ArrayList<Integer> selectableRows = new ArrayList<>() ;
+
+	        for (int i = 1 ; i <= PlayerBoard.SIZE_PATTERN_LINES ; i ++)
+	        {
+	            if (mGame.getPlayer().isPatternLineAccessible(i))
+	            {
+	                selectableRows.add(i) ;
+	            }
+	        }
+	        // Get the selected row.
+	        int row = selectableRows.get(mRandom.nextInt(selectableRows.size())) ;
+	        // Play it.
+	        return new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), row - 1) ;
+		}
 	}
 	
 	private Move selectFloorLine()
