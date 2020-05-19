@@ -1,5 +1,6 @@
 package azul.view.ui.screen;
 
+import azul.model.player.IAPlayer;
 import azul.model.player.Player;
 import azul.view.Display;
 import azul.view.component.JHintTextField;
@@ -124,6 +125,11 @@ public class Prepare extends Screen
                     else
                     {
                         getDisplay().onGoInGame() ;
+
+                        if (getGame().getPlayer(0) instanceof IAPlayer)
+                        {
+                            getDisplay().getMediator().IAPlay() ;
+                        }
                     }
                 }
         )) ;
@@ -183,10 +189,10 @@ public class Prepare extends Screen
         ((JHintTextField) mSlot3.getComponent(1)).setText("") ;
         ((JHintTextField) mSlot4.getComponent(1)).setText("") ;
         // Set the selection.
-        ((Choice) mSlot1.getComponent(2)).select(1) ; // By default an human.
-        ((Choice) mSlot2.getComponent(2)).select(0) ;
-        ((Choice) mSlot3.getComponent(2)).select(0) ;
-        ((Choice) mSlot4.getComponent(2)).select(0) ;
+        ((Choice) mSlot1.getComponent(2)).select(0) ; // By default an human.
+        ((Choice) mSlot2.getComponent(2)).select(1) ;
+        ((Choice) mSlot3.getComponent(2)).select(1) ;
+        ((Choice) mSlot4.getComponent(2)).select(1) ;
         // Start the menu with 2 players.
         mSlot3.setVisible(false) ;
         mSlot4.setVisible(false) ;
