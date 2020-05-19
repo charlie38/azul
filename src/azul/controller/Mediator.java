@@ -18,9 +18,9 @@ import java.util.Observer;
 public class Mediator implements Observer
 {
     // Delay btw two IA moves.
-    public static final int ANIMATION_IA_DEFAULT_DELAY = 1000 ;
+    public static final int ANIMATION_IA_DEFAULT_DELAY = 1500 ;
     public static final int ANIMATION_IA_NO_DELAY = 0 ;
-    private int ANIMATION_IA_DELAY = 1000 ;
+    private int ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;
 
     // Model part.
     private Game mGame ;
@@ -77,13 +77,32 @@ public class Mediator implements Observer
 
         if (player instanceof IAPlayer)
         {
-            mIAStarted = true ;
             // It's a IA turn.
-            switch (((IAPlayer) player).getType())
+            if (ANIMATION_IA_DELAY == ANIMATION_IA_NO_DELAY)
             {
-                case IA_RANDOM : playIAMove(mIARandom.play()) ; break ;
-                case IA_MINIMAX : playIAMove(mIAMinimax.play()) ; break ;
-                case IA_EASY : playIAMove(mIAEasy.play()) ;
+                switch (((IAPlayer) player).getType())
+                {
+                    case IA_RANDOM : playIAMove(mIARandom.play()) ; break ;
+                    case IA_MINIMAX : playIAMove(mIAMinimax.play()) ; break ;
+                    case IA_EASY : playIAMove(mIAEasy.play()) ;
+                }
+            }
+            else
+            {
+                mIATimer = new Timer(ANIMATION_IA_DELAY,
+                        actionEvent ->
+                        {
+                            // Can't factorize code <!> action in mIA_.play() should also be delayed.
+                            switch (((IAPlayer) player).getType())
+                            {
+                                case IA_RANDOM : playIAMove(mIARandom.play()) ; break ;
+                                case IA_MINIMAX : playIAMove(mIAMinimax.play()) ; break ;
+                                case IA_EASY : playIAMove(mIAEasy.play()) ;
+                            }
+                        }
+                ) ;
+                mIATimer.setRepeats(false) ;
+                mIATimer.start() ;
             }
         }
     }
@@ -95,25 +114,8 @@ public class Mediator implements Observer
             return ;
         }
 
-        if (ANIMATION_IA_DELAY == ANIMATION_IA_NO_DELAY)
-        {
-            mGame.playMove(move) ;
-
-            IAPlay() ;
-        }
-        else
-        {
-            mIATimer = new Timer(ANIMATION_IA_DELAY,
-                    actionEvent ->
-                    {
-                        mGame.playMove(move) ;
-
-                        IAPlay() ;
-                    }
-            ) ;
-            mIATimer.setRepeats(false) ;
-            mIATimer.start() ;
-        }
+        mGame.playMove(move) ;
+        IAPlay() ;
     }
 
     @Override
@@ -154,6 +156,7 @@ public class Mediator implements Observer
 
         Game.State state = mGame.getPreviousState() ;
         mGame.setState(state == Game.State.START ? Game.State.CHOOSE_TILES : state) ;
+        mGame.notifyUI() ;
 
         IAPlay() ;
     }
@@ -166,6 +169,7 @@ public class Mediator implements Observer
 
         Game.State state = mGame.getPreviousState() ;
         mGame.setState(state == Game.State.START ? Game.State.CHOOSE_TILES : state) ;
+        mGame.notifyUI() ;
 
         IAPlay() ;
     }

@@ -2,6 +2,8 @@ package azul.view.drawable.game.factory;
 
 import azul.model.move.Move;
 import azul.model.move.TakeInFactory;
+import azul.model.move.TakeOnTable;
+import azul.model.tile.Tile;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -78,44 +80,85 @@ public class FactoryTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image bg = ANIMATION_PATTERN[mAnimationIndex] ?
-                getResourcesLoader().getFactoryCaseSelected()
-                : getResourcesLoader().getFactoryCase() ;
-        Image ingredient = ANIMATION_PATTERN[mAnimationIndex] ?
-                getResourcesLoader().getIngredientSelected(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
-                getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
-
-        g.drawImage(bg, x, y, width, height, null) ;
-        g.drawImage(ingredient, x, y, width, height, null) ;
-
-        paintOnTakeMove(g, x, y, width, height) ;
-    }
-
-    /**
-     * Add an animation when user took a tile from the factory.
-     */
-    private void paintOnTakeMove(Graphics g, int x, int y, int width, int height)
-    {
         Move move = null ;
 
         if (getGame().getHistory().canUndo())
         {
             move = getGame().getHistory().getPrevious() ;
         }
-        // If a move was played.
+        // If a 'Take in factory' move was played.
         if (move instanceof TakeInFactory)
         {
-            // If the factory of the move is this one and if this tile was selected, draw it with a border.
-            if (((TakeInFactory) move).getFactory() == getGame().getFactory(mFactoryIndex)
-                    && ((TakeInFactory) move).getTilesSelected().get(0) == ((TakeInFactory) move)
-                    .getFactoryTiles().get(mIndex))
-            {
-                Image ingredient = getResourcesLoader().getIngredientSelected(((TakeInFactory) move).getFactoryTiles()
-                        .get(mIndex)) ;
+            paintTileOnTakeInFactory(g, x, y, width, height, (TakeInFactory) move) ;
+        }
+        else if (move instanceof TakeOnTable)
+        {
+            paintTileOnTakeOnTableMove(g, x, y, width, height, (TakeOnTable) move) ;
+        }
+        else
+        {
+            paintTile(g, x, y, width, height) ;
+        }
+    }
 
-                g.drawImage(ingredient, x, y, width, height, null) ;
+    private void paintTile(Graphics g, int x, int y, int width, int height)
+    {
+        paintBackground(g, x, y, width, height) ;
+
+        Image ingredient = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getIngredientSelected(getGame().getFactory(mFactoryIndex).getTile(mIndex)) :
+                getResourcesLoader().getIngredient(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
+
+        g.drawImage(ingredient, x, y, width, height, null) ;
+    }
+
+    private void paintTileOnTakeInFactory(Graphics g, int x, int y, int width, int height, TakeInFactory move)
+    {
+        Image ingredient ;
+        // If the factory of the move is this one.
+        if (move.getFactory() == getGame().getFactory(mFactoryIndex))
+        {
+            if (move.getTilesSelected().get(0) == move.getFactoryTiles().get(mIndex))
+            {
+                paintBackground(g, x, y, width, height) ;
+                // If this tile was selected, draw it with a border.
+                ingredient = getResourcesLoader().getIngredientSelected(move.getFactoryTiles().get(mIndex)) ;
+            }
+            else
+            {
+                // Else blurred (it will go to the table if the player continues).
+                ingredient = getResourcesLoader().getIngredientBlurred(move.getFactoryTiles().get(mIndex)) ;
             }
         }
+        else
+        {
+            ingredient = getResourcesLoader().getIngredientBlurred(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
+        }
+
+        g.drawImage(ingredient, x, y, width, height, null) ;
+    }
+
+    private void paintTileOnTakeOnTableMove(Graphics g, int x, int y, int width, int height, TakeOnTable move)
+    {
+        if (move.getTilesSelected().size() ==  1 && move.getTilesSelected().get(0) == Tile.FIRST_PLAYER_MAKER)
+        {
+            paintTile(g, x, y, width, height) ;
+        }
+        else
+        {
+            Image ingredient = getResourcesLoader().getIngredientBlurred(getGame().getFactory(mFactoryIndex).getTile(mIndex)) ;
+
+            g.drawImage(ingredient, x, y, width, height, null) ;
+        }
+    }
+
+    private void paintBackground(Graphics g, int x, int y, int width, int height)
+    {
+        Image bg = ANIMATION_PATTERN[mAnimationIndex] ?
+                getResourcesLoader().getFactoryCaseSelected()
+                : getResourcesLoader().getFactoryCase() ;
+
+        g.drawImage(bg, x, y, width, height, null) ;
     }
 
     public int getFactoryIndex()

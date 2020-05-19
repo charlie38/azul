@@ -194,11 +194,17 @@ public class InGame extends Screen
 
     public void refreshHistoryButtons()
     {
-        mPrevious.setBackground(getGame().getHistory().canUndo() ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
-        mPrevious.setEnabled(getGame().getHistory().canUndo()) ;
+        mPrevious.setBackground(getGame().getHistory().canUndo()
+                && ((getGame().isHumanVsIAs() && getGame().isGameFinished()) || ! getGame().isHumanVsIAs())
+                ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
+        mPrevious.setEnabled(getGame().getHistory().canUndo()
+                && ((getGame().isHumanVsIAs() && getGame().isGameFinished()) || ! getGame().isHumanVsIAs())) ;
 
-        mNext.setBackground(getGame().getHistory().canRedo() ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
-        mNext.setEnabled(getGame().getHistory().canRedo()) ;
+        mNext.setBackground(getGame().getHistory().canRedo()
+                && ((getGame().isHumanVsIAs() && getGame().isGameFinished()) || ! getGame().isHumanVsIAs())
+                ? Display.CL_PRIMARY : Display.CL_QUINARY) ;
+        mNext.setEnabled(getGame().getHistory().canRedo()
+                && ((getGame().isHumanVsIAs() && getGame().isGameFinished()) || ! getGame().isHumanVsIAs())) ;
     }
 
     public void refreshIAButtons()

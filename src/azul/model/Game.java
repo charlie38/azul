@@ -110,8 +110,7 @@ public class Game extends Observable
         mCurrentPlayer = 0 ;
         setState(State.CHOOSE_TILES) ;
         // Notify the UI.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     /** Initialization. **/
@@ -182,22 +181,25 @@ public class Game extends Observable
     {
         setState(State.START) ;
         // Notify the mediator.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     public void notifyGameOver()
     {
         setState(Game.State.GAME_OVER) ;
         // Notify the mediator.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     public void notifyBeginning()
     {
         setState(State.BEGINNING) ;
         // Notify the UI.
+        notifyUI() ;
+    }
+
+    public void notifyUI()
+    {
         setChanged() ;
         notifyObservers() ;
     }
@@ -241,8 +243,7 @@ public class Game extends Observable
         // Undo the move.
         move.undo(this) ;
         // Notify the UI.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     public void playMove(Move move)
@@ -252,8 +253,7 @@ public class Game extends Observable
         // Do the move.
         move.do_(this) ;
         // Notify the UI.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     public void playNextMove()
@@ -263,8 +263,7 @@ public class Game extends Observable
         // Redo the move.
         move.redo(this) ;
         // Notify the UI.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     /**
@@ -310,16 +309,14 @@ public class Game extends Observable
     {
         setState(State.INTERRUPT_IAS) ;
         // Notify the Mediator.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     public void continueIAs(State state)
     {
         setState(state) ;
         // Notify the Mediator.
-        setChanged() ;
-        notifyObservers() ;
+        notifyUI() ;
     }
 
     /**
@@ -516,6 +513,27 @@ public class Game extends Observable
         return true ;
     }
 
+    public boolean isHumanVsIAs()
+    {
+        boolean human = false ;
+        boolean ia = false ;
+
+        for (Player player : mPlayers)
+        {
+            if (player instanceof HumanPlayer)
+            {
+                human = true ;
+            }
+
+            if (player instanceof IAPlayer)
+            {
+                ia = true ;
+            }
+        }
+
+        return ia && human ;
+    }
+
     public boolean isGameFinished()
     {
         return mIsGameFinished ;
@@ -599,6 +617,15 @@ public class Game extends Observable
     public History getHistory()
     {
         return mHistory ;
+    }
+
+    public int getTableSize()
+    {
+        int i = 0 ;
+
+        while (getInTilesTable(++ i) != Tile.EMPTY) ;
+
+        return i ;
     }
 
     private static class GameException extends Exception

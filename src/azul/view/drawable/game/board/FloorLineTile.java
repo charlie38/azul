@@ -1,5 +1,8 @@
 package azul.view.drawable.game.board;
 
+import azul.model.move.Move;
+import azul.model.move.TakeOnTable;
+import azul.model.tile.Tile;
 import azul.view.Display;
 import azul.view.drawable.Drawable;
 
@@ -75,9 +78,27 @@ public class FloorLineTile extends Drawable
         int width = (int) (mOriginalWidth * mCoef) ;
         int height = (int) (mOriginalHeight * mCoef) ;
 
-        Image ingredient = mIsSelected ?
-                getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) :
-                getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) ;
+        Image ingredient ;
+        Move move = null ;
+
+        if (getGame().getHistory().canUndo())
+        {
+            move = getGame().getHistory().getPrevious() ;
+        }
+        // If a 'Take in table' move was played and it was the first, doesn't draw the '1' token.
+        if (move instanceof TakeOnTable && ((TakeOnTable) move).isFirstToTakeFromTable()
+                && getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex) == Tile.FIRST_PLAYER_MAKER
+                && ! (((TakeOnTable) move).getTilesSelected().size() ==  1
+                && ((TakeOnTable) move).getTilesSelected().get(0) == Tile.FIRST_PLAYER_MAKER))
+        {
+            ingredient = getResourcesLoader().getIngredient(Tile.EMPTY) ;
+        }
+        else
+        {
+            ingredient = mIsSelected ?
+                    getResourcesLoader().getIngredient(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) :
+                    getResourcesLoader().getIngredientSelected(getGame().getPlayer(mPlayerIndex).getInFloorLine(mIndex)) ;
+        }
 
         g.drawImage(ingredient, x, y, width, height, null) ;
     }
