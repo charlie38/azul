@@ -133,42 +133,50 @@ public class IAEasy extends IA {
 	}
 	
 	private Move chooseFactory()
-	{
-		//Selected factory
-		TilesFactory factory;
-		//Factories with the type of the targeted tile
-		ArrayList<Integer> targetFactories = new ArrayList<>() ;
+    {
+        //Selected factory
+        TilesFactory factory;
+        //Factories with the type of the targeted tile
+        ArrayList<Integer> targetFactories = new ArrayList<>() ;
 
-		/*CHOICE OF FACTORY*/                                                       /*ERROR LOOP OR OUT OF BOUND*/
-		if(targetFactories.isEmpty())
-		{
-	        for (int i = 0 ; i < mGame.getFactories().size() ; i ++)
-	        {
-	            if (!mGame.getFactory(i).isEmpty())
-	            {
-	            	if(mGame.getFactory(i).isTile(mTargetTile))
-	            	{
-	            		targetFactories.add(i);
-	            	}
-	            }
-	        }
-	        if(targetFactories.isEmpty())
-	        {
-	        	return chooseTable();
-	        }
-		}
+        /*CHOICE OF FACTORY*/                                                       /*ERROR LOOP OR OUT OF BOUND*/
+        int rest_a_remplir = 5 - mGame.getPlayer().getPatternLine(mTargetLine).length;
+        int fac = 1;
+        int nbtiles = 5;
+        if(targetFactories.isEmpty())
+        {
+            for (int i = 0 ; i < mGame.getFactories().size() ; i ++)
+            {
+                if (!mGame.getFactory(i).isEmpty())
+                {
+                    if(mGame.getFactory(i).isTile(mTargetTile))
+                    {
+                        int nbtiles2 = Math.abs(mGame.getFactory(i).numberOfTile(mTargetTile)-rest_a_remplir);
+                        if(nbtiles2<nbtiles){
+                            fac=i;
+                            nbtiles=nbtiles2;
+                        }
+                    }
+                }
+            }
+            targetFactories.add(fac);
+            if(targetFactories.isEmpty())
+            {
+                return chooseTable();
+            }
+        }
         
-	    factory = mGame.getFactory(targetFactories.get(0)) ;
-	    /*CHOICE OF TILES*/
-	    // Get the tiles in the factory.
-	    ArrayList<Tile> factoryTiles = (ArrayList<Tile>) factory.getTiles().clone() ;
-	            
-	    // And get all the factory tiles of this color.
-	    ArrayList<azul.model.tile.Tile> tilesSelected = factory.take(mTargetTile) ;
-	            
-	    // Play it.
-	    return new TakeInFactory(mGame.getPlayer(), tilesSelected, factory, factoryTiles) ;
-	}
+        factory = mGame.getFactory(targetFactories.get(0)) ;
+        /*CHOICE OF TILES*/
+        // Get the tiles in the factory.
+        ArrayList<Tile> factoryTiles = (ArrayList<Tile>) factory.getTiles().clone() ;
+                
+        // And get all the factory tiles of this color.
+        ArrayList<Tile> tilesSelected = factory.take(mTargetTile) ;
+                
+        // Play it.
+        return new TakeInFactory(mGame.getPlayer(), tilesSelected, factory, factoryTiles) ;
+    }
 	
 	private Move chooseTable()
 	{	

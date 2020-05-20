@@ -11,6 +11,7 @@ import azul.view.drawable.game.board.FloorLineArrow;
 import azul.view.drawable.game.board.PatternLineArrow;
 import azul.view.drawable.game.factory.FactoryTile;
 import azul.view.drawable.game.table.TableTile;
+import azul.sound.SoundEffect;
 
 import java.util.ArrayList;
 
@@ -34,11 +35,25 @@ public class Human
                 if (selected instanceof FactoryTile
                         && ! mGame.getFactory(((FactoryTile) selected).getFactoryIndex()).isEmpty())
                 {
+                  try {
+                    SoundEffect audioPlayer = new SoundEffect();
+                        audioPlayer.play();
+                  }
+                  catch (Exception e){
+                      System.out.println(e);
+                    }
                     chooseInFactory((FactoryTile) selected) ;
                 }
                 else if (selected instanceof TableTile
                         && ! mGame.isTableEmpty())
                 {
+                  try {
+                    SoundEffect audioPlayer = new SoundEffect();
+                        audioPlayer.play();
+                  }
+                  catch (Exception e){
+                      System.out.println(e);
+                    }
                     chooseOnTable((TableTile) selected) ;
                 }
 
@@ -50,11 +65,25 @@ public class Human
                 if (selected instanceof PatternLineArrow
                         && ((PatternLineArrow) selected).getPlayerIndex() == mGame.getPlayerIndex())
                 {
+                  try {
+                    SoundEffect audioPlayer = new SoundEffect();
+                        audioPlayer.play();
+                  }
+                  catch (Exception e){
+                      System.out.println(e);
+                    }
                     selectPatternLine((PatternLineArrow) selected) ;
                 }
                 else if (selected instanceof FloorLineArrow
                         && ((FloorLineArrow) selected).getPlayerIndex() == mGame.getPlayerIndex())
                 {
+                  try {
+                    SoundEffect audioPlayer = new SoundEffect();
+                        audioPlayer.play();
+                  }
+                  catch (Exception e){
+                      System.out.println(e);
+                    }
                     selectFloorLine() ;
                 }
         }
