@@ -18,7 +18,8 @@ public class IAEasy extends IA {
 	//Limit of negative points by a surplus of ingredients
 	public static final int MAX_NEGATIVE_SCORE = 2;
 	
-	private ArrayList<Configuration> mPossibleSquares;
+	private ArrayList<Configuration> mPossibleSquares ;
+	private ArrayList<Configuration> mMaxSquare ;
 	
 	private Configuration mConfig;
 	
@@ -44,6 +45,7 @@ public class IAEasy extends IA {
 	public void initialize() 
 	{
 		mConfig = new Configuration(mGame,0,0);
+		mMaxSquare = new ArrayList<>();
 	}
 
 	@Override
@@ -59,8 +61,13 @@ public class IAEasy extends IA {
 	
 	private Move chooseTiles()
 	{	
+		//All of possible squares.
 		mPossibleSquares = mConfig.ConfigurationsFilles();
-		chooseTarget();
+		
+		//Max score of all possible squares ( the array "mPossibleSquares" is sort, and the first element is the max ).
+		mMaxSquare = mConfig.choixMax();
+		
+		chooseTarget();	
 		
 		
 		if(mGame.isTableEmpty())
@@ -108,16 +115,18 @@ public class IAEasy extends IA {
 		chooseSquare();
 		mTargetLine = mTargetSquare.x;
 		mTargetTile = PlayerBoard.getWallTile(mTargetSquare.x, mTargetSquare.y);
-		System.out.print("x : "+mTargetSquare.x+"   y : "+mTargetSquare.y+"    tile : ");
-		System.out.println(mTargetTile);
+		System.out.println("Score : "+mConfig.maxscore+"  x : "+mTargetSquare.x+"   y : "+mTargetSquare.y+"    tile : "+mTargetTile);
 	}
 	
 	private void chooseSquare()
 	{
-		mConfig = mPossibleSquares.get(0);
-		mConfig = mConfig.choixmax();
+		if(mMaxSquare.size() >= 1)
+		{
+			int r = mRandom.nextInt(mMaxSquare.size()-1);
+			mConfig = mMaxSquare.get(r);
+			mMaxSquare.remove(r);
+		}
 		mTargetSquare = new Couple(mConfig.getXCible(),mConfig.getYCible());
-		mPossibleSquares.remove(0);
 	}
 	
 	private Move chooseFactory()
@@ -127,8 +136,8 @@ public class IAEasy extends IA {
 		//Factories with the type of the targeted tile
 		ArrayList<Integer> targetFactories = new ArrayList<>() ;
 
-		/*CHOICE OF FACTORY*/
-		while(targetFactories.isEmpty())
+		/*CHOICE OF FACTORY*/                                                       /*ERROR LOOP OR OUT OF BOUND*/
+		if(targetFactories.isEmpty())
 		{
 	        for (int i = 0 ; i < mGame.getFactories().size() ; i ++)
 	        {
@@ -142,7 +151,7 @@ public class IAEasy extends IA {
 	        }
 	        if(targetFactories.isEmpty())
 	        {
-	        	chooseTarget();
+	        	return chooseTable();
 	        }
 		}
         
@@ -160,19 +169,44 @@ public class IAEasy extends IA {
 	
 	private Move chooseTable()
 	{
-		while(mGame.numberOfTileTable(mTargetTile) == 0)
+		if(mGame.numberOfTileTable(mTargetTile) == 0)                        /*ERROR LOOP OR OUT OF BOUND*/
 		{
 			chooseTarget();
 		}
-		/*CHOICE OF TILES*/
-		// Get the tiles on the table.
-	    ArrayList<Tile> tableTiles = (ArrayList<Tile>) mGame.getTilesTable().clone() ;
-	    // Get the selected tile.
-	    // And get all the table tiles of this color.
-	    ArrayList<azul.model.tile.Tile> tilesSelected = mGame.takeOnTable(mTargetTile) ;
-	    // Play it.
-	    return new TakeOnTable(mGame.getPlayer(), tilesSelected,
-	           ! azul.model.tile.Tile.isFirstPlayerMakerTaken(), tableTiles) ;
+		
+		if(mGame.numberOfTileTable(mTargetTile) != 0)
+		{
+			/*CHOICE OF TILES*/
+			// Get the tiles on the table.
+		    ArrayList<Tile> tableTiles = (ArrayList<Tile>) mGame.getTilesTable().clone() ;
+		    // Get the selected tile.
+		    // And get all the table tiles of this color.
+		    ArrayList<azul.model.tile.Tile> tilesSelected = mGame.takeOnTable(mTargetTile) ;
+		    // Play it.
+		    return new TakeOnTable(mGame.getPlayer(), tilesSelected,
+		           ! azul.model.tile.Tile.isFirstPlayerMakerTaken(), tableTiles) ;
+		}
+		else
+		{
+			ArrayList<Integer> selectableTiles = new ArrayList<>() ;
+
+	        for (int i = 0 ; i < Game.SIZE_TILES_TABLE ; i ++)
+	        {
+	            if (mGame.getInTilesTable(i) != Tile.EMPTY)
+	            {
+	                selectableTiles.add(i) ;
+	            }
+	        }
+	        // Get the tiles on the table.
+	        ArrayList<Tile> tableTiles = (ArrayList<Tile>) mGame.getTilesTable().clone() ;
+	        // Get the selected tile.
+	        Tile tile = mGame.getInTilesTable(selectableTiles.get(mRandom.nextInt(selectableTiles.size()))) ;
+	        // And get all the table tiles of this color.
+	        ArrayList<azul.model.tile.Tile> tilesSelected = mGame.takeOnTable(tile) ;
+	        // Play it.
+	        return new TakeOnTable(mGame.getPlayer(), tilesSelected,
+	                ! azul.model.tile.Tile.isFirstPlayerMakerTaken(), tableTiles) ;
+		}
 		
 	}
 	
@@ -190,7 +224,7 @@ public class IAEasy extends IA {
 	
 	private Move selectPatternLine()
 	{
-		while(! mGame.getPlayer().isPatternLineAccessible(mTargetLine))
+		if(! mGame.getPlayer().isPatternLineAccessible(mTargetLine))                            /*ERROR LOOP OR OUT OF BOUND*/
 		{
 			chooseTarget();
 		}

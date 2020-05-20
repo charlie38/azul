@@ -13,6 +13,7 @@ public class Configuration implements Comparable<Object> {
 	//Coordonnees de la tuile qu'on vise a remplir
 	private int xcible; 
 	private int ycible;
+	public int maxscore;
 
 	
 	
@@ -24,7 +25,7 @@ public class Configuration implements Comparable<Object> {
 	}
 	
 	public int Evaluation() {
-		return mGame.getPlayer(mGame.getPlayerIndex()).getBoard().pointsPotentiels(new Couple(ycible,xcible));
+		return mGame.getPlayer(mGame.getPlayerIndex()).getBoard().pointsPotentiels(new Couple(ycible,xcible))+1;
 	}
 	
 	public ArrayList<Configuration> ConfigurationsFilles(){
@@ -34,7 +35,10 @@ public class Configuration implements Comparable<Object> {
 		for(int i=1; i<6;i++) {
 			for(int j=1; j<6;j++) {
 				if(!board.isWallCaseNotEmpty(i,j) && (board.getPatternLine(i)[0]==Tile.EMPTY || board.getPatternLine(i)[0]==PlayerBoard.getWallTile(i, j)) && !(board.isPatterLineFull(i))) {
-					ConfigFilles.add(new Configuration(mGame, i,j));
+					Configuration c = new Configuration(mGame, i,j);
+					c.maxscore = c.Evaluation();
+					//System.out.println("["+i+"] ["+j+"]   SCORE : "+c.maxscore);
+					ConfigFilles.add(c);
 				}
 			}
 		}
@@ -62,6 +66,23 @@ public class Configuration implements Comparable<Object> {
         return resultat;
         
     }
+	
+	//Return the list of Configuration with the max score.
+	public ArrayList<Configuration> choixMax()
+	{
+		ArrayList<Configuration> Filles=ConfigurationsFilles();
+		ArrayList<Configuration> FillesMax = new ArrayList<>();
+		if(Filles==null) return null;
+		int max = Filles.get(0).maxscore;
+		for(Configuration c : Filles)
+		{
+			if(max == c.maxscore)
+			{
+				FillesMax.add(c);
+			}
+		}
+		return FillesMax;
+	}
 	
 	public Configuration choixmin() {
 		
