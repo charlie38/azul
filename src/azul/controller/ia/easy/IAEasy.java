@@ -115,6 +115,10 @@ public class IAEasy extends IA {
 		chooseSquare();
 		mTargetLine = mTargetSquare.x;
 		mTargetTile = PlayerBoard.getWallTile(mTargetSquare.x, mTargetSquare.y);
+		if(!isTargetInTable() && !isTargetInFactories() && !mMaxSquare.isEmpty())
+		{
+			chooseTarget();
+		}
 		System.out.println("Score : "+mConfig.maxscore+"  x : "+mTargetSquare.x+"   y : "+mTargetSquare.y+"    tile : "+mTargetTile);
 	}
 	
@@ -122,9 +126,8 @@ public class IAEasy extends IA {
 	{
 		if(mMaxSquare.size() >= 1)
 		{
-			int r = mRandom.nextInt(mMaxSquare.size()-1);
-			mConfig = mMaxSquare.get(r);
-			mMaxSquare.remove(r);
+			mConfig = mMaxSquare.get(0);
+			mMaxSquare.remove(0);
 		}
 		mTargetSquare = new Couple(mConfig.getXCible(),mConfig.getYCible());
 	}
@@ -168,12 +171,7 @@ public class IAEasy extends IA {
 	}
 	
 	private Move chooseTable()
-	{
-		if(mGame.numberOfTileTable(mTargetTile) == 0)                        /*ERROR LOOP OR OUT OF BOUND*/
-		{
-			chooseTarget();
-		}
-		
+	{	
 		if(mGame.numberOfTileTable(mTargetTile) != 0)
 		{
 			/*CHOICE OF TILES*/
@@ -224,10 +222,6 @@ public class IAEasy extends IA {
 	
 	private Move selectPatternLine()
 	{
-		if(! mGame.getPlayer().isPatternLineAccessible(mTargetLine))                            /*ERROR LOOP OR OUT OF BOUND*/
-		{
-			chooseTarget();
-		}
 		return new ChoosePatternLine(mGame.getPlayer(), mGame.getTilesAside(), mGame.getTilesRemaining(), mTargetLine - 1) ;
 			
 	}
