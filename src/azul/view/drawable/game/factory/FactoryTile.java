@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 public class FactoryTile extends Drawable
 {
     // Request a focus animation.
-    private static final int ANIMATION_DELAY = 100 ;
+    private static final int ANIMATION_DELAY = 350 ;
     private final boolean[] ANIMATION_PATTERN = { true, false, true,
             false, false, false, false, false, false, false, false, false, false, false } ;
 

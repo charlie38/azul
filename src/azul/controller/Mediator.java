@@ -18,7 +18,7 @@ import java.util.Observer;
 public class Mediator implements Observer
 {
     // Delay btw two IA moves.
-    public static final int ANIMATION_IA_DEFAULT_DELAY = 1500 ;
+    public static final int ANIMATION_IA_DEFAULT_DELAY = 2500;
     public static final int ANIMATION_IA_NO_DELAY = 0 ;
     private int ANIMATION_IA_DELAY = ANIMATION_IA_DEFAULT_DELAY ;
 

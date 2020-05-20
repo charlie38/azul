@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class TilesFactory extends Drawable
 {
     // Request a focus animation.
-    private static final int ANIMATION_DELAY = 100 ;
+    private static final int ANIMATION_DELAY = 350 ;
     private final boolean[] ANIMATION_PATTERN = { true, false, true,
             false, false, false, false, false, false, false, false, false, false, false } ;
     // /!\ Change all factory components size.

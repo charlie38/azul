@@ -20,9 +20,9 @@ public class Prepare extends Screen
     public final String MESSAGE_TITLE = "NEW GAME" ;
     public final String MESSAGE_SUBTITLE = "Players choice:" ;
     public final String MESSAGE_PLAYER = "Player " ;
-    public final String MESSAGE_TYPE_IA_RANDOM = "RANDOM IA" ;
-    public final String MESSAGE_TYPE_IA_MINIMAX = "MINIMAX IA" ;
-    public final String MESSAGE_TYPE_IA_EASY = "EASY IA" ;
+    public final String MESSAGE_TYPE_IA_RANDOM = "EASY IA" ;
+    public final String MESSAGE_TYPE_IA_MINIMAX = "HARD IA" ;
+    public final String MESSAGE_TYPE_IA_EASY = "NORMAL IA" ;
     public final String MESSAGE_TYPE_HUMAN = "HUMAN" ;
     public final String MESSAGE_NAME_CHOICE = "insert a name" ;
     public final String MESSAGE_DELETE = "remove" ;
@@ -147,8 +147,8 @@ public class Prepare extends Screen
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         name.setPreferredSize(new Dimension(150, 50)) ;
 
-        Choice type = createSpinner(new String[] { MESSAGE_TYPE_HUMAN, MESSAGE_TYPE_IA_EASY, MESSAGE_TYPE_IA_MINIMAX,
-                        MESSAGE_TYPE_IA_RANDOM },
+        Choice type = createSpinner(new String[] { MESSAGE_TYPE_HUMAN, MESSAGE_TYPE_IA_EASY, MESSAGE_TYPE_IA_RANDOM,
+                        MESSAGE_TYPE_IA_MINIMAX },
                 Display.CD_TERTIARY, Display.CL_PRIMARY, 20) ;
         type.setPreferredSize(new Dimension(150, 50)) ;
 
