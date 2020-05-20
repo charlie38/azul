@@ -1,4 +1,4 @@
-package azul.sound;
+package azul.controller.human.sound;
 
 import java.io.File;
 import java.io.IOException;

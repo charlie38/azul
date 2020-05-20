@@ -11,7 +11,7 @@ import azul.view.drawable.game.board.FloorLineArrow;
 import azul.view.drawable.game.board.PatternLineArrow;
 import azul.view.drawable.game.factory.FactoryTile;
 import azul.view.drawable.game.table.TableTile;
-import azul.sound.SoundEffect;
+import azul.controller.human.sound.SoundEffect;
 
 import java.util.ArrayList;
 
